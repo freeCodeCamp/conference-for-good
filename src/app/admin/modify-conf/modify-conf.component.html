@@ -1,0 +1,103 @@
+<div class="container" [class.page-transition]="transitionService.isTransitioning()">
+  <h1>Modify Conferences</h1>
+  <div id="dropdown" class="row">
+    <div class="col-md-4">
+      <label for="conferences" class="control-label">Select Conference to Modify</label>
+      <select #conferences class="form-control" id="conferences" (input)="refreshSelectedConf()">
+        <option *ngFor="let conf of adminService.conferences">
+          {{ conf.title }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs" id="tab-bar">
+    <li role="presentation" class="active">
+      <a href="#tabDetails" data-toggle="tab">Change details</a>
+    </li>
+    <li role="presentation" (click)="updateSelectedDate(dates.value)">
+      <a href="#tabTimeslot" data-toggle="tab">Add Timeslots</a>
+    </li>
+    <li role="presentation"><a href="#tabRoom" data-toggle="tab">Add Rooms</a></li>
+  </ul>
+
+  <div class="tab-content clearfix">
+
+    <div class="tab-pane active" id="tabDetails">
+      <div class="form-group tab-body">
+        <div class="row">
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label" for="title">Conference Title</label>
+            <input #title type="text" class="form-control" id="title">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label" for="start-date">Start Date</label>
+            <input #startDate type="date" class="form-control" id="start-date">
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label" for="end-date">End Date</label>
+            <input #endDate type="date" class="form-control" id="end-date">
+          </div>
+        </div>
+      </div>
+      <button id="update" class="btn btn-primary" 
+              (click)="updateConf(conferences.value, title, startDate, endDate)">Update</button>
+    </div>
+
+    <div class="tab-pane" id="tabTimeslot">
+      <div class="tab-body">
+        <div id="dropdown" class="row">
+          <div class="col-md-4">
+            <label for="dates" class="control-label">Select Date</label>
+            <select #dates class="form-control" id="dates" (input)="updateSelectedDate(dates.value)">
+              <option *ngFor="let date of (selectedConfDates | async)">
+                {{ date }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-4 col-xs-5">
+            <label class="control-label" for="start-time">Start Time</label>
+            <input #startTime type="time" class="form-control" id="start-time">
+          </div>
+          <div class="col-md-4 col-xs-5">
+            <label class="control-label" for="end-time">End Time</label>
+            <input #endTime type="time" class="form-control" id="end-time">
+          </div>
+        </div>
+        <button class="btn btn-primary add" (click)="addTimeslot(startTime, endTime, conferences, dates)">Add</button>
+        <div class="current-items">
+          <h4>Current TimeSlots</h4>
+            <div *ngFor="let slot of (selectedDaySlots | async)">
+              <i class="fa fa-ban delete" (click)="deleteTimeSlot(dates.value, conferences.value, slot)"></i> 
+              {{ slot.start | time }} to {{ slot.end | time }}
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="tabRoom">
+      <div class="form-group row tab-body">
+        <div class="col-md-4 col-xs-6">
+          <label class="control-label" for="roomName">Room Name</label>
+          <input #roomName type="text" class="form-control" id="roomName">
+        </div>
+      </div>
+      <button class="btn btn-primary add" (click)="addRoom(conferences, roomName)">Add</button>
+      <div class="current-items">
+        <h4>Current Rooms</h4>
+          <div *ngFor="let room of (selectedConf | async)?.rooms">
+            <i class="fa fa-ban delete" (click)="deleteRoom(conferences, room)"></i> {{ room }}
+            <i class="fa fa-arrow-up arrow" aria-hidden="true" (click)="moveRoom(conferences, room, '-')"></i>
+            <i class="fa fa-arrow-down arrow" aria-hidden="true" (click)="moveRoom(conferences, room, '+')"></i>
+          </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <toast #toast></toast>
+</div>

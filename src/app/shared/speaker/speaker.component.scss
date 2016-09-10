@@ -1,0 +1,64 @@
+@import '../../shared/common-styles';
+
+h2 {
+  margin-bottom: 30px;
+}
+
+form {
+  margin-bottom: 80px;
+}
+
+.section {
+  margin-bottom: 30px;
+  // background-color: hsla(0, 40%, 70%, 0.1); design decision, looks cleaner with border
+  border: 1px dashed hsl(0, 40%, 70%);
+  padding: 20px 40px 20px 40px;
+  border-radius: 20px;
+}
+
+.row {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.primary-label {
+  font-weight: bold;
+}
+
+.sub-label {
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+input.ng-invalid.ng-dirty.ng-touched {
+  border-bottom: none !important;
+  box-shadow: inset 0 -2px 0 $brand-warning !important;
+}
+
+#phones {
+  display: flex;
+  align-items: flex-end;
+}
+
+textarea {
+  resize: none;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+#debug {
+  width: 25%;
+  position: fixed;
+  right: 10px;
+  top: 80px;
+  word-break: break-word;
+}
+
+.formLabelRequired::before {
+  content: "*";
+  color: red;
+}

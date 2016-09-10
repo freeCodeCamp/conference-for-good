@@ -1,0 +1,57 @@
+@import '../../shared/common-styles';
+
+#speaker-list {
+  text-align: center;
+}
+
+#subtitle {
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-weight: 100;
+}
+
+#speakers {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  //margin-top: 40px;
+}
+
+.speaker {
+  @extend .card;
+  display: inline-block;
+  text-align: left;
+  height: 100px;
+  padding: 0;
+  margin: 10px;
+  font-weight: 100;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+  .name {
+    font-weight: bold;
+  }
+}
+
+.speaker-left {
+  display: inline-block;
+  vertical-align: top;
+  img {
+    width: 100px;
+    background-size: cover;
+    background-position: center center
+  }
+}
+
+.speaker-right {
+  display: inline-block;
+  margin-left: 10px;
+  margin-top: 3px;
+  text-align: left;
+}
+
+.noHeadshot {
+  width: 100px;
+}

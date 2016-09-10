@@ -1,0 +1,119 @@
+<div id="calender-wrapper" class="container-fluid" [class.page-transition]="transitionService.isTransitioning()">
+  <h1>Calendar View</h1>
+  <div class="divider"></div>
+
+  <div class="row day-table" *ngFor="let day of (adminService.activeConference | async)?.days">
+    <div class="date">{{ day.date | dateCustom:'long' }}</div>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        <thead>
+          <th class="time-header">Time</th>
+          <th *ngFor="let room of (adminService.activeConference | async)?.rooms">
+            {{ room }}
+          </th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let slot of day.timeSlots">
+            <td class="time">
+              <div>{{ slot.start | time }} -</div>
+              <div>{{ slot.end | time }}</div>
+            </td>
+
+            <!-- Room & Time slot -->
+            <td *ngFor="let room of (adminService.activeConference | async)?.rooms"
+                [class.empty-slot]="!getSession(slot, room)"
+                class="session-cell">
+              <i class="fa fa-pencil edit-slot"
+                 (click)="setSelectedSlot(slot, room)" aria-hidden="true"></i>
+              <div *ngIf="getSession(slot, room)">
+                <a class="slot-title" (click)="gotoSession(slot, room)">{{ getSessionTitle(slot, room) }}</a> <br/>
+                <div class="divider"></div>
+                <a class="slot-name" [routerLink]="['/speaker', {id: getSpeakers(slot, room).mainPresenter?._id}]">
+                  {{ fullName(getSpeakers(slot, room).mainPresenter) }}
+                </a>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Set Session Modal -->
+  <div class="modal fade" #setSessionModal id="setSessionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Modify Slot</h4>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+
+            <div class="col-xs-6">
+              <div class="row"><b>Room</b></div>
+              <div class="row item">{{ selectedRoom }}</div>
+
+              <div class="row">
+                <div class="row"><b>Time</b></div>
+                <div class="row item">{{ selectedSlot?.start | time }} - {{ selectedSlot?.end | time }}</div>
+              </div>
+            </div>
+
+            <div class="col-xs-6">
+              <div class="row">
+                <div class="row"><b>Lead Presenter</b></div>
+                <div class="row item"><a [routerLink]="['/speaker', {id: getSpeakers(selectedSlot, selectedRoom)?.mainPresenter?._id}]">{{ fullName(getSpeakers(selectedSlot, selectedRoom)?.mainPresenter) }}</a></div>
+              </div>
+
+              <div class="row"><b>Co-Presenters</b></div>
+              <div class="row item copres-list">
+                <div *ngFor="let coPres of getSpeakers(selectedSlot, selectedRoom)?.coPresenters">
+                  <a [routerLink]="['/speaker', {id: coPres._id}]">{{ fullName(coPres) }}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="row scheduled"><b>Scheduled Session</b></div>
+          <div class="row">
+            <i *ngIf="getSession(selectedSlot, selectedRoom)" class="fa fa-ban delete" 
+               (click)="removeSession(selectedSlot, selectedRoom)"></i>
+            <a (click)="gotoSession(selectedSlot, selectedRoom)">{{ getSession(selectedSlot, selectedRoom)?.title }}</a>
+          </div>
+          <div class="row session-row">
+            <div class="col-xs-6 col-xs-offset-3 modal-select">
+              <label for="modalSessions" class="control-label">Change session for this slot to:</label>
+              <select #sessionSelect class="form-control" id="modalSessions" (input)="isTwoParter(sessionSelect.value)">
+                <option>None</option>
+                <option *ngFor="let session of (sessionService.sessions | async)" [value]="session._id">
+                  {{ session.title }}
+                </option>
+              </select>
+            </div>
+            <div *ngIf="twoParter"
+                 class="col-xs-6 col-xs-offset-3 modal-select">
+              <select #sessionPartSelect class="form-control" id="modalParts">
+                <option value="1">Part 1</option>
+                <option value="2">Part 2</option>
+              </select>
+            </div>
+            <div class="col-xs-6 col-xs-offset-3 modal-select">
+              <button type="button" class="btn btn-default change-btn" 
+                      (click)="saveSlot(selectedSlot, selectedRoom, sessionSelect.value)">Change</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link" data-dismiss="modal">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <toast #toast></toast>
+</div>

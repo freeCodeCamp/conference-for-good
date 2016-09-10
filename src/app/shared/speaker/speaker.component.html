@@ -1,0 +1,250 @@
+<div class="container"
+     [class.page-transition]="transitionService.isTransitioning()">
+  <h2>Speaker Information</h2>
+
+  <form #speakerForm="ngForm" (submit)="updateSpeaker(speakerForm.value)">
+    <div class="form-group">
+
+      <div class="row section">
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="salutation">Salutation</label>
+            <input type="text" class="form-control"
+                  [(ngModel)]="model.salutation"
+                   id="salutation"
+                  name="salutation" #salutation="ngModel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="title">Title</label><br/>
+            <label class="control-label sub-label" for="title">If you have multiple titles, please choose the most relevant. This title will be included in CCAW materials.</label>
+            <input type="text" class="form-control"
+                    [(ngModel)]="model.title"
+                   id="title"
+                    name="title" #title="ngModel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label primary-label formLabelRequired" for="nameFirst">First Name</label>
+            <input type="text" class="form-control"
+                   required
+                  [(ngModel)]="model.nameFirst"
+                   id="nameFirst"
+                  name="nameFirst" #nameFirst="ngModel">
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label primary-label formLabelRequired" for="nameLast">Last Name</label>
+            <input type="text" class="form-control"
+                   required
+                  [(ngModel)]="model.nameLast"
+                   id="nameLast"
+                  name="nameLast" #nameLast="ngModel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label formLabelRequired" for="organization">Organization</label><br/>
+            <label class="control-label sub-label" for="organization">If you are associated with multiple organizations, please choose the most relevant. This organization will be included in CCAW materials.</label>
+            <input type="text" class="form-control"
+                    [(ngModel)]="model.organization"
+                   id="organization"
+                    name="organization" #organization="ngModel">
+          </div>
+        </div>
+      </div>
+
+      <div class="row section">
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="address1">Address Line 1</label>
+            <input type="text" class="form-control"
+                  [(ngModel)]="model.address1"
+                   id="address1"
+                  name="address1" #address1="ngModel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="address2">Address Line 2</label>
+            <input type="text" class="form-control"
+                  [(ngModel)]="model.address2"
+                   id="address2"
+                  name="address2" #address2="ngModel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label primary-label" for="city">City</label>
+            <input type="text" class="form-control"
+                  [(ngModel)]="model.city"
+                  name="city" #city="ngModel">
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label primary-label" for="state">State</label>
+            <input type="text" class="form-control"
+                  [(ngModel)]="model.state"
+                  name="state" #state="ngModel">
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label primary-label" for="zip">Zip Code</label>
+            <input type="text" class="form-control"
+                  [(ngModel)]="model.zip"
+                  name="zip" #zip="ngModel">
+          </div>
+        </div>
+        <div class="row" id="phones">
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label primary-label" for="phoneWork">Work Phone</label>
+            <input type="text" class="form-control"
+                  [(ngModel)]="model.phoneWork"
+                  name="phoneWork" #phoneWork="ngModel">
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label primary-label" for="phoneCell">Cell Phone</label><br/>
+            <label class="control-label sub-label" for="phoneCell">This is only for use by conference staff and will not be shared.</label>
+            <input type="text" class="form-control"
+                  [(ngModel)]="model.phoneCell"
+                  name="phoneCell" #phoneCell="ngModel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label formLabelRequired" for="email">Email</label>
+            <input type="text" class="form-control"
+                   required
+                  [(ngModel)]="model.email"
+                  name="email" #email="ngModel">
+          </div>
+        </div>
+      </div>
+
+      <div class="row section">
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="assistantOrCC">Assistant/CC</label>
+            <input type="text" class="form-control"
+                  [(ngModel)]="model.assistantOrCC"
+                  name="assistantOrCC" #assistantOrCC="ngModel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label formLabelRequired" for="bioWebsite">Website Bio</label><br/>
+            <label class="control-label sub-label" for="bioWebsite"><b>125 word limit.</b> This bio will appear on CCAW's website and on the conference app. Please use third person.</label>
+            <textarea class="form-control" rows="3"
+                  [(ngModel)]="model.bioWebsite"
+                  name="bioWebsite" #bioWebsite="ngModel"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label formLabelRequired" for="bioProgram">Program Bio</label><br/>
+            <label class="control-label sub-label" for="bioProgram"><b>60 word limit.</b> In order to cut down on printing costs and reduce paper waste, please shorten your bio to be included in the printed program. Bios longer than 60 words will be edited down at CCAW staff's discretion.</label>
+            <textarea class="form-control" rows="3"
+                  [(ngModel)]="model.bioProgram"
+                  name="bioProgram" #bioProgram="ngModel"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row section">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="headshot">***Headshot Url?</label><br/>
+          <label class="control-label sub-label" for="headshot">This photo will be displayed on CCAW's website and on the conference app.</label><br/>
+          <label class="control-label sub-label" for="headshot">If you prefer not to display a headshot, please upload your organization's logo instead.</label>
+          <input type="text" class="form-control"
+                 [(ngModel)]="model.headshot"
+                 name="headshot" #headshot="ngModel">
+        </div>
+      </div>
+
+      <div class="row section">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="mediaWilling">Are you willing to be interviewed by the media, if requested?</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="mediaWilling" [(ngModel)]="model.mediaWilling"
+                     id="mediaWillingYes" [value]="true" #mediaWilling="ngModel" checked="">
+              Yes
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="mediaWilling" [(ngModel)]="model.mediaWilling"
+                     id="mediaWillingNo" [value]="false" #mediaWilling="ngModel">
+              No
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row section">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="costsCoveredByOrg">Please select which of the following costs your organization is able to cover (check all that apply or none):</label>
+          <div class="checkbox-group">
+            <label *ngFor="let cost of model.costsCoveredByOrg">
+              <input type="checkbox" [checked]="cost.covered"
+                     (change)="changeCostCovered($event.target.checked, cost)"
+                     name="costCoveredByOrg"> {{ capitalize(cost.name) }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row section">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="speakingFees"><b>Please list any required speaking fees.</b> As a non-profit, we appreciate your consideration of providing your services at a discounted rate.</label><br/>
+          <label class="control-label sub-label" for="speakingFees"><b>Please note that CCAW does not pay per diems to any speakers.</b> All breakfasts and lunches will be provided free of charge.</label>
+          <input type="text" class="form-control"
+                 [(ngModel)]="model.speakingFees"
+                 name="speakingFees" #speakingFees="ngModel">
+        </div>
+      </div>
+
+      <div class="row section">
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="hasPresentedAtCCAWInPast2years">Have you presented at CCAW in the past two years?</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="hasPresentedAtCCAWInPast2years" [(ngModel)]="model.hasPresentedAtCCAWInPast2years"
+                      id="hasPresentedAtCCAWInPast2yearsYes" [value]="true" #hasPresentedAtCCAWInPast2years="ngModel" checked="">
+                Yes
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="hasPresentedAtCCAWInPast2years" [(ngModel)]="model.hasPresentedAtCCAWInPast2years"
+                      id="hasPresentedAtCCAWInPast2yearsNo" [value]="false" #hasPresentedAtCCAWInPast2years="ngModel">
+                No
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="recentSpeakingExp">Recent Speaking Experience</label><br/>
+            <label class="control-label sub-label" for="recentSpeakingExp">Note date, event name, presentation topic, and number of people in attendance.</label>
+            <textarea class="form-control" rows="3"
+                  [(ngModel)]="model.recentSpeakingExp"
+                  name="recentSpeakingExp" #recentSpeakingExp="ngModel"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="speakingReferences">Speaking References</label><br/>
+            <label class="control-label sub-label" for="speakingReferences">Please list at least two references. Include name of contact, city, state, phone number and/or email.</label>
+            <textarea class="form-control" rows="3"
+                  [(ngModel)]="model.speakingReferences"
+                  name="speakingReferences" #speakingReferences="ngModel"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <button type="submit" [disabled]="!speakerForm.form.valid" class="btn btn-primary">Submit</button>
+    <toast #toast></toast>
+  </form>
+</div>

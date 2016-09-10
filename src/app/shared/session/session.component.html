@@ -1,0 +1,320 @@
+<div class="container"
+     [class.page-transition]="transitionService.isTransitioning()">
+  <h1>Session Details</h1>
+
+  <form #sessionForm="ngForm">
+    <div class="form-group">
+
+      <div *ngIf="(authService.user | async) && (authService.user | async).admin">
+        <h3>Admin Fields</h3>
+
+        <div class="row block speaker">
+          <h4>Assign speakers to session</h4>
+          <div>
+            <p><b>Current speakers</b></p>
+            <p>Lead Presenter: <span class="lead-pres" *ngIf="mainPresenter()">
+              <i class="fa fa-ban delete" (click)="removeSpeaker('main')"></i>
+              <span class="slot-display">{{ mainPresenter().nameFirst }} {{ mainPresenter().nameLast }}</span>
+            </span></p>
+            <p id="co-pres-label">Co-Presenters: </p>
+            <div class="co-presenters"> 
+              <div *ngFor="let coPres of (sessionSpeakers | async)?.coPresenters">
+                <i class="fa fa-ban delete" (click)="removeSpeaker(coPres._id)"></i>
+                <span class="slot-display">{{ coPres?.nameFirst }} {{ coPres?.nameLast }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xs-12">
+            <label class="control-label primary-label" for="speakers">Speakers:</label>
+            <select #speakers class="form-control" id="speakers" (input)="updateSelectedDate(dates.value)">
+              <option value="">None</option>
+              <option *ngFor="let speaker of (speakerService.speakers | async)"
+                      [value]="speaker._id">
+                {{ speaker.nameFirst }} {{ speaker.nameLast }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-12 col-xs-12 lead-box">
+            <label>
+              <input type="checkbox" #lead> Lead presenter
+            </label>
+          </div>
+          <div class="col-xs-12">
+            <button type="submit"
+                    class="btn btn-primary" 
+                    (click)="assignSpeaker(speakers.value, lead.checked)">Add</button>
+          </div>
+        </div>
+
+        <div class="block slot">
+
+          <div class="row">
+            <h4>Schedule session for a timeslot and date</h4>
+          </div>
+
+          <div class="row schedule">
+            <span>Currently Scheduled for: </span> 
+            <div id="slot-list">
+              <div *ngIf="model.statusTimeLocation?.length > 0">   
+                <div *ngFor="let occurrence of model.statusTimeLocation">
+                      <i class="fa fa-ban delete" (click)="clearSlot(occurrence)"></i>
+                      <span class="slot-display">{{ getPart(occurrence) }}{{ getDate(occurrence) | dateCustom }} from {{ slot(occurrence)?.start | time }} to {{ slot(occurrence)?.end | time }} in {{ occurrence.room }}</span>
+                </div>
+              </div>
+              <div class="slot-display" *ngIf="model.statusTimeLocation?.length === 0">None</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 col-xs-12">
+              <label class="control-label primary-label" for="dates">Session date:</label>
+              <select #dates class="form-control" id="dates" (input)="updateSelectedDate(dates.value)">
+                <option value="">None</option>
+                <option *ngFor="let day of (adminService.activeConference | async).days">
+                  {{ day.date | dateCustom }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-4 col-xs-12">
+              <label class="control-label primary-label" for="slots">Time slot:</label>
+              <select #slots class="form-control" id="slots">
+                <option value="">None</option>
+                <option *ngFor="let slot of (selectedDaySlots | async)"
+                        [value]="slot._id">
+                  {{ slot.start | time }} to {{ slot.end | time }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-4 col-xs-12">
+              <label class="control-label primary-label" for="rooms">Room:</label>
+              <select #rooms class="form-control" id="rooms">
+                <option value="">None</option>
+                <option *ngFor="let room of (adminService.activeConference | async).rooms">
+                  {{ room }}
+                </option>
+              </select>
+            </div>
+            <div *ngIf="model.length === '180'" class="col-xs-4">
+              <select #partSelect class="form-control" id="modalParts">
+                <option value="1">Part 1</option>
+                <option value="2">Part 2</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit"
+                  class="btn btn-primary" 
+                  (click)="saveToSlot(slots.value, rooms.value)">Add</button>
+
+        </div>
+
+      </div>
+
+      <h3 *ngIf="authService.user.admin">User Fields</h3>
+      <div class="row block">
+        <div class="col-md-12 col-xs-12">
+          <label class="control-label primary-label" for="type">Presentation Type</label>
+          <label class="control-label sub-label" for="type">{{ presentationTypeLabel }}</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="type" [(ngModel)]="model.type"
+                     id="typeCaseStudy" [value]="'casestudy'" #type="ngModel" checked="">
+              Case Study
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="type" [(ngModel)]="model.type"
+                     id="typeWorkshop" [value]="'workshop'" #type="ngModel">
+              Workshop
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row block">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="length">Presentation Length</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="length" [(ngModel)]="model.length"
+                     id="length90" [value]="'90'" #length="ngModel" checked="">
+              90 minutes
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="length" [(ngModel)]="model.length"
+                     id="length180" [value]="'180'" #length="ngModel">
+              3 hours (Part 1 and Part 2)
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row block">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="title">Title of Presentation</label>
+          <input type="text" class="form-control" required 
+                 [(ngModel)]="model.title" id="title"
+                 name="title" #title="ngModel">
+        </div>
+      </div>
+
+      <div class="row block">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="descriptionWebsite">Website Description</label><br/>
+          <label class="control-label sub-label" for="descriptionWebsite"><b>150 word limit.</b> This description will appear on CCAW's website and on the conference app.</label><br/>
+          <label class="control-label sub-label" for="descriptionWebsite">The description must discuss learning objectives and/or takeaways for attendees. Please use third person.</label>
+          <textarea class="form-control" rows="3" required
+                 [(ngModel)]="model.descriptionWebsite"
+                 name="descriptionWebsite" #descriptionWebsite="ngModel"></textarea>
+        </div>
+      </div>
+
+      <div class="row block">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="descriptionProgram">Program Description</label><br/>
+          <label class="control-label sub-label" for="descriptionProgram"><b>60 word limit.</b> In order to cut down on printing costs and reduce paper waste, please shorten your presentation description to be included in the printed program. Please use third person.</label>
+          <textarea class="form-control" rows="3" required
+                 [(ngModel)]="model.descriptionProgram"
+                 name="descriptionProgram" #descriptionProgram="ngModel"></textarea>
+        </div>
+      </div>
+
+      <div class="row block">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="tags">Presentation Tags</label><br/>
+          <label class="control-label sub-label" for="type">Please ONLY select tags that are directly applicable to the presentation. (Check all that apply)</label>
+          <div class="checkbox-group">
+            <label *ngFor="let tag of model.tags">
+              <input type="checkbox" [checked]="tag.checked" 
+                     (change)="changeTag($event.target.checked, tag)"
+                     name="tag"> {{ tag.label || capitalize(tag.name) }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row block">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="level">Presentation Level</label><br/>
+          <label class="control-label sub-label" for="type">Please note that the majority of CCAW presentations will fall under the 'intermediate' and 'advanced' categories.</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="level" [(ngModel)]="model.level"
+                     id="levelBeginner" [value]="'beginner'" #level="ngModel" checked="">
+              Beginner
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="level" [(ngModel)]="model.level"
+                     id="levelIntermediate" [value]="'intermediate'" #level="ngModel">
+              Intermediate
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="level" [(ngModel)]="model.level"
+                     id="levelAdvanced" [value]="'advanced'" #level="ngModel">
+              Advanced
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row block">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="willingToBeRecorded">Are you willing to have this presentation recorded for future use by the Conference on Crimes Against Women?</label><br/>
+          <div class="radio">
+            <label>
+              <input type="radio" name="willingToBeRecorded" [(ngModel)]="model.willingToBeRecorded"
+                     [value]="'audio'" #willingToBeRecorded="ngModel" checked="">
+              Yes, audio recording
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="willingToBeRecorded" [(ngModel)]="model.willingToBeRecorded"
+                     [value]="'audioVisual'" #willingToBeRecorded="ngModel">
+              Yes, audio/visual recording
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="willingToBeRecorded" [(ngModel)]="model.willingToBeRecorded"
+                     [value]="'no'" #willingToBeRecorded="ngModel">
+              No
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row block">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="isMediaOrPressFriendly">Is this presentation media/press friendly?</label><br/>
+          <div class="radio">
+            <label>
+              <input type="radio" name="isMediaOrPressFriendly" [(ngModel)]="model.isMediaOrPressFriendly"
+                     [value]="'yes'" #isMediaOrPressFriendly="ngModel" checked="">
+              Yes
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="isMediaOrPressFriendly" [(ngModel)]="model.isMediaOrPressFriendly"
+                     [value]="'yesNoPhotos'" #isMediaOrPressFriendly="ngModel">
+              Yes, but no photos
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="isMediaOrPressFriendly" [(ngModel)]="model.isMediaOrPressFriendly"
+                     [value]="'yesNoAudioRecOrPhotos'" #isMediaOrPressFriendly="ngModel">
+              Yes, but no audio recording or photos
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="isMediaOrPressFriendly" [(ngModel)]="model.isMediaOrPressFriendly"
+                     [value]="'no'" #isMediaOrPressFriendly="ngModel">
+              No
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row block">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="willingToRepeat">Are you willing to repeat this presentation, if necessary?</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="willingToRepeat" [(ngModel)]="model.willingToRepeat"
+                     [value]="true" #willingToRepeat="ngModel" checked="">
+              Yes
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="willingToRepeat" [(ngModel)]="model.willingToRepeat"
+                     [value]="false" #willingToRepeat="ngModel">
+              No
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <button type="submit" 
+            class="btn btn-primary" 
+            (click)="updateSession(sessionForm.form)">Submit</button>
+    <toast #toast></toast>
+  </form>
+</div>
+
+<!--  DEBUG -->
+<!--<div id="debug">
+  {{ diagnostic }}
+</div>-->

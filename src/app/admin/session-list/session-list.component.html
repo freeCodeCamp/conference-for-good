@@ -1,0 +1,32 @@
+<div id="session-list" class="container" [class.page-transition]="transitionService.isTransitioning()">
+  <h1>List of sessions</h1>
+  <p id="subtitle">
+    Click any existing session to modify its information or add a 
+    new session from scratch.
+  </p>
+  <a [routerLink]="['/session']"><button type="submit" class="btn btn-primary">Add Session</button></a>
+
+  <div class="divider"></div>
+
+  <div class="row">
+    <div id="sessions" class="col-md-10 col-s-12 col-md-offset-1">
+      <div *ngFor="let sessionRef of (sessionService.sessions | async)" 
+          class="session row" (click)="gotoSession(sessionRef._id)">
+        <div class="row">
+          <div class="col-xs-12 title"><b>{{ sessionRef.title }}</b></div>
+          <div class="divider-small col-xs-12"></div>
+        </div>
+        <div class="row">
+          <div class="session-left col-xs-2">
+            <div><b>Length:</b></div>
+            <div>{{ sessionRef.length }} minutes</div>
+            <div><b>Type:</b></div>
+            <div>{{ sessionRef.type }}</div>
+          </div>
+          <div class="session-right col-xs-10">{{ sessionRef.descriptionWebsite }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

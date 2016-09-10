@@ -1,0 +1,24 @@
+@import './shared/common-styles';
+
+.page-wrapper {
+  font-family: 'Roboto';
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+#logout {
+  cursor: pointer;
+}
+
+#cog-link {
+  padding: 0;
+}
+
+.nav {
+  .fa-cog {
+    font-size: 30px;
+    padding: 17px;
+  }
+}

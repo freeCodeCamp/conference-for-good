@@ -1,0 +1,42 @@
+<div class="container-fluid backgroundContainer" [class.page-transition]="transitionService.isTransitioning()">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-4 col-md-offset-4 authContainer">
+                <h3 class="authHeader text-center">Member Signup</h3>
+                <p class="authSubheader">Create your account:</p>
+
+                <form [formGroup]="form" #registerForm="ngForm" (submit)="doSignup($event)">
+
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" formControlName="firstName" required #firstName class="form-control" id="firstName" placeholder="First Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" formControlName="lastName" required #lastName class="form-control" id="lastName" placeholder="Last Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" formControlName="email" required #email class="form-control" id="email" placeholder="Email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" formControlName="password" required #password class="form-control" id="password" placeholder="Password">
+                    </div>
+
+                    <button type="submit" [disabled]="!registerForm.form.valid" class="btn btn-danger btn-block authButton">Signup</button>
+
+                </form>
+
+                <div class="otherLink">
+                    <a [routerLink]="['/login']">Click here to Login</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <toast #toast></toast>
+</div>

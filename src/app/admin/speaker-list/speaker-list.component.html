@@ -1,0 +1,35 @@
+<div id="speaker-list" class="container" [class.page-transition]="transitionService.isTransitioning()">
+  <h1>List of speakers</h1>
+  <p id="subtitle">
+    Click any existing speaker to modify their information or add a
+    new speaker from scratch.
+  </p>
+  <a [routerLink]="['/speaker']"><button type="submit" class="btn btn-primary">Add Speaker</button></a>
+
+  <div class="divider"></div>
+
+  <div class="row">
+
+
+      <div *ngFor="let speaker of (speakerService.speakers | async)">
+          <div id="speakers" class="col-md-6 col-xs-12">
+            <div *ngIf="!speaker.admin"
+                 class="speaker row" (click)="gotoSpeaker(speaker._id)">
+              <div class="speaker-left text-center">
+                <img *ngIf="speaker.headshot" [src]="speaker.headshot" class="img-responsive">
+                <p *ngIf="!speaker.headshot" class="noHeadshot"><br />No<br/>Image<br />Found</p>
+              </div>
+              <div class="speaker-right">
+                <div class="name">{{ speaker.salutation | capitalize }} {{ speaker.nameFirst | capitalize }} {{ speaker.nameLast | capitalize }}</div>
+                <div class="name">{{ speaker.title | capitalize }} </div>
+                <div>{{ speaker.organization }}</div>
+                <div>{{ speaker.email }}</div>
+                <div>{{ speaker.sessions.length }} scheduled sessions</div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="container-fluid backgroundContainer" [class.page-transition]="transitionService.isTransitioning()">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-4 col-md-offset-4 authContainer">
+                <h3 class="authHeader text-center">Change Password</h3>
+                <p class="authSubheader">Enter a new password:</p>
+                <form [formGroup]="form" #registerForm="ngForm" (submit)="doChangePassword($event)">
+
+                    <div class="form-group">
+                        <label for="email">New Password</label>
+                        <input type="password" formControlName="password" required #password class="form-control" id="password" placeholder="New Password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Re-enter New Password</label>
+                        <input type="password" formControlName="password2" required #password2 class="form-control" id="password2" placeholder="Re-enter New Password">
+                    </div>
+
+                    <button type="submit" [disabled]="!registerForm.form.valid" class="btn btn-danger btn-block authButton">Change Password</button>
+
+                </form>
+
+                <div class="otherLink">
+                    <a *ngIf="!authService.user.getValue().admin" [routerLink]="['/dashboard']">Return to Dashboard</a>
+                    <a *ngIf="authService.user.getValue().admin" [routerLink]="['/home']">Return to Dashboard</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <toast #toast></toast>
+</div>

@@ -1,0 +1,162 @@
+@import '../../shared/common-styles';
+
+#calender-wrapper {
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+.divider {
+  margin-bottom: 50px;
+}
+
+.date {
+  font-size: 20px;
+  font-weight: 500;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+/** Table */
+
+.day-table {
+  margin-bottom: 50px;
+}
+
+.table {
+  table-layout: fixed;
+  overflow-wrap: break-word;
+}
+
+th {
+  padding: 8px;
+  font-size: 17px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.session-cell {
+  position: relative;
+  font-weight: 300;
+  text-align: center;
+  padding: 0 !important;
+  line-height: 18px !important;
+  vertical-align: middle !important;
+  &:hover .edit-slot {
+    visibility: visible;
+  }
+  .edit-slot {
+    visibility: hidden;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    cursor: pointer;
+    color: $brand-primary;
+    font-size: 25px;
+  }
+  a {
+    cursor: pointer;
+  }
+  .divider {
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: hsl(0, 0%, 60%);
+  }
+}
+
+.time {
+  font-weight: 500;
+  width: 120px;
+  text-align: left;
+}
+
+.empty-slot {
+  background-color: $brand-success-transparent;
+}
+
+.time-header {
+  width: 120px;
+}
+
+.display-type {
+  border-bottom: 1px dotted black;
+}
+
+.copres-list {
+  display: flex;
+  align-content: space-around;
+  flex-wrap: wrap;
+  a {
+    margin-left: 20px;
+  }
+}
+
+/** Modal */
+
+.modal-dialog {
+  margin-top: 10%;
+}
+
+.modal-body {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.scheduled {
+  margin-top: 20px;
+}
+
+.copres-list {
+  display: flex;
+  flex-direction: column;
+  margin-right: 5px;
+}
+
+a {
+  cursor: pointer;
+}
+
+.delete {
+  margin-right: 5px;
+  margin-top: 10px;
+  color: $gray-light;
+  transition: 0.2s;
+  &:hover {
+    color: $brand-primary;
+    cursor: pointer;
+  }
+}
+
+.change-btn {
+  margin-top: 10px;
+}
+
+.modal-select {
+  text-align: left;
+  label {
+    font-weight: 500;
+  }
+}
+
+#modalParts {
+  margin-bottom: 10px;
+  width: 60px;
+}
+
+.session-row {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.item {
+  margin-bottom: 20px;
+}
+
+.debug {
+  position: fixed;
+  right: 10px;
+  top: 60px;
+}

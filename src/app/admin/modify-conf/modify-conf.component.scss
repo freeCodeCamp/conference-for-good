@@ -1,0 +1,54 @@
+@import '../../shared/common-styles';
+
+#dropdown {
+  margin-top: 40px;
+}
+
+.tab-content {
+  margin-bottom: 80px;
+}
+
+.tab-body {
+  margin-top: 40px;
+}
+
+.btn {
+  margin-top: 10px;
+}
+
+.timeslotHeader {
+  margin-top: 40px;
+}
+
+#tab-bar {
+  margin-top: 60px;
+}
+
+#title, #dates {
+  margin-bottom: 20px;
+}
+
+.current-items {
+  margin-top: 40px;
+  .delete {
+    margin-right: 5px;
+    margin-top: 10px;
+    color: $gray-light;
+    transition: 0.2s;
+    &:hover {
+      color: $brand-primary;
+      cursor: pointer;
+    }
+  }
+  .fa-arrow-up {
+    margin-left: 10px;
+  }
+  .arrow {
+    color: $gray-light;
+    transition: 0.2s;
+    &:hover {
+      color: $brand-primary;
+      cursor: pointer;
+    }
+  }
+}

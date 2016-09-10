@@ -1,0 +1,78 @@
+@import '../../shared/common-styles';
+
+.title {
+  color: $brand-primary;
+}
+
+.block {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.dashboard-item {
+  @extend .card;
+  text-align: left;
+  padding: 30px;
+  //margin: 10px;
+  margin-bottom: 20px;
+  font-weight: 100;
+  overflow: hidden;
+  &:hover {
+    cursor: auto;
+    box-shadow: 0 -1px 0 hsl(0, 0%, 90%),
+                0 0 2px hsla(0, 0%, 0%, 0.12),
+                0 2px 4px hsla(0, 0%, 0%, 0.24);
+  }
+}
+
+.dashboard-list {
+  padding: 15px;
+}
+
+.divider-s {
+  @extend .divider;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: hsl(0, 0%, 70%);
+}
+
+.action-item {
+  margin-top: 10px;
+}
+
+.adding-copres {
+  margin-bottom: 40px;
+}
+
+.delete {
+  margin-right: 5px;
+  margin-top: 10px;
+  color: $gray-light;
+  transition: 0.2s;
+  &:hover {
+    color: $brand-primary;
+    cursor: pointer;
+  }
+}
+
+#sessions {
+  margin-bottom: 16px;
+}
+
+.existing-copres {
+  border: 1px dashed hsl(0, 0%, 50%);
+  padding: 30px;
+  border-radius: 20px;
+  button {
+    margin-top: 20px;
+  }
+}
+
+.new-copres {
+  padding: 40px;
+}
+
+.redText {
+  color: red;
+}

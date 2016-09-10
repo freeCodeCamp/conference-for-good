@@ -1,0 +1,17 @@
+<div class="container" [class.page-transition]="transitionService.isTransitioning()">
+  <h1>Active Conference</h1>
+  <h4>Select the conference you want to work with.</h4>
+  <div id="dropdown" class="row">
+    <div class="col-md-4">
+      <label for="conferences" class="control-label">Conferences</label>
+      <select #conferences class="form-control" id="conferences">
+        <option *ngFor="let conf of adminService.conferences">
+          {{ conf.title }}
+        </option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary" 
+            (click)="changeActiveConf(conferences.value)">Select</button>
+  </div>
+  <toast #toast></toast>
+</div>

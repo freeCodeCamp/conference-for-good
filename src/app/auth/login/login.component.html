@@ -1,0 +1,32 @@
+<div class="container-fluid backgroundContainer" [class.page-transition]="transitionService.isTransitioning()">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-4 col-md-offset-4 authContainer">
+                <h3 class="authHeader text-center">Member Login</h3>
+                <p class="authSubheader">Sign in to your account:</p>
+                <form [formGroup]="form" #registerForm="ngForm" (submit)="doLogin($event)">
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" formControlName="email" required #email class="form-control" id="email" placeholder="Email Address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" formControlName="password" required #password class="form-control" id="password" placeholder="Password">
+                    </div>
+
+                    <button type="submit" [disabled]="!registerForm.form.valid" class="btn btn-danger btn-block authButton">Login</button>
+
+                </form>
+
+                <div class="otherLink">
+                    <a [routerLink]="['/signup']">Click here to Signup</a><br />
+                    <a [routerLink]="['/forgotpassword']">Forgot Password</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <toast #toast></toast>
+</div>

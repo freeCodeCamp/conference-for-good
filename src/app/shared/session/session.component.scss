@@ -1,0 +1,107 @@
+@import '../../shared/common-styles';
+
+h2 {
+  margin-bottom: 30px;
+}
+
+form {
+  margin-bottom: 80px;
+}
+
+.block {
+  margin-bottom: 30px;
+  // background-color: hsla(0, 40%, 70%, 0.1); design decision, looks cleaner with border
+  border: 1px dashed hsl(0, 40%, 70%);
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.primary-label {
+  font-weight: bold;
+}
+
+.sub-label {
+  font-size: 13px;
+  margin-top: 5px;
+  white-space: pre-line;
+}
+
+input.ng-invalid.ng-dirty.ng-touched {
+  border-bottom: none !important;
+  box-shadow: inset 0 -2px 0 $brand-warning !important;
+}
+
+#phones {
+  display: flex;
+  align-items: flex-end;
+}
+
+textarea {
+  resize: none;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+/** Admin fields */
+
+.schedule {
+  margin: 20px;
+}
+
+#slot-list {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.slot-display {
+  border-bottom: 1px dotted $brand-primary;
+}
+
+.slot button, .speaker button {
+  margin-top: 30px;
+}
+
+.slot p {
+  margin: 30px;
+}
+
+.lead-pres {
+  margin-left: 30px;
+}
+
+.lead-box {
+  margin-top: 10px;
+}
+
+#co-pres-label {
+  display: inline-block;
+}
+
+.co-presenters {
+  display: inline-flex;
+  flex-direction: column;
+  margin-left: 30px;
+}
+
+.delete {
+  margin-right: 5px;
+  margin-top: 10px;
+  color: $gray-light;
+  transition: 0.2s;
+  &:hover {
+    color: $brand-primary;
+    cursor: pointer;
+  }
+}
+
+#debug {
+  width: 25%;
+  position: fixed;
+  right: 10px;
+  top: 80px;
+  word-break: break-word;
+}

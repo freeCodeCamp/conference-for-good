@@ -1,0 +1,52 @@
+@import '../../shared/common-styles';
+
+#session-list {
+  text-align: center;
+}
+
+#subtitle {
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-weight: 100;
+}
+
+#sessions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+}
+
+.session {
+  @extend .card;
+  padding: 15px !important;
+  text-align: left;
+  padding: 10px;
+  font-weight: 100;
+}
+
+.divider-small {
+  height: 1px;
+  background-color: $gray-light;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.title {
+  text-align: center;
+  white-space: pre;
+  overflow: hidden;
+  font-size: 20px;
+}
+
+.session-left {
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.session-right {
+  display: inline-block;
+  white-space: pre-wrap;
+  overflow-y: hidden;
+}

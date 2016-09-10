@@ -1,0 +1,23 @@
+<div class="container" [class.page-transition]="transitionService.isTransitioning()">
+  <h1>Create Conference</h1>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-md-4 col-xs-6">
+        <label class="control-label" for="title">Conference Title</label>
+        <input #title type="text" class="form-control" id="title">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 col-xs-6">
+        <label class="control-label" for="start-date">Start Date</label>
+        <input #start type="date" class="form-control" id="start-date">
+      </div>
+      <div class="col-md-4 col-xs-6">
+        <label class="control-label" for="end-date">End Date</label>
+        <input #end type="date" class="form-control" id="end-date">
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" (click)="createConf(title, start, end)">Create</button>
+  <toast #toast></toast>
+</div>
