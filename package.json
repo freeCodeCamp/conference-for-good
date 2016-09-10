@@ -13,6 +13,10 @@
     "heroku-postbuild": "ng build --prod"
   },
   "private": true,
+  "engines": {
+    "node": "6.5.0",
+    "npm": "3.10.5"
+  },
   "dependencies": {
     "@angular/common": "2.0.0-rc.5",
     "@angular/compiler": "2.0.0-rc.5",
@@ -39,13 +43,15 @@
     "passport-local": "^1.0.0",
     "rxjs": "5.0.0-beta.11",
     "ts-helpers": "^1.1.1",
-    "zone.js": "0.6.12"
+    "zone.js": "0.6.12",
+
+    "typescript": "^2.0.0",
+    "angular-cli": "1.0.0-beta.11-webpack.8"
   },
   "devDependencies": {
     "@types/jasmine": "^2.2.30",
     "@types/lodash": "^4.14.34",
     "@types/moment": "^2.13.0",
-    "angular-cli": "1.0.0-beta.11-webpack.8",
     "codelyzer": "~0.0.26",
     "dotenv": "^2.0.0",
     "jasmine-core": "2.4.1",
@@ -57,7 +63,6 @@
     "nodemon": "^1.10.2",
     "protractor": "4.0.3",
     "ts-node": "1.2.1",
-    "tslint": "3.13.0",
-    "typescript": "^2.0.0"
+    "tslint": "3.13.0"
   }
 }
