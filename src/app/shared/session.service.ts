@@ -6,6 +6,7 @@ import "rxjs/add/operator/toPromise";
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
+import { environment } from '../../environments/environment';
 import { handleError, parseJson, packageForPost } from './http-helpers';
 import { AdminService } from './admin.service';
 import { Conference, TimeSlot } from './conference.model';
@@ -27,6 +28,8 @@ enum SessionFilter {
 @Injectable()
 export class SessionService {
 
+  baseUrl = environment.production ? '' : 'http://localhost:3000';
+
   sessionsUnfiltered: BehaviorSubject<Session[]> = new BehaviorSubject([]);
   sessions: BehaviorSubject<Session[]> = new BehaviorSubject([]);
 
@@ -40,7 +43,7 @@ export class SessionService {
 
   getAllSessions() {
     return this.http
-              .get('/api/getallsessions')
+              .get(this.baseUrl + '/api/getallsessions')
               .toPromise()
               .then(parseJson)
               .then(allSessions => {
@@ -240,7 +243,7 @@ export class SessionService {
 
     let pkg = packageForPost(conf);
     return this.http
-              .post('/api/changetimeslot', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/api/changetimeslot', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .catch(handleError);
@@ -272,7 +275,7 @@ export class SessionService {
 
     let pkg = packageForPost(conf);
     return this.http
-        .post('/api/deleteRoom', pkg.body, pkg.opts)
+        .post(this.baseUrl + '/api/deleteRoom', pkg.body, pkg.opts)
         .toPromise()
         .then(parseJson)
         .catch(handleError);
@@ -293,7 +296,7 @@ export class SessionService {
    * @updateType Different server endpoints for speaker and slot updates
   */
   updateSession(session: Session, updateType?: string) {
-    let serverUrl = '/api/updatesession';
+    let serverUrl = this.baseUrl + '/api/updatesession';
     if (updateType) serverUrl += updateType;
     let pkg = packageForPost(session);
     return this.http

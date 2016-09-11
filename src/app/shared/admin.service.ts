@@ -5,12 +5,15 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import "rxjs/add/operator/toPromise";
 import * as _ from 'lodash';
 
+import { environment } from '../../environments/environment';
 import { handleError, parseJson, packageForPost } from './http-helpers';
 import { Conference, TimeSlot } from './conference.model';
 import { Speaker } from './speaker.model';
 
 @Injectable()
 export class AdminService {
+
+  baseUrl = environment.production ? '' : 'http://localhost:3000';
 
   conferences: Conference[] = [];
   activeConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
@@ -31,7 +34,7 @@ export class AdminService {
     this.activeConference.next(newConf);
     let pkg = packageForPost(newConf);
     return this.http
-              .post('/api/createconference', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/api/createconference', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .catch(handleError);
@@ -44,7 +47,7 @@ export class AdminService {
     this.activeConference.next(conf);
     let pkg = packageForPost(conf);
     return this.http
-              .post('/api/changeactiveconf', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/api/changeactiveconf', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .catch(handleError);
@@ -65,7 +68,7 @@ export class AdminService {
     };
     let pkg = packageForPost({currentTitle: currentTitle, conference: conference});
     return this.http
-              .post('/api/updateconference', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/api/updateconference', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .catch(handleError);
@@ -90,7 +93,7 @@ export class AdminService {
     }
     let pkg = packageForPost(conference);
     return this.http
-              .post('/api/changetimeslot', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/api/changetimeslot', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .then(serverConf => {
@@ -141,7 +144,7 @@ export class AdminService {
 
     let pkg = packageForPost(conf);
     return this.http
-        .post('/api/addRoom', pkg.body, pkg.opts)
+        .post(this.baseUrl + '/api/addRoom', pkg.body, pkg.opts)
         .toPromise()
         .then(parseJson)
         .catch(handleError);
@@ -162,7 +165,7 @@ export class AdminService {
 
     let pkg = packageForPost(conf);
     return this.http
-              .post('/api/updateconfrooms', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/api/updateconfrooms', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .catch(handleError);
@@ -170,7 +173,7 @@ export class AdminService {
 
   getAllConferences() {
     return this.http
-              .get('/api/getallconferences')
+              .get(this.baseUrl + '/api/getallconferences')
               .toPromise()
               .then(parseJson)
               .then(conferences => {

@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import "rxjs/add/operator/toPromise";
 import * as _ from 'lodash';
 
+import { environment } from '../../environments/environment';
 import { handleError, parseJson, packageForPost } from './http-helpers';
 import { Conference, TimeSlot } from './conference.model';
 import { Session } from './session.model';
@@ -29,6 +30,8 @@ enum SpeakerFilter {
 @Injectable()
 export class SpeakerService {
 
+  baseUrl = environment.production ? '' : 'http://localhost:3000';
+
   speakersUnfiltered: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
   speakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
   admins: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
@@ -43,7 +46,7 @@ export class SpeakerService {
 
   getAllSpeakers() {
     return this.http
-              .get('/api/getallspeakers')
+              .get(this.baseUrl + '/api/getallspeakers')
               .toPromise()
               .then(parseJson)
               .then(allSpeakers => {
@@ -103,7 +106,7 @@ export class SpeakerService {
 
     let pkg = packageForPost(speaker);
     return this.http
-              .post('/api/updatespeaker', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/api/updatespeaker', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .then(serverSpeaker => {

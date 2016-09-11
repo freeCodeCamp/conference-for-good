@@ -15,7 +15,6 @@ const app = express();
 
 /** Define Variables  **/
 let production = process.env.NODE_ENV === 'production';
-production = true;
 let port = process.env.PORT || 3000;
 
 // Load local environment variables in development
@@ -36,21 +35,29 @@ mongoose.connect(mongoURI);
 /** True = get response details on served node modules **/
 let verboseLogging = false;
 
-/**  Configure middleware for production  **/
+/**  Configure middleware **/
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('dev', {
+  skip: (req, res) => {
+    if (verboseLogging) return false;
+    else return req.baseUrl === '/scripts';
+  }
+}));
 if (production) {
+  // Production server serves frontend files
   app.use(compress());
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(morgan('dev', {
-    skip: (req, res) => {
-      if (verboseLogging) return false;
-      else return req.baseUrl === '/scripts';
-    }
-  }));
   app.use( express.static( path.join(__dirname, '../dist') ));
   app.use('/scripts', express.static( path.join(__dirname, '../node_modules') ));
   app.use('/app', express.static( path.join(__dirname, '../dist/app') ));
   app.use('/public', express.static( path.join(__dirname, '../public') ));
+} else {
+  // In development, livereload server provides front end, backend is just api, need CORS
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 }
 
 /** Configure Passport **/

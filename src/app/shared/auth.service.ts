@@ -5,11 +5,14 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import "rxjs/add/operator/toPromise";
 
+import { environment } from '../../environments/environment';
 import { Speaker } from './speaker.model';
 import { handleError, parseJson, packageForPost } from './http-helpers';
 
 @Injectable()
 export class AuthService {
+  
+  baseUrl = environment.production ? '' : 'http://localhost:3000';
 
   //user: {speaker: Speaker};
   user: BehaviorSubject<Speaker> = new BehaviorSubject(null);
@@ -18,7 +21,7 @@ export class AuthService {
 
   checkSession() {
     return this.http
-              .get('/auth/checkSession')
+              .get(this.baseUrl + '/auth/checkSession')
               .toPromise()
               .then(parseJson)
               .then(res => {
@@ -34,7 +37,7 @@ export class AuthService {
 
   logout() {
     return this.http
-              .get('/auth/logout')
+              .get(this.baseUrl + '/auth/logout')
               .toPromise()
               .then(res => {
                 this.user.next(null);
@@ -46,7 +49,7 @@ export class AuthService {
   login(formData) {
     let pkg = packageForPost(formData);
     return this.http
-              .post('/auth/login', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/auth/login', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .then(user => {
@@ -58,7 +61,7 @@ export class AuthService {
   signup(formData) {
     let pkg = packageForPost(formData);
     return this.http
-              .post('/auth/signup', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/auth/signup', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson);
   }
@@ -70,7 +73,7 @@ export class AuthService {
     }
     let pkg = packageForPost(data);
     return this.http
-              .post('/auth/signup', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/auth/signup', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson);
   }
@@ -79,7 +82,7 @@ export class AuthService {
       let data = { formData: formData };
       let pkg = packageForPost(data);
       return this.http
-          .post('/auth/forgotpassword', pkg.body, pkg.opts)
+          .post(this.baseUrl + '/auth/forgotpassword', pkg.body, pkg.opts)
           .toPromise()
           .then(parseJson)
           .catch(handleError);
@@ -93,7 +96,7 @@ export class AuthService {
     let pkg = packageForPost(data);
 
     return this.http
-              .post('/auth/changePassword', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/auth/changePassword', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .catch(handleError);
@@ -101,7 +104,7 @@ export class AuthService {
 
   addAdmin(speakerId) {
     return this.http
-        .get('/auth/addadmin/' + speakerId)
+        .get(this.baseUrl + '/auth/addadmin/' + speakerId)
         .toPromise()
         .then(parseJson)
         .catch(handleError);
@@ -109,7 +112,7 @@ export class AuthService {
 
   deleteAdmin(speakerId) {
     return this.http
-        .get('/auth/deleteadmin/' + speakerId)
+        .get(this.baseUrl + '/auth/deleteadmin/' + speakerId)
         .toPromise()
         .then(parseJson)
         .catch(handleError);
