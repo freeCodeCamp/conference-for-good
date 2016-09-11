@@ -17,7 +17,10 @@
       "styles": [
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.min.js",
+        "../node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js"
+      ],
       "environments": {
         "source": "environments/environment.ts",
         "prod": "environments/environment.prod.ts",

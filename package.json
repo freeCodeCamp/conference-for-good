@@ -10,7 +10,7 @@
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
-    "heroku-postbuild": "ng build --prod"
+    "heroku-postbuild": "rm -r ./dist && ng build --prod"
   },
   "private": true,
   "engines": {
@@ -26,6 +26,7 @@
     "@angular/platform-browser": "2.0.0-rc.5",
     "@angular/platform-browser-dynamic": "2.0.0-rc.5",
     "@angular/router": "3.0.0-rc.1",
+    "angular-cli": "1.0.0-beta.11-webpack.8",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "bootstrap-sass": "^3.3.7",
@@ -33,6 +34,7 @@
     "core-js": "^2.4.0",
     "express": "^4.14.0",
     "express-session": "^1.14.1",
+    "jquery": "^3.1.0",
     "lodash": "^4.15.0",
     "moment": "^2.14.1",
     "mongoose": "^4.6.0",
@@ -43,10 +45,8 @@
     "passport-local": "^1.0.0",
     "rxjs": "5.0.0-beta.11",
     "ts-helpers": "^1.1.1",
-    "zone.js": "0.6.12",
-
     "typescript": "^2.0.0",
-    "angular-cli": "1.0.0-beta.11-webpack.8"
+    "zone.js": "0.6.12"
   },
   "devDependencies": {
     "@types/jasmine": "^2.2.30",
