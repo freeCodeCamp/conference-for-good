@@ -144,63 +144,18 @@ router.post('/updateconfrooms', (req, res) => {
 
 router.post('/updatespeaker', (req, res) => {
     let speaker = req.body;
+
+    // TODO When Brooke makes a speaker herself
+    //     do we need to generate an account for the folks that
+    //     need this done for them?
     Speaker
-        .findOneAndUpdate({email: speaker.email}, speaker, {upsert:true})
-        .exec()
-        .then( (err, user) => {
+        .findOneAndUpdate({email: speaker.email}, speaker, {upsert:true, new: true}, (err, user) => {
             if (err) {
+                console.log('speaker save error', err);
                 return res.status(500).json({ alert: 'failed' });
             }
-            return res.status(200).json({ alert: 'saved' });
-    })
-
-    // Existing speakers have an id
-    // if (speaker._id) {
-    //     Speaker
-    //         .findById(speaker._id)
-    //         .exec()
-    //         .then(serverSpeaker => {
-    //             if (serverSpeaker === null) {
-    //                 console.log('Speaker not found');
-    //                 res.status(500).json({message: 'Speaker not found'});
-    //             } else {
-    //                 console.log('found existing speaker');
-    //                 _.merge(serverSpeaker, speaker);
-    //                 if (serverSpeaker.costsCoveredByOrg !== speaker.costsCoveredByOrg) {
-    //                     serverSpeaker.costsCoveredByOrg = speaker.costsCoveredByOrg;
-    //                     serverSpeaker.markModified('costsCoveredByOrg');
-    //                 }
-    //                 serverSpeaker.save(err => {
-    //                     if (err) {
-    //                         console.log('save error but found speaker');
-    //                         console.log(err);
-    //                         res.status(500).json({message: 'Speaker save error'});
-    //                     } else res.status(200).json(serverSpeaker);
-    //                 });
-    //             }
-    //         });
-    // } else {
-    //     // TODO this happens when Brooke makes a speaker herself,
-    //     // do we need to generate an account for the folks that
-    //     // need this done for them?
-    //     let newSpeaker = new Speaker({
-    //         admin: false,
-    //         password: 'password',
-    //         status: 'pending',
-    //         statusNotification: false,
-    //         mediaWilling: false,
-    //         costsCoveredByOrg: [],
-    //         hasPresentedAtCCAWInPast2years: false,
-    //     });
-    //     _.merge(newSpeaker, speaker);
-    //     newSpeaker.save(err => {
-    //         if (err) {
-    //             console.log('save error and didnt find speaker');
-    //             console.log(err);
-    //             res.status(500).json({message: 'Speaker save error'});
-    //         } else res.status(200).json(newSpeaker);
-    //     });
-    // }
+            return res.status(200).json(user);
+        });
 });
 
 router.post('/updatesession', (req, res) => {

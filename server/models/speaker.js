@@ -12,7 +12,8 @@ let speakerSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    default: 'password'
   },
   nameFirst: {
     type: String,
@@ -38,7 +39,10 @@ let speakerSchema = new mongoose.Schema({
     type: String,
     default: 'pending'
   }, // pending, accepted, denied, notifed: boolean
-  statusNotification: Boolean,  // After accepting/denying, whether they were notified
+  statusNotification: {
+    type: Boolean,
+    defualt: false
+  }, // After accepting/denying, whether they were notified
   title: String,
   organization: String,
   address1: String,

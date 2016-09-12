@@ -78,7 +78,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   }
 
   updateSpeaker(form: any) {
-    form.profileComplete = this.checkProfile(form);
+    this.model.profileComplete = this.checkProfile(form);
 
     if (this.leadPresId) {
       let leadPres = this.speakerService.getSpeaker(this.leadPresId);
@@ -105,7 +105,9 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           });
     } else {
       this.speakerService
-          .updateSpeaker(form)
+          // Must user model here rather than form, not all fields are
+          // 2-way data bound and are only updated via model (costsCovered)
+          .updateSpeaker(this.model)
           .then(res => this.toast.success('Speaker updated!'));
     }
   }

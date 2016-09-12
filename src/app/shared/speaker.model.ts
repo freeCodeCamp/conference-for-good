@@ -13,7 +13,7 @@ export interface Speaker {
   email: string,
 
   // Speaker information
-
+  profileComplete: boolean,
   status: {
     type: string,
     default: 'pending'
