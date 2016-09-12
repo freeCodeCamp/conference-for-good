@@ -10,7 +10,17 @@
         <h3>Admin Fields</h3>
 
         <div class="row section speaker">
-          
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="speakerNotes">Speaker Notes</label><br/>
+          <textarea class="form-control" rows="3"
+                    [(ngModel)]="model.adminNotes"
+                    #speakerNotes="ngModel"
+                    name="speakerNotes"></textarea>
+        </div>
+        <div class="col-xs-12">
+          <button class="btn btn-primary"
+                  (click)="updateSpeaker(model)">Save Notes</button>
+        </div>
         </div>
       </div>
 
