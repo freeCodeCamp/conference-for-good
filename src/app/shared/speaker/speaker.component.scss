@@ -35,6 +35,14 @@ input.ng-invalid.ng-dirty.ng-touched {
   box-shadow: inset 0 -2px 0 $brand-warning !important;
 }
 
+.speaker-notes {
+  margin-bottom: 15px;
+}
+
+#admin-notes {
+  resize: both;
+}
+
 #phones {
   display: flex;
   align-items: flex-end;
