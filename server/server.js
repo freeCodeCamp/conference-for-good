@@ -50,7 +50,6 @@ if (production) {
   app.use( express.static( path.join(__dirname, '../dist') ));
   app.use('/scripts', express.static( path.join(__dirname, '../node_modules') ));
   app.use('/app', express.static( path.join(__dirname, '../dist/app') ));
-  app.use('/public', express.static( path.join(__dirname, '../public') ));
 } else {
   // In development, livereload server provides front end, backend is just api, need CORS
   app.use(function(req, res, next) {
