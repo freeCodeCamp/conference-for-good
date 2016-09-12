@@ -5,10 +5,11 @@
   <form #sessionForm="ngForm">
     <div class="form-group">
 
-      <div *ngIf="(authService.user | async) && (authService.user | async).admin">
+      <div *ngIf="(authService.user | async) && (authService.user | async).admin 
+                  && model._id">
         <h3>Admin Fields</h3>
 
-        <div class="row block speaker">
+        <div class="row section speaker">
           <h4>Assign speakers to session</h4>
           <div>
             <p><b>Current speakers</b></p>
@@ -47,7 +48,7 @@
           </div>
         </div>
 
-        <div class="block slot">
+        <div class="section slot">
 
           <div class="row">
             <h4>Schedule session for a timeslot and date</h4>
@@ -108,11 +109,10 @@
                   (click)="saveToSlot(slots.value, rooms.value)">Add</button>
 
         </div>
-
+        <h3>Public Fields</h3>
       </div>
 
-      <h3 *ngIf="authService.user.admin">User Fields</h3>
-      <div class="row block">
+      <div class="row section">
         <div class="col-md-12 col-xs-12">
           <label class="control-label primary-label" for="type">Presentation Type</label>
           <label class="control-label sub-label" for="type">{{ presentationTypeLabel }}</label>
@@ -133,7 +133,7 @@
         </div>
       </div>
 
-      <div class="row block">
+      <div class="row section">
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="length">Presentation Length</label>
           <div class="radio">
@@ -153,7 +153,7 @@
         </div>
       </div>
 
-      <div class="row block">
+      <div class="row section">
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="title">Title of Presentation</label>
           <input type="text" class="form-control" required 
@@ -162,7 +162,7 @@
         </div>
       </div>
 
-      <div class="row block">
+      <div class="row section">
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="descriptionWebsite">Website Description</label><br/>
           <label class="control-label sub-label" for="descriptionWebsite"><b>150 word limit.</b> This description will appear on CCAW's website and on the conference app.</label><br/>
@@ -173,7 +173,7 @@
         </div>
       </div>
 
-      <div class="row block">
+      <div class="row section">
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="descriptionProgram">Program Description</label><br/>
           <label class="control-label sub-label" for="descriptionProgram"><b>60 word limit.</b> In order to cut down on printing costs and reduce paper waste, please shorten your presentation description to be included in the printed program. Please use third person.</label>
@@ -183,7 +183,7 @@
         </div>
       </div>
 
-      <div class="row block">
+      <div class="row section">
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="tags">Presentation Tags</label><br/>
           <label class="control-label sub-label" for="type">Please ONLY select tags that are directly applicable to the presentation. (Check all that apply)</label>
@@ -197,7 +197,7 @@
         </div>
       </div>
 
-      <div class="row block">
+      <div class="row section">
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="level">Presentation Level</label><br/>
           <label class="control-label sub-label" for="type">Please note that the majority of CCAW presentations will fall under the 'intermediate' and 'advanced' categories.</label>
@@ -225,7 +225,7 @@
         </div>
       </div>
 
-      <div class="row block">
+      <div class="row section">
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="willingToBeRecorded">Are you willing to have this presentation recorded for future use by the Conference on Crimes Against Women?</label><br/>
           <div class="radio">
@@ -252,7 +252,7 @@
         </div>
       </div>
 
-      <div class="row block">
+      <div class="row section">
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="isMediaOrPressFriendly">Is this presentation media/press friendly?</label><br/>
           <div class="radio">
@@ -286,7 +286,7 @@
         </div>
       </div>
 
-      <div class="row block">
+      <div class="row section">
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="willingToRepeat">Are you willing to repeat this presentation, if necessary?</label>
           <div class="radio">

@@ -5,6 +5,15 @@
   <form #speakerForm="ngForm" (submit)="updateSpeaker(speakerForm.value)">
     <div class="form-group">
 
+      <div *ngIf="(authService.user | async) && (authService.user | async).admin
+                  && model._id">
+        <h3>Admin Fields</h3>
+
+        <div class="row section speaker">
+          
+        </div>
+      </div>
+
       <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
