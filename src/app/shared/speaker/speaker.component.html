@@ -250,22 +250,24 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label" for="recentSpeakingExp">Recent Speaking Experience</label><br/>
-            <label class="control-label sub-label" for="recentSpeakingExp">Note date, event name, presentation topic, and number of people in attendance.</label>
-            <textarea class="form-control" rows="3"
-                  [(ngModel)]="model.recentSpeakingExp"
-                  name="recentSpeakingExp" #recentSpeakingExp="ngModel"></textarea>
+        <div *ngIf="!model.hasPresentedAtCCAWInPast2years">
+          <div class="row">
+            <div class="col-md-8 col-xs-12">
+              <label class="control-label primary-label" for="recentSpeakingExp">Recent Speaking Experience</label><br/>
+              <label class="control-label sub-label" for="recentSpeakingExp">Note date, event name, presentation topic, and number of people in attendance.</label>
+              <textarea class="form-control" rows="3"
+                    [(ngModel)]="model.recentSpeakingExp"
+                    name="recentSpeakingExp" #recentSpeakingExp="ngModel"></textarea>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label" for="speakingReferences">Speaking References</label><br/>
-            <label class="control-label sub-label" for="speakingReferences">Please list at least two references. Include name of contact, city, state, phone number and/or email.</label>
-            <textarea class="form-control" rows="3"
-                  [(ngModel)]="model.speakingReferences"
-                  name="speakingReferences" #speakingReferences="ngModel"></textarea>
+          <div class="row">
+            <div class="col-md-8 col-xs-12">
+              <label class="control-label primary-label" for="speakingReferences">Speaking References</label><br/>
+              <label class="control-label sub-label" for="speakingReferences">Please list at least two references. Include name of contact, city, state, phone number and/or email.</label>
+              <textarea class="form-control" rows="3"
+                    [(ngModel)]="model.speakingReferences"
+                    name="speakingReferences" #speakingReferences="ngModel"></textarea>
+            </div>
           </div>
         </div>
       </div>
