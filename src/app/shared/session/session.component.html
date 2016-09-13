@@ -167,9 +167,13 @@
           <label class="control-label primary-label" for="descriptionWebsite">Website Description</label><br/>
           <label class="control-label sub-label" for="descriptionWebsite"><b>150 word limit.</b> This description will appear on CCAW's website and on the conference app.</label><br/>
           <label class="control-label sub-label" for="descriptionWebsite">The description must discuss learning objectives and/or takeaways for attendees. Please use third person.</label>
-          <textarea class="form-control" rows="3" required
+          <textarea class="form-control" rows="3" maxWords="150"
                  [(ngModel)]="model.descriptionWebsite"
                  name="descriptionWebsite" #descriptionWebsite="ngModel"></textarea>
+          <div *ngIf="!descriptionWebsite.valid" class="alert alert-warning">
+            <p>There is a 150 word limit for the website description, please edit text to below limit.</p>
+            <p>Current words: {{ descriptionWebsite.value.split(' ').length }}</p>
+          </div>
         </div>
       </div>
 
@@ -177,9 +181,13 @@
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="descriptionProgram">Program Description</label><br/>
           <label class="control-label sub-label" for="descriptionProgram"><b>60 word limit.</b> In order to cut down on printing costs and reduce paper waste, please shorten your presentation description to be included in the printed program. Please use third person.</label>
-          <textarea class="form-control" rows="3" required
+          <textarea class="form-control" rows="3" maxWords="60"
                  [(ngModel)]="model.descriptionProgram"
                  name="descriptionProgram" #descriptionProgram="ngModel"></textarea>
+          <div *ngIf="!descriptionProgram.valid" class="alert alert-warning">
+            <p>There is a 60 word limit for the program description, please edit text to below limit.</p>
+            <p>Current words: {{ descriptionProgram.value.split(' ').length }}</p>
+          </div>
         </div>
       </div>
 
@@ -307,7 +315,7 @@
       </div>
 
     </div>
-    <button type="submit" 
+    <button type="submit" [disabled]="!sessionForm.form.valid"
             class="btn btn-primary" 
             (click)="updateSession(sessionForm.form)">Submit</button>
     <toast #toast></toast>
