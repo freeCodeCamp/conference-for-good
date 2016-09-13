@@ -44,6 +44,9 @@ import { DatePipe } from './shared/date.pipe';
 import { CapitalizePipe } from './shared/capitalize.pipe';
 import { TimePipe } from './shared/time.pipe';
 
+/** Directives */
+import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -61,7 +64,10 @@ import { TimePipe } from './shared/time.pipe';
     ForgotPasswordComponent, ToastComponent,
 
     // Pipes
-    DatePipe, CapitalizePipe, TimePipe
+    DatePipe, CapitalizePipe, TimePipe,
+
+    // Directives
+    MaxWordsValidatorDirective
   ],
   providers: [
     // Route guards

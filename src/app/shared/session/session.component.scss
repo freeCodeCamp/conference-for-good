@@ -36,8 +36,9 @@ input.ng-invalid.ng-dirty.ng-touched {
   align-items: flex-end;
 }
 
-textarea {
-  resize: none;
+.alert-warning {
+  margin-top: 10px;
+  margin-bottom: 0;
 }
 
 .checkbox-group {
