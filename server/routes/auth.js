@@ -58,7 +58,7 @@ router.post('/signup', (req, res, next) => {
             subject: `Copresenter with ${leadPresName} at CCAW`, // Subject line
             html: `
                 <div>You've been signed up as a copresenter for a presentation at Conference for Crimes Against Women by ${leadPresName}.</div>
-                <div>Please <a href="http://localhost:3000/login">log in here</a> to view and update your information with the following: </div>
+                <div>Please <a href="http://localhost:4200/login">log in here</a> to view and update your information with the following: </div>
                 <div>Your username: ${req.body.email}</div>
                 <div>Your password: ${req.body.password}</div>
             ` // TODO change to URL for deployment
@@ -66,7 +66,7 @@ router.post('/signup', (req, res, next) => {
 
         transporter.sendMail(mailOptions, function(error, info){
             if(error){
-                console.log('email not sent');
+                console.log('email not sent', error);
             } else {
                 console.log('email sent');
             }
@@ -133,7 +133,7 @@ router.post('/forgotpassword', (req, res) => {
                     from: 'Jennifer Bland <ratracegrad@gmail.com>', // TODO update with CCAW sender address
                     to: formData.email,
                     subject: 'New CCAW password.', // Subject line
-                    html: '<b>Your new password is ' + newPass + '.  </b><a href="http://localhost:3000/login">Login here.</a>' // TODO change to URL for deployment
+                    html: '<b>Your new password is ' + newPass + '.  </b><a href="http://localhost:4200/login">Login here.</a>' // TODO change to URL for deployment
                 };
 
                 transporter.sendMail(mailOptions, function(error, info){

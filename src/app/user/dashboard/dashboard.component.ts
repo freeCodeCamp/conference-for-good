@@ -60,6 +60,7 @@ export class DashboardComponent {
         }
         return false;
       });
+      console.log('scheduled sessions: ', this.scheduledSessions);
     });
 
     this.leadOnlySessions = _.filter(this.allSpeakerSessions, session => session.speakers.mainPresenter === this.speaker._id);
