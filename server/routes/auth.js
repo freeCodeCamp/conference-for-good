@@ -44,7 +44,6 @@ router.post('/signup', (req, res, next) => {
     // If lead presenter signs up, generate a random password and email them info
     if (req.body.leadPres) {
         let formData = req.body.formData;
-        console.log('data', formData);
         req.body.email = formData.email;
         req.body.firstName = formData.firstName;
         req.body.lastName = formData.lastName;
@@ -82,14 +81,6 @@ router.post('/signup', (req, res, next) => {
         return res.status(200).json({alert: info, userId: user._id});
     })(req, res, next);
 });
-
-/*router.post('/signupforcopres', (req, res) => {
-    let leadPres = req.body.leadPres;
-    let signupData = req.body.signupData;
-    signupData.password = generateRandomPassword();
-    
-
-});*/
 
 router.get('/logout', (req, res) => {
     req.logout();
