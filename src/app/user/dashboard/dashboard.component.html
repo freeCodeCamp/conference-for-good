@@ -100,12 +100,12 @@
       <button class="btn btn-primary center-block" (click)="goto('proposal')">Submit Presentation Proposal</button>
     </div>
     <div class="col-md-4 col-xs-12 action-item">
-      <button class="btn btn-primary center-block" (click)="addingCopres = !addingCopres">Add co-presenters</button>
+      <button class="btn btn-primary center-block" (click)="copresLinkJump()">Add co-presenters</button>
     </div>
   </div>
 
-  <div class="row adding-copres">
-    <div *ngIf="addingCopres" class="block">
+  <div #copresLink class="row adding-copres">
+    <div class="block">
       <p>
         Please select copresenters for presentations which you have submitted.
         If they have not made an account, you can start one for them, and they will receive

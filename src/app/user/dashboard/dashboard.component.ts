@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 
@@ -19,6 +19,7 @@ import { ToastComponent } from '../../shared/toast.component';
 export class DashboardComponent {
 
   @ViewChild('toast') toast: ToastComponent;
+  @ViewChild('copresLink') copresLink: ElementRef;
 
   speaker: Speaker;
   allSpeakerSessions: Session[] = [];
@@ -26,8 +27,6 @@ export class DashboardComponent {
   scheduledSessions: Session[] = [];
 
   leadOnlySessions: Session[] = [];
-
-  addingCopres = false;
 
   constructor(private transitionService: TransitionService,
               private adminService: AdminService,
@@ -85,6 +84,14 @@ export class DashboardComponent {
   }
 
   addCopres(sessionId: string, speakerId: string) {
+    if (sessionId === '') {
+      this.toast.error('Please select the presentation this copresenter will be assigned to.');
+      return;
+    }
+    if (speakerId === this.speaker._id) {
+      this.toast.error('Cannot make yourself a copresenter.');
+      return;
+    }
     let isLead = false;
     this.sessionService.assignSpeaker(speakerId, isLead, sessionId)
         .then(res => {
@@ -117,6 +124,11 @@ export class DashboardComponent {
       default:
         break;
     }
+  }
+
+  copresLinkJump() {
+    let copresLink: HTMLDivElement = this.copresLink.nativeElement;
+    copresLink.scrollIntoView(true);
   }
 
 }
