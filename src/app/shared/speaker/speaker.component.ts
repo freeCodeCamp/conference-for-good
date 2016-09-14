@@ -81,6 +81,10 @@ export class SpeakerComponent implements OnInit, OnDestroy {
     this.model.profileComplete = this.checkProfile(form);
 
     if (this.leadPresId) {
+      if (this.speakerService.findSpeakerByEmail(this.model.email)) {
+        this.toast.error('A speaker with that email already exists');
+        return;
+      }
       let leadPres = this.speakerService.getSpeaker(this.leadPresId);
       let signupData = {
         email: this.model.email,
@@ -97,11 +101,6 @@ export class SpeakerComponent implements OnInit, OnDestroy {
                 .then(res => {
                   this.toast.success('Copresenter account created and emailed!')
                 });
-          })
-          .catch(err => {
-            if (err.status === 409) {
-              this.toast.error('A speaker with that email already exists');
-            }
           });
     } else {
       this.speakerService

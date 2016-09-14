@@ -61,6 +61,10 @@ export class SpeakerService {
     return _.find(this.speakersUnfiltered.getValue(), speaker => speaker._id === speakerId );
   }
 
+  findSpeakerByEmail(speakerEmail: string) {
+    return _.find(this.speakersUnfiltered.getValue(), speaker => speaker.email === speakerEmail);
+  }
+
   /** Update speaker display filters */
   setFiltering() {
     let unfilteredCopy = this.speakersUnfiltered.getValue();
