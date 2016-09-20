@@ -9,6 +9,23 @@
     <h3 class="text-center title">My Information</h3>
     <div class="col-xs-12">
 
+<!--      <div class="col-xs-6">
+*** Why do we need to show completed speakers? Alert should only show incomplete to take action when needed
+        <div class="dashboard-item">
+          <div class="row">
+            <b>Completed Speaker Profiles</b>
+          </div>
+          <div class="row">
+            <div *ngFor="let speaker of (speakerService.profileCompleted | async)">
+              <div class="name">
+                {{ speaker.saluation | capitalize }} {{ speaker.nameFirst | capitalize }} {{ speaker.nameLast | capitalize }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>-->
+
       <div class="col-xs-6">
 
         <div class="dashboard-item">
@@ -16,22 +33,13 @@
             <b>Incomplete Speaker Profiles</b>
           </div>
           <div class="row">
-            <span *ngIf="speaker.profileComplete">None</span>
-            <span *ngIf="!speaker.profileComplete" class="redText">Profile Incomplete</span>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="col-xs-6">
-
-        <div class="dashboard-item">
-          <div class="row">
-            <b>Completed Speaker Profiles</b>
-          </div>
-          <div class="row">
-            <span *ngIf="speaker.profileComplete">None</span>
-            <span *ngIf="!speaker.profileComplete" class="redText">Profile Incomplete</span>
+            <div *ngFor="let speaker of (speakerService.profileNotDone | async)">
+              <div class="name">
+                <a [routerLink]="['/speaker', {id: speaker._id}]">
+                  {{ speaker.salutation | capitalize }} {{ speaker.nameFirst | capitalize }} {{ speaker.nameLast | capitalize }}
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 

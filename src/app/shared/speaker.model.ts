@@ -36,7 +36,7 @@ export interface Speaker {
   costsCoveredByOrg: {  // In form: Travel/Lodging/None check all that apply
     name: string,
     covered: boolean
-  }[], 
+  }[],
   speakingFees: string, // Not sure if we need a number? Selectable from dropdown?
   hasPresentedAtCCAWInPast2years: boolean,
   recentSpeakingExp: string,
