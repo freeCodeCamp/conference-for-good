@@ -32,6 +32,8 @@ export class SessionService {
 
   sessionsUnfiltered: BehaviorSubject<Session[]> = new BehaviorSubject([]);
   sessions: BehaviorSubject<Session[]> = new BehaviorSubject([]);
+  sessionsCompleted: BehaviorSubject<Session[]> = new BehaviorSubject([]);
+  sessionsNotDone: BehaviorSubject<Session[]> = new BehaviorSubject([]);
 
   currentFilters: BehaviorSubject<{order: SessionOrder, filter: SessionFilter}> 
                   = new BehaviorSubject({order: SessionOrder.Alphabetical, filter: SessionFilter.None}); 
@@ -72,6 +74,9 @@ export class SessionService {
   setFiltering() {
     let unfilteredCopy = this.sessionsUnfiltered.getValue();
     let filtered: Session[];
+
+    this.sessionsCompleted.next(_.filter(unfilteredCopy, session => session.sessionCompleted));
+    this.sessionsNotDone.next(_.filter(unfilteredCopy, session => !session.sessionCompleted));
 
     switch (this.currentFilters.getValue().order) {
       case SessionOrder.Alphabetical:
