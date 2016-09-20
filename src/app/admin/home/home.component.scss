@@ -1,2 +1,9 @@
 @import '../../shared/common-styles';
 @import '../../user/dashboard/dashboard.component.scss';
+
+.pending-session {
+  padding: 10px;
+  margin: 10px;
+  border: 1px dashed hsl(0, 0%, 75%);
+  border-radius: 10px;
+}
