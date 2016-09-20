@@ -71,8 +71,8 @@ export class SpeakerService {
     filtered = _.filter(unfilteredCopy, speaker => !speaker.admin);
     this.admins.next(_.filter(unfilteredCopy, speaker => speaker.admin));
 
-    this.profileCompleted.next(_.filter(unfilteredCopy, speaker => speaker.profileComplete));
-    this.profileNotDone.next(_.filter(unfilteredCopy, speaker => !speaker.profileComplete));
+    this.profileCompleted.next(_.filter(filtered, speaker => speaker.profileComplete));
+    this.profileNotDone.next(_.filter(filtered, speaker => !speaker.profileComplete));
 
     switch (this.currentFilters.getValue().order) {
       case SpeakerOrder.Alphabetical:

@@ -35,7 +35,9 @@
           <div class="row">
             <div *ngFor="let speaker of (speakerService.profileNotDone | async)">
               <div class="name">
-                {{ speaker.saluation | capitalize }} {{ speaker.nameFirst | capitalize }} {{ speaker.nameLast | capitalize }}
+                <a [routerLink]="['/speaker', {id: speaker._id}]">
+                  {{ speaker.salutation | capitalize }} {{ speaker.nameFirst | capitalize }} {{ speaker.nameLast | capitalize }}
+                </a>
               </div>
             </div>
           </div>
