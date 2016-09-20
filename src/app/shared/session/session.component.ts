@@ -205,7 +205,7 @@ export class SessionComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateSession(form: NgForm) {
+  updateSession(form: any) {
     this.model.sessionCompleted = this.checkSession(form);
 
     this.sessionService
@@ -217,7 +217,14 @@ export class SessionComponent implements OnInit, OnDestroy {
     var flag = true;
 
     this.requiredSessionFields.forEach(item => {
-      if (!form[item]) {
+      if (typeof form[item] !== undefined) {
+        // If type is boolean, form item is completed
+        if (typeof form[item] !== 'boolean') {
+          if (!form[item]) {
+            flag = false;
+          }
+        }
+      } else {
         flag = false;
       }
     });
