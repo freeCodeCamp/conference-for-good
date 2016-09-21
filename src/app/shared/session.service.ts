@@ -33,6 +33,15 @@ export class SessionService {
   sessionsUnfiltered: BehaviorSubject<Session[]> = new BehaviorSubject([]);
   sessions: BehaviorSubject<Session[]> = new BehaviorSubject([]);
 
+  // All sessions sorted by completion
+  sessionsCompleted: BehaviorSubject<Session[]> = new BehaviorSubject([]);
+  sessionsNotDone: BehaviorSubject<Session[]> = new BehaviorSubject([]);
+
+  // Completed sessions sorted by approval
+  sessionsPending: BehaviorSubject<Session[]> = new BehaviorSubject([]);
+  sessionsApproved: BehaviorSubject<Session[]> = new BehaviorSubject([]);
+  sessionsDenied: BehaviorSubject<Session[]> = new BehaviorSubject([]);
+
   currentFilters: BehaviorSubject<{order: SessionOrder, filter: SessionFilter}> 
                   = new BehaviorSubject({order: SessionOrder.Alphabetical, filter: SessionFilter.None}); 
 
@@ -72,6 +81,13 @@ export class SessionService {
   setFiltering() {
     let unfilteredCopy = this.sessionsUnfiltered.getValue();
     let filtered: Session[];
+
+    this.sessionsCompleted.next(_.filter(unfilteredCopy, session => session.sessionCompleted));
+    this.sessionsNotDone.next(_.filter(unfilteredCopy, session => !session.sessionCompleted));
+
+    this.sessionsPending.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'pending'));
+    this.sessionsApproved.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'approved'));
+    this.sessionsDenied.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'denied'));
 
     switch (this.currentFilters.getValue().order) {
       case SessionOrder.Alphabetical:
@@ -290,6 +306,13 @@ export class SessionService {
       });
     });
     return hasScheduledSession;
+  }
+
+  // approval: string, // pending (default), approved, denied (by brooke) 
+  changeApproval(session: Session, approval: string) {
+    session.approval = approval;
+    
+    return this.updateSession(session);
   }
 
   /** Update new session on server and sync response with front end 

@@ -6,7 +6,40 @@
   <div class="divider"></div>
 
   <div class="row block">
-    <h3 class="text-center title">My Information</h3>
+    <div class="dashboard-item">
+      <div class="col-xs-12">
+        <div class="row">
+          <b>Completed sessions pending approval</b>
+          <p>
+            Sessions that are complete with lead presenters
+            that have complete profiles awaiting approval or denial.
+          </p>
+        </div>
+        <div class="row">
+          <div *ngFor="let session of fullyCompletePendingSessions">
+
+            <div class="row pending-session">
+
+              <div class="col-xs-6">
+                <a [routerLink]="['/session', {id: session._id}]">{{ session.title }}</a><br/>
+                <a [routerLink]="['/speaker', {id: session.speakers.mainPresenter}]">
+                  {{ speakerService.getSpeakerList(session.speakers).mainPresenter.nameFirst }} {{ speakerService.getSpeakerList(session.speakers).mainPresenter.nameLast }}
+                </a>
+              </div>
+              <div class="col-xs-6">
+                <a class="btn btn-success" (click)="changeApproval(session, 'approved')">Approve</a>
+                <a class="btn btn-warning" (click)="changeApproval(session, 'denied')">Deny</a>
+              </div>
+            
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row block">
     <div class="col-xs-12">
 
 <!--      <div class="col-xs-6">
@@ -43,6 +76,19 @@
           </div>
         </div>
 
+      </div>
+
+      <div class="col-xs-6">
+        <div class="dashboard-item">
+          <div class="row">
+            <b>Incomplete Sessions</b>
+          </div>
+          <div class="row">
+            <div *ngFor="let session of (sessionService.sessionsNotDone | async)">
+              <a [routerLink]="['/session', {id: session._id}]">{{ session.title }}</a>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>

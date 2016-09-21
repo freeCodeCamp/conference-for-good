@@ -39,6 +39,9 @@ export class SessionComponent implements OnInit, OnDestroy {
   sessionSpeakers: BehaviorSubject<{mainPresenter: Speaker, coPresenters: Speaker[]}> = new BehaviorSubject(null);
 
   model: Session;
+  requiredSessionFields = ['type', 'length', 'title', 'descriptionWebsite',
+                           'descriptionProgram', 'level', 'willingToBeRecorded', 
+                           'isMediaOrPressFriendly', 'willingToRepeat'];
 
   tags = tags;
   
@@ -202,11 +205,31 @@ export class SessionComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateSession(form: NgForm) {
-    if (!form.valid) return;
+  updateSession(form: any) {
+    this.model.sessionCompleted = this.checkSession(form);
+
     this.sessionService
         .updateSession(this.model)
         .then(res => this.toast.success('Session updated!'));
+  }
+
+  checkSession(form: any) {
+    var flag = true;
+
+    this.requiredSessionFields.forEach(item => {
+      if (typeof form[item] !== undefined) {
+        // If type is boolean, form item is completed
+        if (typeof form[item] !== 'boolean') {
+          if (!form[item]) {
+            flag = false;
+          }
+        }
+      } else {
+        flag = false;
+      }
+    });
+
+    return flag;
   }
 
 }

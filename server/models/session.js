@@ -29,7 +29,11 @@ let sessionSchema = new mongoose.Schema({
     part: String, // 1 or 2 - for two parters, which part is being scheduled else 0
     room: String
   }],
-  miscRequirements: String
+  miscRequirements: String,
+  sessionCompleted: {
+    type: Boolean,
+    default: false
+  }
 });
 
 module.exports = mongoose.model('Session', sessionSchema);
