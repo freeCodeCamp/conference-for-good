@@ -72,7 +72,7 @@ export class SpeakerService {
         }
       });
     });
-    console.log('all speakers', allSpeakers);
+
     return allSpeakers;
   }
 
