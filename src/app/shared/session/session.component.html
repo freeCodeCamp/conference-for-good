@@ -10,6 +10,21 @@
         <h3>Admin Fields</h3>
 
         <div class="row section">
+          <h4>Change associated conference</h4>
+          <p><b>Sessions is currently associated with: </b> <span class="text-primary">{{ model.associatedConf }}</span></p>
+          <div class="col-md-4">
+            <label for="defaultConferences" class="control-label">Conferences</label>
+            <select #defaultConferences class="form-control" id="defaultConferences">
+              <option *ngFor="let conf of adminService.conferences">
+                {{ conf.title }}
+              </option>
+            </select>
+          </div>
+              <button type="submit" class="btn btn-primary" 
+            (click)="changeAssociatedConf(defaultConferences.value)">Select</button>
+        </div>
+
+        <div class="row section">
           <h4>Modify session approval</h4>
           <p><b>Session is currently:</b> <span class="text-primary">{{ model.approval }}</span></p>
           <div class="session-status" *ngIf="!model.sessionComplete || !mainPresenter()?.profileComplete">
