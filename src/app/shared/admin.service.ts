@@ -35,6 +35,7 @@ export class AdminService {
     };
     this.conferences.push(newConf);
     this.activeConference.next(newConf);
+    this.defaultConference.next(newConf);
     let pkg = packageForPost(newConf);
     return this.http
               .post(this.baseUrl + '/api/createconference', pkg.body, pkg.opts)

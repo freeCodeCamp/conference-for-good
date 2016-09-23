@@ -36,7 +36,11 @@ router.get('/getallsessions', (req, res) => {
 router.post('/createconference', (req, res) => {
     let conf = req.body;
     console.log('conf:', conf);
-    updateActiveConfs(null).then(saveSuccess => {
+    updateActiveConfs(null)
+        .then(saveSuccess => {
+            if (!saveSuccess) return res.status(500).json({message: 'Conference save error'});
+            else return updateDefaultConfs(null);
+        }).then(saveSuccess => {
         if (saveSuccess) {
             let newConf = new Conference();
             newConf.lastActive = true;
