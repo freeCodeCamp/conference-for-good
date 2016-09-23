@@ -15,13 +15,21 @@
             <p><b>Current speakers</b></p>
             <p>Lead Presenter: <span class="lead-pres" *ngIf="mainPresenter()">
               <i class="fa fa-ban delete" (click)="removeSpeaker('main')"></i>
-              <span class="slot-display">{{ mainPresenter().nameFirst }} {{ mainPresenter().nameLast }}</span>
+              <span class="slot-display">
+                <a class="slot-speaker" [routerLink]="['/speaker', {id: mainPresenter()._id}]">
+                  {{ mainPresenter().nameFirst }} {{ mainPresenter().nameLast }}
+                </a>
+              </span>
             </span></p>
             <p id="co-pres-label">Co-Presenters: </p>
             <div class="co-presenters"> 
               <div *ngFor="let coPres of (sessionSpeakers | async)?.coPresenters">
                 <i class="fa fa-ban delete" (click)="removeSpeaker(coPres._id)"></i>
-                <span class="slot-display">{{ coPres?.nameFirst }} {{ coPres?.nameLast }}</span>
+                <span class="slot-display">
+                  <a class="slot-speaker" [routerLink]="['/speaker', {id: coPres._id}]">
+                    {{ coPres?.nameFirst }} {{ coPres?.nameLast }}
+                  </a>
+                </span>
               </div>
             </div>
           </div>
