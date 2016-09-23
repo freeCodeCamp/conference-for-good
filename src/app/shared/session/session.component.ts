@@ -86,7 +86,7 @@ export class SessionComponent implements OnInit, OnDestroy {
         }
       } else {
         this.model = this.sessionService.getSession(params['id']);
-        this.sessionService.sessions.subscribe(sessions => {
+        this.sessionService.sessionsUnfiltered.subscribe(sessions => {
           this.getSessionSpeakers();
         });
       }

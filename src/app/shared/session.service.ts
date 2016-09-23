@@ -13,41 +13,29 @@ import { Conference, TimeSlot } from './conference.model';
 import { Speaker } from './speaker.model';
 import { Session } from './session.model';
 
-enum SessionOrder {
-  Alphabetical,
-  DateAdded
-}
-
-enum SessionFilter {
-  None,
-  Pending,
-  Completed,
-  Upcoming
-}
-
 @Injectable()
 export class SessionService {
 
   baseUrl = environment.production ? '' : 'http://localhost:3000';
 
+  // All sessions with no filtering
   sessionsUnfiltered: BehaviorSubject<Session[]> = new BehaviorSubject([]);
-  sessions: BehaviorSubject<Session[]> = new BehaviorSubject([]);
 
-  // All sessions sorted by completion
+  // All sessions filtered by association with current active conf (aka active sessions)
+  sessionsActive: BehaviorSubject<Session[]> = new BehaviorSubject([]);
+
+  // Active sessions filtered by completion
   sessionsCompleted: BehaviorSubject<Session[]> = new BehaviorSubject([]);
   sessionsNotDone: BehaviorSubject<Session[]> = new BehaviorSubject([]);
 
-  // Completed sessions sorted by approval
+  // Completed active sessions filtered by approval
   sessionsPending: BehaviorSubject<Session[]> = new BehaviorSubject([]);
   sessionsApproved: BehaviorSubject<Session[]> = new BehaviorSubject([]);
   sessionsDenied: BehaviorSubject<Session[]> = new BehaviorSubject([]);
 
-  currentFilters: BehaviorSubject<{order: SessionOrder, filter: SessionFilter}> 
-                  = new BehaviorSubject({order: SessionOrder.Alphabetical, filter: SessionFilter.None}); 
-
   constructor(private http: Http,
               private adminService: AdminService) {
-    this.currentFilters.subscribe(filter => this.setFiltering());
+
   }
 
   getAllSessions() {
@@ -57,7 +45,7 @@ export class SessionService {
               .then(parseJson)
               .then(allSessions => {
                 this.sessionsUnfiltered.next(allSessions);
-                this.setFiltering();
+                this.setFilterAndSort();
               })
               .catch(handleError);
   }
@@ -78,43 +66,22 @@ export class SessionService {
   }
 
   /** Update session display filters */
-  setFiltering() {
+  setFilterAndSort() {
     let unfilteredCopy = this.sessionsUnfiltered.getValue();
-    let filtered: Session[];
+    let sortedUnfiltered: Session[];
+    sortedUnfiltered = _.sortBy(unfilteredCopy, session => session.title);
 
-    this.sessionsCompleted.next(_.filter(unfilteredCopy, session => session.sessionComplete));
-    this.sessionsNotDone.next(_.filter(unfilteredCopy, session => !session.sessionComplete));
+    let defaultConf = this.adminService.defaultConference.getValue().title;
+    this.sessionsActive.next(_.filter(sortedUnfiltered, sessions => sessions.associatedConf === defaultConf));
+
+    this.sessionsCompleted.next(_.filter(this.sessionsActive.getValue(), session => session.sessionComplete));
+    this.sessionsNotDone.next(_.filter(this.sessionsActive.getValue(), session => !session.sessionComplete));
 
     this.sessionsPending.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'pending'));
     this.sessionsApproved.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'approved'));
     this.sessionsDenied.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'denied'));
 
-    switch (this.currentFilters.getValue().order) {
-      case SessionOrder.Alphabetical:
-        filtered = _.sortBy(unfilteredCopy, session => session.title);
-        break;
-      case SessionOrder.DateAdded:
-        // Implementation
-        break;
-      default:
-        break;
-    }
-
-    switch (this.currentFilters.getValue().filter) {
-      case SessionFilter.Upcoming:
-        let today = moment();
-        filtered = _.filter(filtered, session => this.getSessionMoment(session))
-        break;
-      
-      default:
-        break;
-    }
-
-    this.sessions.next(filtered);
-  }
-
-  getSessionMoment(session: Session) {
-    
+    this.sessionsUnfiltered.next(sortedUnfiltered);
   }
 
   /** Find the session assigned to room and timeslot, if any
@@ -126,7 +93,7 @@ export class SessionService {
       return;
     }
     let part = '';
-    let session = _.find(this.sessions.getValue(), session => {
+    let session = _.find(this.sessionsUnfiltered.getValue(), session => {
       // Skip sessions that haven't been assigned
       if (!session.statusTimeLocation || session.statusTimeLocation.length < 1) return false;
       let sameSlotAndRoom = false;
@@ -144,7 +111,7 @@ export class SessionService {
 
   /** Get the session with a known id */
   getSession(sessionId: string) {
-    return _.find(this.sessions.getValue(), session => session._id === sessionId );
+    return _.find(this.sessionsUnfiltered.getValue(), session => session._id === sessionId );
   }
 
   /** Assign a session to a slot and room and remove overlap if needed */
@@ -269,7 +236,7 @@ export class SessionService {
                            confDate: {date: string, timeSlots: TimeSlot[]},
                            slotIndex: number): boolean {
     let slot = confDate.timeSlots[slotIndex];
-    let sessions = this.sessions.getValue();
+    let sessions = this.sessionsUnfiltered.getValue();
     let hasScheduledSession = false;
     sessions.forEach(session => {
       session.statusTimeLocation.forEach(occurrence => {
@@ -298,7 +265,7 @@ export class SessionService {
   }
 
   roomHasScheduledSessions(conf: Conference, room: string): boolean {
-    let sessions = this.sessions.getValue();
+    let sessions = this.sessionsUnfiltered.getValue();
     let hasScheduledSession = false;
     sessions.forEach(session => {
       session.statusTimeLocation.forEach(occurrence => {
@@ -341,7 +308,7 @@ export class SessionService {
                   existingSession = serverSession;
                 }
                 this.sessionsUnfiltered.next(newSessions);
-                this.setFiltering();
+                this.setFilterAndSort();
                 return serverSession;
               })
               .catch(handleError);

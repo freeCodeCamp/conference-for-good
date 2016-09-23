@@ -206,6 +206,8 @@ export class AdminService {
                 });
                 let activeConf = _.find(this.conferences, conf => conf.lastActive === true);
                 this.activeConference.next(activeConf);
+                let defaultConf = _.find(this.conferences, conf => conf.default === true);
+                this.defaultConference.next(defaultConf);
                 return conferences;
               })
               .catch(handleError);
