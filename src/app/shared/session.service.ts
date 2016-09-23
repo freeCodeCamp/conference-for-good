@@ -315,6 +315,12 @@ export class SessionService {
     return this.updateSession(session);
   }
 
+  changeAssociatedConf(session: Session, conferenceTitle: string) {
+    session.associatedConf = conferenceTitle;
+
+    return this.updateSession(session);
+  }
+
   /** Update new session on server and sync response with front end 
    * @updateType Different server endpoints for speaker and slot updates
   */
