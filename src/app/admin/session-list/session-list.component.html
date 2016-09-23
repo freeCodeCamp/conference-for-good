@@ -4,13 +4,30 @@
     Click any existing session to modify its information or add a 
     new session from scratch.
   </p>
-  <a [routerLink]="['/session']"><button type="submit" class="btn btn-primary">Add Session</button></a>
+  <div class="row">
+    <div class="col-xs-6">
+      <a [routerLink]="['/session']"><button type="submit" class="btn btn-primary">Add Session</button></a>
+    </div>
+    <div class="col-xs-6 col-md-2">
+      <label for="filter" class="control-label">Filter</label>
+      <select #filter class="form-control" id="filter"
+        (input)="setFilter(filter.value)">
+        <option>Active</option>
+        <option>All</option>
+        <option>Complete</option>
+        <option>Incomplete</option>
+        <option>Pending</option>
+        <option>Approved</option>
+        <option>Denied</option>
+      </select>
+    </div>
+  </div>
 
   <div class="divider"></div>
 
   <div class="row">
     <div id="sessions" class="col-md-10 col-s-12 col-md-offset-1">
-      <div *ngFor="let sessionRef of (sessionService.sessions | async)" 
+      <div *ngFor="let sessionRef of (displaySessions | async)" 
           class="session row" (click)="gotoSession(sessionRef._id)">
         <div class="row">
           <div class="col-xs-12 title"><b>{{ sessionRef.title }}</b></div>
