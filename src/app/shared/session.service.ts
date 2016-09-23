@@ -82,8 +82,8 @@ export class SessionService {
     let unfilteredCopy = this.sessionsUnfiltered.getValue();
     let filtered: Session[];
 
-    this.sessionsCompleted.next(_.filter(unfilteredCopy, session => session.sessionCompleted));
-    this.sessionsNotDone.next(_.filter(unfilteredCopy, session => !session.sessionCompleted));
+    this.sessionsCompleted.next(_.filter(unfilteredCopy, session => session.sessionComplete));
+    this.sessionsNotDone.next(_.filter(unfilteredCopy, session => !session.sessionComplete));
 
     this.sessionsPending.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'pending'));
     this.sessionsApproved.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'approved'));

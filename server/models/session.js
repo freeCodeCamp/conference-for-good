@@ -30,7 +30,7 @@ let sessionSchema = new mongoose.Schema({
     room: String
   }],
   miscRequirements: String,
-  sessionCompleted: {
+  sessionComplete: {
     type: Boolean,
     default: false
   }

@@ -9,6 +9,31 @@
                   && model._id">
         <h3>Admin Fields</h3>
 
+        <div class="row section">
+          <h4>Modify session approval</h4>
+          <p><b>Session is currently:</b> <span class="text-primary">{{ model.approval }}</span></p>
+          <div class="session-status" *ngIf="!model.sessionComplete || !mainPresenter()?.profileComplete">
+            <b>Session completion status:</b>
+            <p class="text-info">
+              Please note that not all necessary fields are completed. Contact the speaker for status if needed.
+            </p>
+            <p *ngIf="!model.sessionComplete" class="text-primary">Session form is incomplete</p>
+            <p *ngIf="!mainPresenter()?.profileComplete" class="text-primary">Lead presenter profile is incomplete</p>
+          </div>
+          <div class="session-status" *ngIf="model.sessionComplete && mainPresenter()?.profileComplete">
+            <b>Session completion status:</b>
+            <p class="text-success">
+              All session and lead presenter fields are completed.
+            </p>
+          </div>
+          <b>Change session approval to:</b>
+          <div class="approval-buttons">
+            <a class="btn btn-success" (click)="changeApproval('approved')">Approved</a>
+            <a class="btn btn-warning" (click)="changeApproval('denied')">Denied</a>
+            <a class="btn btn-default" (click)="changeApproval('pending')">Pending</a>
+          </div>
+        </div>
+
         <div class="row section speaker">
           <h4>Assign speakers to session</h4>
           <div>

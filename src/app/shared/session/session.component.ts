@@ -206,7 +206,7 @@ export class SessionComponent implements OnInit, OnDestroy {
   }
 
   updateSession(form: any) {
-    this.model.sessionCompleted = this.checkSession(form);
+    this.model.sessionComplete = this.checkSession(form);
 
     this.sessionService
         .updateSession(this.model)
@@ -230,6 +230,14 @@ export class SessionComponent implements OnInit, OnDestroy {
     });
 
     return flag;
+  }
+
+  changeApproval(approval: string) {
+    this.sessionService
+        .changeApproval(this.model, approval)
+        .then(res => {
+          this.toast.success(`Session is now ${approval}`);
+        });
   }
 
 }
