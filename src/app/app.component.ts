@@ -35,8 +35,9 @@ export class AppComponent implements OnInit {
           else if (user && !user.admin) this.router.navigate(['/dashboard']);
         });
     this.adminService.getAllConferences();
-    this.sessionService.getAllSessions();
-    this.speakerService.getAllSpeakers();
+    this.sessionService
+        .getAllSessions()
+        .then(res => this.speakerService.getAllSpeakers());    
   }
 
   logout() {

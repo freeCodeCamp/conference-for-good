@@ -73,7 +73,7 @@ export class SessionService {
 
     let defaultConf = this.adminService.defaultConference.getValue().title;
     this.sessionsActive.next(_.filter(sortedUnfiltered, sessions => sessions.associatedConf === defaultConf));
-    console.log('active sessions', this.sessionsActive.getValue());
+
     this.sessionsCompleted.next(_.filter(this.sessionsActive.getValue(), session => session.sessionComplete));
     this.sessionsNotDone.next(_.filter(this.sessionsActive.getValue(), session => !session.sessionComplete));
 

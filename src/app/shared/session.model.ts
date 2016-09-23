@@ -9,7 +9,7 @@ export interface Session {
     descriptionProgram: string, // To be printed on pamphlet? 60 word limit
     tags: { // Option to add tags after MVP
       name: string,
-      label?: string,
+        label?: string,
       checked: boolean
     }[], 
     level: string, // beginner, intermediate or advanced - dropdown on frontend

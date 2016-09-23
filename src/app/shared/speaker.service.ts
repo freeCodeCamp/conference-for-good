@@ -6,22 +6,13 @@ import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
 import { handleError, parseJson, packageForPost } from './http-helpers';
+import { AdminService } from './admin.service';
 import { Speaker } from './speaker.model';
+import { SessionService } from './session.service';
 
 export interface SpeakerList {
   mainPresenter: Speaker;
   coPresenters: Speaker[];
-}
-
-enum SpeakerOrder {
-  Alphabetical,
-  DateJoined
-}
-
-enum SpeakerFilter {
-  None,
-  HasPresentations,
-  IncompleteProfile
 }
 
 @Injectable()
@@ -29,19 +20,29 @@ export class SpeakerService {
 
   baseUrl = environment.production ? '' : 'http://localhost:3000';
 
+  // All speakers with no filtering
   speakersUnfiltered: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
-  speakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+
+  // Admins only
   admins: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+
+  // Non-admins only
+  speakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+
+  // Speakers filtered by profile completion
   profileCompleted: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
   profileNotDone: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
-  currentFilters: BehaviorSubject<{order: SpeakerOrder, filter: SpeakerFilter}>
-                  = new BehaviorSubject({order: SpeakerOrder.Alphabetical, filter: SpeakerFilter.None});
+  // Speakers with proposals for the current year (aka active speakers)
+  speakersActive: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
+  // Active speakers filtered by profile completion
+  activeProfileCompleted: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+  activeProfileNotDone: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
-  constructor(private http: Http) {
-    this.currentFilters.subscribe(filter => this.setFiltering());
-  }
+  constructor(private http: Http,
+              private adminService: AdminService,
+              private sessionService: SessionService) { }
 
   getAllSpeakers() {
     return this.http
@@ -50,9 +51,29 @@ export class SpeakerService {
               .then(parseJson)
               .then(allSpeakers => {
                 this.speakersUnfiltered.next(allSpeakers);
-                this.setFiltering();
+                this.setFilterAndSort();
               })
               .catch(handleError);
+  }
+
+  /** Merge sessions speaker is involved in to a list in front-end speaker model */
+  setSpeakerSessions(allSpeakers: Speaker[]) {
+    let sessions = this.sessionService.sessionsUnfiltered.getValue();
+    allSpeakers.forEach(speaker => {
+      sessions.forEach(session => {
+        let speakers = session.speakers;
+        if (speakers) {
+          if (speakers.mainPresenter === speaker._id) speaker.sessions.push(session._id);
+          else if (speakers.coPresenters.length > 0) {
+            speakers.coPresenters.forEach(coPres => {
+              if (coPres === speaker._id) speaker.sessions.push(session._id);
+            });
+          }
+        }
+      });
+    });
+    console.log('all speakers', allSpeakers);
+    return allSpeakers;
   }
 
   /** Get speaker by id */
@@ -65,35 +86,35 @@ export class SpeakerService {
   }
 
   /** Update speaker display filters */
-  setFiltering() {
+  setFilterAndSort() {
     let unfilteredCopy = this.speakersUnfiltered.getValue();
-    let filtered: Speaker[];
-    filtered = _.filter(unfilteredCopy, speaker => !speaker.admin);
-    this.admins.next(_.filter(unfilteredCopy, speaker => speaker.admin));
+    let sortedUnfiltered: Speaker[];
+    sortedUnfiltered = _.sortBy(unfilteredCopy, speaker => speaker.nameLast.toLowerCase());
+    
+    let speakersOnly = _.filter(sortedUnfiltered, speaker => !speaker.admin);
+    speakersOnly = this.setSpeakerSessions(speakersOnly);
+    this.speakers.next(speakersOnly);
 
-    this.profileCompleted.next(_.filter(filtered, speaker => speaker.profileComplete));
-    this.profileNotDone.next(_.filter(filtered, speaker => !speaker.profileComplete));
+    this.admins.next(_.filter(sortedUnfiltered, speaker => speaker.admin));
 
-    switch (this.currentFilters.getValue().order) {
-      case SpeakerOrder.Alphabetical:
-        filtered = _.sortBy(filtered, speaker => speaker.nameLast);
-        break;
-      case SpeakerOrder.DateJoined:
-        // Implementation
-        break;
-      default:
-        break;
-    }
+    this.profileCompleted.next(_.filter(this.speakers.getValue(), speaker => speaker.profileComplete));
+    this.profileNotDone.next(_.filter(this.speakers.getValue(), speaker => !speaker.profileComplete));
 
-    switch (this.currentFilters.getValue().filter) {
-      case SpeakerFilter.HasPresentations:
-        break;
+    this.speakersActive.next(_.filter(this.speakers.getValue(), speaker => {
+      if (speaker.sessions) {
+        let defaultConf = this.adminService.defaultConference.getValue().title;
+        for (let i = 0; i < speaker.sessions.length; i++) {
+          let session = this.sessionService.getSession(speaker.sessions[i]);
+          if (session.associatedConf === defaultConf) return true;
+        }
+        return false;
+      } else return false;
+    }));
 
-      default:
-        break;
-    }
+    this.activeProfileCompleted.next(_.filter(this.speakersActive.getValue(), speaker => speaker.profileComplete));
+    this.activeProfileNotDone.next(_.filter(this.speakersActive.getValue(), speaker => !speaker.profileComplete));
 
-    this.speakers.next(filtered);
+    this.speakersUnfiltered.next(sortedUnfiltered);
   }
 
 
@@ -124,7 +145,7 @@ export class SpeakerService {
                   existingSpeaker = serverSpeaker;
                 }
                 this.speakersUnfiltered.next(newSpeakers);
-                this.setFiltering();
+                this.setFilterAndSort();
                 return serverSpeaker;
               })
               .catch(handleError);
