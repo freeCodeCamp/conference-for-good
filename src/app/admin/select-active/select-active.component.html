@@ -2,7 +2,7 @@
   <h1>Active Conference</h1>
 
   <h3>Select the conference viewable in calendar</h3>
-  <p>View old conference schedules</p>
+  <p>This allows you to view old conference schedules in the calendar view when changed.</p>
   <div id="dropdown" class="row">
     <div class="col-md-4">
       <label for="conferences" class="control-label">Conferences</label>
@@ -16,10 +16,11 @@
             (click)="changeActiveConf(conferences.value)">Select</button>
   </div>
 
-  <h3>Select the current default conference</h3>
+  <h3 class="spacing">Select the current default conference</h3>
   <p>
     Select which conference you want to be the default. The default conference 
-    is the one new speaker submissions will be associated with.
+    is the one new speaker submissions will be associated with - the conference 
+    currently accepting submissions.
   </p>
   <div id="dropdown" class="row">
     <div class="col-md-4">
