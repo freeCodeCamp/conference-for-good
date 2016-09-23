@@ -27,7 +27,7 @@ export interface Session {
       room: string
     }[],
     miscRequirements?: String,
-    sessionCompleted: boolean
+    sessionComplete: boolean
 }
 
 interface StatusTimeLocation {
