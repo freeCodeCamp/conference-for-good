@@ -17,13 +17,16 @@ export class AdminService {
 
   conferences: Conference[] = [];
   activeConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
+  defaultConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
 
   constructor(private http: Http) { }
 
   createConference(title: string, startDate: string, endDate: string) {
     this.resetActiveConfs();
+    this.resetDefaultConfs();
     let newConf: Conference = {
       lastActive: true,
+      default: true,
       title: title,
       dateRange: {
         start: startDate,
@@ -53,9 +56,28 @@ export class AdminService {
               .catch(handleError);
   }
 
+  changeDefaultConf(confTitle: string) {
+    let conf = _.find(this.conferences, conf => conf.title === confTitle);
+    this.resetDefaultConfs();
+    conf.default = true;
+    this.defaultConference.next(conf);
+    let pkg = packageForPost(conf);
+    return this.http
+              .post(this.baseUrl + '/api/changedefaultconf', pkg.body, pkg.opts)
+              .toPromise()
+              .then(parseJson)
+              .catch(handleError);
+  }
+
   resetActiveConfs() {
     this.conferences.forEach(conf => {
       conf.lastActive = false;
+    });
+  }
+
+  resetDefaultConfs() {
+    this.conferences.forEach(conf => {
+      conf.default = false;
     });
   }
 

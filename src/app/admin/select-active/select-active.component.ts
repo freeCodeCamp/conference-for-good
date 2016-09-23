@@ -27,6 +27,11 @@ export class SelectActiveComponent implements OnInit, AfterViewInit {
 
   changeActiveConf(conferenceTitle: string) {
     this.adminService.changeActiveConf(conferenceTitle)
-        .then(res => this.toast.success('Active conference changed!'));
+        .then(res => this.toast.success(`Calender view displaying: ${conferenceTitle}`));
+  }
+
+  changeDefaultConf(conferenceTitle: string) {
+    this.adminService.changeDefaultConf(conferenceTitle)
+        .then(res => this.toast.success(`Speaker submissions now associated with: ${conferenceTitle}`));
   }
 }
