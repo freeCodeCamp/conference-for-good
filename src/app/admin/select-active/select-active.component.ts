@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
 import { AdminService } from '../../shared/admin.service';
 import { TransitionService } from '../../shared/transition.service';
@@ -9,20 +9,15 @@ import { ToastComponent } from '../../shared/toast.component';
   templateUrl: './select-active.component.html',
   styleUrls: ['./select-active.component.scss']
 })
-export class SelectActiveComponent implements OnInit, AfterViewInit {
+export class SelectActiveComponent implements OnInit {
 
   @ViewChild('toast') toast: ToastComponent;
-  @ViewChild('conferences') conferences: ElementRef;
 
   constructor(private transitionService: TransitionService,
               private adminService: AdminService) { }
 
   ngOnInit() {
     this.transitionService.transition();
-  }
-
-  ngAfterViewInit() {
-    this.conferences.nativeElement.value = this.adminService.activeConference.getValue().title;
   }
 
   changeActiveConf(conferenceTitle: string) {
