@@ -86,7 +86,7 @@ export class SessionComponent implements OnInit, OnDestroy {
         }
       } else {
         this.model = this.sessionService.getSession(params['id']);
-        this.sessionService.sessions.subscribe(sessions => {
+        this.sessionService.sessionsUnfiltered.subscribe(sessions => {
           this.getSessionSpeakers();
         });
       }
@@ -148,6 +148,12 @@ export class SessionComponent implements OnInit, OnDestroy {
     tag.checked = isChecked;
   }
 
+  changeAssociatedConf(conferenceTitle: string) {
+    this.sessionService
+        .changeAssociatedConf(this.model, conferenceTitle)
+        .then(res => this.toast.success(`Now associated with: ${conferenceTitle}`));
+  }
+
   saveToSlot(slotId: string, room: string) {
     let part = '0';
     if (this.model.length === '180') {
@@ -206,7 +212,8 @@ export class SessionComponent implements OnInit, OnDestroy {
   }
 
   updateSession(form: any) {
-    this.model.sessionCompleted = this.checkSession(form);
+    this.model.sessionComplete = this.checkSession(form);
+    this.model.associatedConf = this.adminService.defaultConference.getValue().title;
 
     this.sessionService
         .updateSession(this.model)
@@ -230,6 +237,14 @@ export class SessionComponent implements OnInit, OnDestroy {
     });
 
     return flag;
+  }
+
+  changeApproval(approval: string) {
+    this.sessionService
+        .changeApproval(this.model, approval)
+        .then(res => {
+          this.toast.success(`Session is now ${approval}`);
+        });
   }
 
 }

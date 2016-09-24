@@ -53,6 +53,14 @@ input.ng-invalid.ng-dirty.ng-touched {
   margin: 20px;
 }
 
+.session-status {
+  padding: 20px;
+}
+
+.approval-buttons {
+  margin-top: 10px;
+}
+
 #slot-list {
   display: inline-flex;
   flex-direction: column;
@@ -60,6 +68,14 @@ input.ng-invalid.ng-dirty.ng-touched {
 
 .slot-display {
   border-bottom: 1px dotted $brand-primary;
+}
+
+.slot-speaker {
+  color: black;
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .slot button, .speaker button {

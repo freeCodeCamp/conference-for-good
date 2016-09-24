@@ -1,17 +1,41 @@
 <div class="container" [class.page-transition]="transitionService.isTransitioning()">
   <h1>Active Conference</h1>
-  <h4>Select the conference you want to work with.</h4>
+
+  <h3>Select the conference viewable in calendar</h3>
+  <p>This allows you to view old conference schedules in the calendar view when changed.</p>
   <div id="dropdown" class="row">
+    <p><b>Currently viewing in calendar: <span class="text-info">{{ (adminService.activeConference | async)?.title }}</span></b></p>
     <div class="col-md-4">
-      <label for="conferences" class="control-label">Conferences</label>
-      <select #conferences class="form-control" id="conferences">
+      <label for="activeConferences" class="control-label">Conferences</label>
+      <select #activeConferences class="form-control" id="activeConferences">
         <option *ngFor="let conf of adminService.conferences">
           {{ conf.title }}
         </option>
       </select>
     </div>
     <button type="submit" class="btn btn-primary" 
-            (click)="changeActiveConf(conferences.value)">Select</button>
+            (click)="changeActiveConf(activeConferences.value)">Select</button>
   </div>
+
+  <h3 class="spacing">Select the current default conference</h3>
+  <p>
+    Select which conference you want to be the default. The default conference 
+    is the one new speaker submissions will be associated with - the conference 
+    currently accepting submissions.
+  </p>
+  <div id="dropdown" class="row">
+    <p><b>Currently accepting submissions: <span class="text-info">{{ (adminService.defaultConference | async)?.title }}</span></b></p>
+    <div class="col-md-4">
+      <label for="defaultConferences" class="control-label">Conferences</label>
+      <select #defaultConferences class="form-control" id="defaultConferences">
+        <option *ngFor="let conf of adminService.conferences">
+          {{ conf.title }}
+        </option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary" 
+            (click)="changeDefaultConf(defaultConferences.value)">Select</button>
+  </div>
+
   <toast #toast></toast>
 </div>

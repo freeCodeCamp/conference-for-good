@@ -36,7 +36,11 @@ router.get('/getallsessions', (req, res) => {
 router.post('/createconference', (req, res) => {
     let conf = req.body;
     console.log('conf:', conf);
-    updateActiveConfs(null).then(saveSuccess => {
+    updateActiveConfs(null)
+        .then(saveSuccess => {
+            if (!saveSuccess) return res.status(500).json({message: 'Conference save error'});
+            else return updateDefaultConfs(null);
+        }).then(saveSuccess => {
         if (saveSuccess) {
             let newConf = new Conference();
             newConf.lastActive = true;
@@ -60,6 +64,15 @@ router.post('/changeactiveconf', (req, res) => {
     let conf = req.body;
 
     updateActiveConfs(conf).then(saveSuccess => {
+        if (saveSuccess) res.status(200).json({message: 'Conferences update'});
+        else res.status(500).json({message: 'Conferences updating error'});
+    });
+});
+
+router.post('/changedefaultconf', (req, res) => {
+    let conf = req.body;
+
+    updateDefaultConfs(conf).then(saveSuccess => {
         if (saveSuccess) res.status(200).json({message: 'Conferences update'});
         else res.status(500).json({message: 'Conferences updating error'});
     });
@@ -249,6 +262,32 @@ function updateActiveConfs(activeConf) {
                 for (let i = 0; i < conferences.length; i++) {
                     let serverConf = conferences[i];
                     serverConf.lastActive = serverConf.title === activeConf.title;
+                    serverConf.save(err => {
+                        console.log('conf saved');
+                        if (err) {
+                            console.log(err);
+                            allSavesSuccessful = false;
+                        }
+                    });
+                }
+                resolve(allSavesSuccessful);
+            });
+    });
+    return savePromise;
+}
+
+function updateDefaultConfs(defaultConf) {
+    // If no active conf passed, make all confs inactive
+    if (defaultConf === null) defaultConf = {title: ''};
+    let savePromise = new Promise((resolve, reject) => {
+        Conference
+            .find({})
+            .exec()
+            .then(conferences => {
+                let allSavesSuccessful = true;
+                for (let i = 0; i < conferences.length; i++) {
+                    let serverConf = conferences[i];
+                    serverConf.default = serverConf.title === defaultConf.title;
                     serverConf.save(err => {
                         console.log('conf saved');
                         if (err) {

@@ -4,18 +4,34 @@
     Click any existing speaker to modify their information or add a
     new speaker from scratch.
   </p>
-  <a [routerLink]="['/speaker']"><button type="submit" class="btn btn-primary">Add Speaker</button></a>
+  <div class="row">
+    <div class="col-xs-6">
+      <a [routerLink]="['/speaker']"><button type="submit" class="btn btn-primary">Add Speaker</button></a>
+    </div>
+    <div class="col-xs-4 col-md-2">
+      <label for="filter" class="control-label">Filter</label>
+      <select #filter class="form-control" id="filter"
+        (input)="setFilter(filter.value)">
+        <option>Active</option>
+        <option>All</option>
+        <option>All Complete</option>
+        <option>All Incomplete</option>
+        <option>Active Complete</option>
+        <option>Active Incomplete</option>
+      </select>
+    </div>
+  </div>
 
   <div class="divider"></div>
 
   <div class="row">
 
 
-      <div *ngFor="let speaker of (speakerService.speakers | async)">
+      <div *ngFor="let speaker of (displaySpeakers | async)">
           <div id="speakers" class="col-md-6 col-xs-12">
             <div *ngIf="!speaker.admin"
                  class="speaker row" (click)="gotoSpeaker(speaker._id)">
-              <div class="speaker-left text-center">
+              <div *ngIf="!currentFilter.includes('all')" class="speaker-left text-center">
                 <img *ngIf="speaker.headshot" [src]="speaker.headshot" class="img-responsive">
                 <p *ngIf="!speaker.headshot" class="noHeadshot"><br />No<br/>Image<br />Found</p>
               </div>

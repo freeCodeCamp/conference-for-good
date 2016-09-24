@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 
 let sessionSchema = new mongoose.Schema({
+  associatedConf: String, // title of conf this session was submitted for
   approval: String, // pending, approved, denied (by brooke) 
   type: String, // Case study or workshop - structure of multiple choice fields? in front end, dropdown or radio fields
   length: String, // 90 minutes, 3 hours (parts 1 and 2)
@@ -30,7 +31,7 @@ let sessionSchema = new mongoose.Schema({
     room: String
   }],
   miscRequirements: String,
-  sessionCompleted: {
+  sessionComplete: {
     type: Boolean,
     default: false
   }

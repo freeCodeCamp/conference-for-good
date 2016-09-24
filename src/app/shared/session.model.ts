@@ -1,5 +1,6 @@
 export interface Session {
     _id?: string,
+    associatedConf: string, // title of conf this session was submitted for
     approval: string, // pending, approved, denied (by brooke) 
     type: string, // Case study or workshop - structure of multiple choice fields? in front end, dropdown or radio fields
     length: string, // 90 minutes('90''), 3 hours('180') (parts 1 and 2)
@@ -8,7 +9,7 @@ export interface Session {
     descriptionProgram: string, // To be printed on pamphlet? 60 word limit
     tags: { // Option to add tags after MVP
       name: string,
-      label?: string,
+        label?: string,
       checked: boolean
     }[], 
     level: string, // beginner, intermediate or advanced - dropdown on frontend
@@ -27,7 +28,7 @@ export interface Session {
       room: string
     }[],
     miscRequirements?: String,
-    sessionCompleted: boolean
+    sessionComplete: boolean
 }
 
 interface StatusTimeLocation {

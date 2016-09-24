@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 let conferenceSchema = new mongoose.Schema({
   lastActive: Boolean,
+  default: Boolean,
   title: String,
   dateRange: {
     start: String, // 2016-12-30

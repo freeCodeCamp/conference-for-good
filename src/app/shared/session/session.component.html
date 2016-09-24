@@ -9,19 +9,67 @@
                   && model._id">
         <h3>Admin Fields</h3>
 
+        <div class="row section">
+          <h4>Change associated conference</h4>
+          <p><b>Sessions is currently associated with: </b> <span class="text-primary">{{ model.associatedConf }}</span></p>
+          <div class="col-md-4">
+            <label for="defaultConferences" class="control-label">Conferences</label>
+            <select #defaultConferences class="form-control" id="defaultConferences">
+              <option *ngFor="let conf of adminService.conferences">
+                {{ conf.title }}
+              </option>
+            </select>
+          </div>
+              <button type="submit" class="btn btn-primary" 
+            (click)="changeAssociatedConf(defaultConferences.value)">Select</button>
+        </div>
+
+        <div class="row section">
+          <h4>Modify session approval</h4>
+          <p><b>Session is currently:</b> <span class="text-primary">{{ model.approval }}</span></p>
+          <div class="session-status" *ngIf="!model.sessionComplete || !mainPresenter()?.profileComplete">
+            <b>Session completion status:</b>
+            <p class="text-info">
+              Please note that not all necessary fields are completed. Contact the speaker for status if needed.
+            </p>
+            <p *ngIf="!model.sessionComplete" class="text-primary">Session form is incomplete</p>
+            <p *ngIf="!mainPresenter()?.profileComplete" class="text-primary">Lead presenter profile is incomplete</p>
+          </div>
+          <div class="session-status" *ngIf="model.sessionComplete && mainPresenter()?.profileComplete">
+            <b>Session completion status:</b>
+            <p class="text-success">
+              All session and lead presenter fields are completed.
+            </p>
+          </div>
+          <b>Change session approval to:</b>
+          <div class="approval-buttons">
+            <a class="btn btn-success" (click)="changeApproval('approved')">Approved</a>
+            <a class="btn btn-warning" (click)="changeApproval('denied')">Denied</a>
+            <a class="btn btn-default" (click)="changeApproval('pending')">Pending</a>
+          </div>
+        </div>
+
         <div class="row section speaker">
           <h4>Assign speakers to session</h4>
           <div>
             <p><b>Current speakers</b></p>
             <p>Lead Presenter: <span class="lead-pres" *ngIf="mainPresenter()">
               <i class="fa fa-ban delete" (click)="removeSpeaker('main')"></i>
-              <span class="slot-display">{{ mainPresenter().nameFirst }} {{ mainPresenter().nameLast }}</span>
+              <span class="slot-display">
+                <a class="slot-speaker" [routerLink]="['/speaker', {id: mainPresenter()._id}]">
+                  {{ mainPresenter().nameFirst }} {{ mainPresenter().nameLast }}
+                </a>
+              </span>
             </span></p>
             <p id="co-pres-label">Co-Presenters: </p>
             <div class="co-presenters"> 
               <div *ngFor="let coPres of (sessionSpeakers | async)?.coPresenters">
                 <i class="fa fa-ban delete" (click)="removeSpeaker(coPres._id)"></i>
-                <span class="slot-display">{{ coPres?.nameFirst }} {{ coPres?.nameLast }}</span>
+                <span class="slot-display">
+                  <a class="slot-speaker" [routerLink]="['/speaker', {id: coPres._id}]">
+                    {{ coPres?.nameFirst }} {{ coPres?.nameLast }}
+                  </a>
+                </span>
               </div>
             </div>
           </div>
