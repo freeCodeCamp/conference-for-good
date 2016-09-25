@@ -82,13 +82,9 @@ export class AdminService {
     });
   }
 
-  updateConference(currentTitle: string, newTitle, startDate, endDate) {
+  updateConference(currentTitle: string, newTitle) {
     let conference = _.find(this.conferences, conf => conf.title === currentTitle);
     conference.title = newTitle;
-    conference.dateRange = {
-      start: startDate,
-      end: endDate
-    };
     let pkg = packageForPost({currentTitle: currentTitle, conference: conference});
     return this.http
               .post(this.baseUrl + '/api/updateconference', pkg.body, pkg.opts)
@@ -161,7 +157,7 @@ export class AdminService {
   addRoom(conferenceTitle: string, room: string) {
     let conf = _.find(this.conferences, conf => conf.title === conferenceTitle);
 
-    if (typeof conf.rooms === 'undefined') conf.rooms = [];
+    if (!conf.rooms) conf.rooms = [];
     // Sync front end
     conf.rooms.push(room);
 
@@ -208,8 +204,6 @@ export class AdminService {
                 this.activeConference.next(activeConf);
                 let defaultConf = _.find(this.conferences, conf => conf.defaultConf === true);
                 this.defaultConference.next(defaultConf);
-                console.log('lodash search for default conf result: ', defaultConf);
-                console.log('default conf: ', this.defaultConference.getValue());
                 return conferences;
               })
               .catch(handleError);

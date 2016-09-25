@@ -31,8 +31,6 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
   selectedDaySlots: BehaviorSubject<TimeSlot[]> = new BehaviorSubject([]);
 
   @ViewChild('title') title: ElementRef;
-  @ViewChild('startDate') startDate: ElementRef;
-  @ViewChild('endDate') endDate: ElementRef;
 
   constructor(private transitionService: TransitionService,
               private adminService: AdminService,
@@ -52,14 +50,28 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
     this.fillCurrentDetails();
   }
 
-  updateConf(currentTitle: string, title: HTMLInputElement, 
-             start: HTMLInputElement, end: HTMLInputElement) {
+  updateConf(currentTitle: string, title: HTMLInputElement) {
     let newTitle = title.value;
     if (newTitle.length < 1) {
       this.toast.error('Conference must have a title');
       return;
     }
-    // Input date value format: 2016-12-30
+    this.adminService
+        .getAllConferences()
+        .then((conferences: Conference[]) => {
+          if (!this.isDuplicateTitle(conferences, newTitle, this.selectedConf.getValue().title)) {
+            this.adminService.updateConference(currentTitle, newTitle)
+              .then(res => {
+                this.toast.success('Conference updated!');
+                this.refreshSelectedConf();
+              });
+          } else {
+            this.toast.error('Conference title already exists, please choose another');
+          }
+        });
+
+        // Removed ability to change date range, relies on too much
+/*    // Input date value format: 2016-12-30
     let startText = start.value;
     let endText = end.value;
     let startMoment = moment(startText);
@@ -88,7 +100,7 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
       this.toast.error('Start date invalid');
     } else if (!endValid) {
       this.toast.error('End date invalid');
-    }
+    }*/
   }
 
   addTimeslot(start: HTMLInputElement, end: HTMLInputElement,
@@ -200,8 +212,6 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
 
   fillCurrentDetails() {
     this.title.nativeElement.value = this.selectedConf.getValue().title;
-    this.startDate.nativeElement.value = this.selectedConf.getValue().dateRange.start;
-    this.endDate.nativeElement.value = this.selectedConf.getValue().dateRange.end;
   }
 
   isDuplicateTitle(conferences: Conference[], newTitle: string, currentTitle) {

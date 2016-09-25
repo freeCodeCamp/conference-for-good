@@ -133,7 +133,6 @@ router.post('/updateconference', (req, res) => {
         .exec()
         .then(serverConf => {
             serverConf.title = conf.title;
-            serverConf.dateRange = conf.dateRange;
             serverConf.save(err => {
                 if (err) res.status(500).json({message: 'Conference save error'});
                 else res.status(200).json({message: 'Conference saved'});

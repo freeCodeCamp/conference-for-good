@@ -31,19 +31,9 @@
             <input #title type="text" class="form-control" id="title">
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-4 col-xs-6">
-            <label class="control-label" for="start-date">Start Date</label>
-            <input #startDate type="date" class="form-control" id="start-date">
-          </div>
-          <div class="col-md-4 col-xs-6">
-            <label class="control-label" for="end-date">End Date</label>
-            <input #endDate type="date" class="form-control" id="end-date">
-          </div>
-        </div>
       </div>
       <button id="update" class="btn btn-primary" 
-              (click)="updateConf(conferences.value, title, startDate, endDate)">Update</button>
+              (click)="updateConf(conferences.value, title)">Update</button>
     </div>
 
     <div class="tab-pane" id="tabTimeslot">
