@@ -10,17 +10,25 @@
         <h3>Admin Fields</h3>
 
         <div class="row section speaker">
-        <div class="col-md-8 col-xs-12 speaker-notes">
-          <label class="control-label primary-label" for="speakerNotes">Speaker Notes</label><br/>
-          <textarea class="form-control" rows="3"
-                    [(ngModel)]="model.adminNotes"
-                    #speakerNotes="ngModel" id="admin-notes"
-                    name="speakerNotes"></textarea>
+          <div class="col-md-8 col-xs-12 speaker-notes">
+            <label class="control-label primary-label" for="speakerNotes">Speaker Notes</label><br/>
+            <textarea class="form-control" rows="3"
+                      [(ngModel)]="model.adminNotes"
+                      #speakerNotes="ngModel" id="admin-notes"
+                      name="speakerNotes"></textarea>
+          </div>
+          <div class="col-xs-12">
+            <button class="btn btn-primary"
+                    (click)="updateSpeaker(model)">Save Notes</button>
+          </div>
         </div>
-        <div class="col-xs-12">
-          <button class="btn btn-primary"
-                  (click)="updateSpeaker(model)">Save Notes</button>
-        </div>
+        <div class="row section">
+          <p><b>Sessions speaker is involved in:</b></p>
+          <ul>
+            <li *ngFor="let session of speakerSessions">
+              <a [routerLink]="['/session', {id: session._id}]">{{ session.title }}</a>
+            </li>
+          </ul>
         </div>
         <h3>Public Fields</h3>
       </div>
