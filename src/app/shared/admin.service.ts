@@ -26,7 +26,7 @@ export class AdminService {
     this.resetDefaultConfs();
     let newConf: Conference = {
       lastActive: true,
-      default: true,
+      defaultConf: true,
       title: title,
       dateRange: {
         start: startDate,
@@ -60,7 +60,7 @@ export class AdminService {
   changeDefaultConf(confTitle: string) {
     let conf = _.find(this.conferences, conf => conf.title === confTitle);
     this.resetDefaultConfs();
-    conf.default = true;
+    conf.defaultConf = true;
     this.defaultConference.next(conf);
     let pkg = packageForPost(conf);
     return this.http
@@ -78,7 +78,7 @@ export class AdminService {
 
   resetDefaultConfs() {
     this.conferences.forEach(conf => {
-      conf.default = false;
+      conf.defaultConf = false;
     });
   }
 
@@ -206,8 +206,10 @@ export class AdminService {
                 });
                 let activeConf = _.find(this.conferences, conf => conf.lastActive === true);
                 this.activeConference.next(activeConf);
-                let defaultConf = _.find(this.conferences, conf => conf.default === true);
+                let defaultConf = _.find(this.conferences, conf => conf.defaultConf === true);
                 this.defaultConference.next(defaultConf);
+                console.log('lodash search for default conf result: ', defaultConf);
+                console.log('default conf: ', this.defaultConference.getValue());
                 return conferences;
               })
               .catch(handleError);
