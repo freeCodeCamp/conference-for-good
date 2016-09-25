@@ -96,32 +96,33 @@ export class AdminService {
   addTimeslot(startTime: string, endTime: string,
               conferenceTitle: string, date: string) {
     let conference = _.find(this.conferences, conf => conf.title === conferenceTitle);
-    let confDate = _.find(conference.days, day => day.date === date);
+    // Shallow clone to prevent premature updates
+    let confCopy = _.clone(conference);
+
+    let confDate = _.find(confCopy.days, day => day.date === date);
     let newTimeSlot = {start: startTime, end: endTime};
+    
 
     // If day has no slots yet, make it and add the new slot
     if (typeof confDate === 'undefined') {
-      if (typeof conference.days === 'undefined') conference.days = [];
-      let newDay = {
+      if (typeof confCopy.days === 'undefined') confCopy.days = [];
+      let newDay: (any) = {
         date: date,
         timeSlots: [newTimeSlot]
       };
-      conference.days.push(newDay);
+      confCopy.days.push(newDay);
     } else {
       confDate.timeSlots.push(newTimeSlot);
     }
-    let pkg = packageForPost(conference);
+    let pkg = packageForPost(confCopy);
     return this.http
               .post(this.baseUrl + '/api/changetimeslot', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .then(serverConf => {
-                // Need conference ID
-                conference = serverConf;
-                conference = this.sortConfSlotsAndDays(conference);
-                if (conference.title === this.activeConference.getValue().title) {
-                  this.activeConference.next(conference);
-                }
+                // Need slot ID
+                this.getAllConferences();
+                return serverConf;
               })
               .catch(handleError);
   }
@@ -160,6 +161,8 @@ export class AdminService {
     if (!conf.rooms) conf.rooms = [];
     // Sync front end
     conf.rooms.push(room);
+    console.log('room conf', conf);
+    if (conf.title === this.activeConference.getValue().title) this.activeConference.next(conf);
 
     let pkg = packageForPost(conf);
     return this.http

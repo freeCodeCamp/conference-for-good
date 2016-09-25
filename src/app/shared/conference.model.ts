@@ -11,6 +11,7 @@ export interface Conference {
   };
   days?: {
     /** Date format: 2016-12-30 */
+    _id: string,
     date: string,
     timeSlots: TimeSlot[]
   }[],

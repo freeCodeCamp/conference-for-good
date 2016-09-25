@@ -20,8 +20,7 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
 
   @ViewChild('toast') toast: ToastComponent;
 
-  @ViewChild('conferences') conferencesRef: ElementRef;
-  conferencesSelect: HTMLSelectElement;
+  @ViewChild('conferences') conferences: ElementRef;
   @ViewChild('dates') dates: ElementRef;
   datesSelect: HTMLSelectElement;
 
@@ -41,16 +40,19 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.transitionService.transition();
+    let activeConf = this.adminService.activeConference.getValue();
+    this.conferences.nativeElement.value = activeConf.title;
+    this.selectedConf.next(activeConf);
   }
 
   ngAfterViewInit() {
-    this.conferencesSelect = this.conferencesRef.nativeElement;
     this.datesSelect = this.dates.nativeElement;
     this.refreshSelectedConf();
     this.fillCurrentDetails();
   }
 
-  updateConf(currentTitle: string, title: HTMLInputElement) {
+  updateConf(title: HTMLInputElement) {
+    let currentTitle = this.selectedConf.getValue().title;
     let newTitle = title.value;
     if (newTitle.length < 1) {
       this.toast.error('Conference must have a title');
@@ -63,6 +65,9 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
             this.adminService.updateConference(currentTitle, newTitle)
               .then(res => {
                 this.toast.success('Conference updated!');
+                let conf = this.selectedConf.getValue();
+                conf.title = newTitle;
+                this.selectedConf.next(conf)
                 this.refreshSelectedConf();
               });
           } else {
@@ -104,10 +109,10 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
   }
 
   addTimeslot(start: HTMLInputElement, end: HTMLInputElement,
-              conferences: HTMLSelectElement, dates: HTMLSelectElement) {
+              dates: HTMLSelectElement) {
     let startVal = start.value;
     let endVal = end.value;
-    let conferenceTitle = conferences.value;
+    let conferenceTitle = this.selectedConf.getValue().title;
     let date = this.dateService.formatDateForDatabase(dates.value);
     let startMoment = moment(`${date} ${startVal}`, this.dateService.dbFormatTimeDate, true);
     let endMoment = moment(`${date} ${endVal}`, this.dateService.dbFormatTimeDate, true);
@@ -119,10 +124,10 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
       } else {
           this.adminService.addTimeslot(startVal, endVal, conferenceTitle, date)
               .then(res => {
-                this.refreshSelectedConf(this.datesSelect.value);
-                this.toast.success('Timeslot added!');
                 start.value = "";
                 end.value = "";
+                this.refreshSelectedConf(this.datesSelect.value);
+                this.toast.success('Timeslot added!');
               });
       }
     } else if (!startValid) {
@@ -133,8 +138,9 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
     }
   }
 
-  deleteTimeSlot(date: string, conf: string, slot: TimeSlot) {
+  deleteTimeSlot(date: string, slot: TimeSlot) {
     let dbDate = this.dateService.formatDateForDatabase(date);
+    let conf = this.selectedConf.getValue().title;
     this.sessionService.deleteTimeSlot(dbDate, conf, slot)
         .then(res => {
           if (res.message && res.message === 'slot has sessions') {
@@ -146,8 +152,8 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
         });
   }
 
-  addRoom(conferences: HTMLSelectElement, roomName: HTMLInputElement) {
-    let conferenceTitle = conferences.value;
+  addRoom(roomName: HTMLInputElement) {
+    let conferenceTitle = this.selectedConf.getValue().title;
     let name = roomName.value;
 
     if (name.length < 1) {
@@ -162,8 +168,8 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
     }
   }
 
-  deleteRoom(conferences: HTMLSelectElement, room: string) {
-    let conferenceTitle = conferences.value;
+  deleteRoom(room: string) {
+    let conferenceTitle = this.selectedConf.getValue().title;
 
     this.sessionService.deleteRoom(conferenceTitle, room)
         .then(res => {
@@ -175,8 +181,8 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
         });
   }
 
-  moveRoom(conferences: HTMLSelectElement, room: string, direction: string) {
-    let conferenceTitle = conferences.value;
+  moveRoom(room: string, direction: string) {
+    let conferenceTitle = this.selectedConf.getValue().title;
 
     this.adminService.moveRoom(conferenceTitle, room, direction);
   }
@@ -193,11 +199,15 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
     } else {
       this.selectedDaySlots.next([]);
     }
+    this.conferences.nativeElement.value = this.selectedConf.getValue().title;
+  }
+
+  updateSelectedConf(confTitle: string) {
+    this.selectedConf.next(_.find(this.adminService.conferences, d => d.title === confTitle));
+    this.refreshSelectedConf();
   }
 
   refreshSelectedConf(dateSelected?: string) {
-    let selectedConfTitle = this.conferencesSelect.value;
-    this.selectedConf.next(_.find(this.adminService.conferences, d => d.title === selectedConfTitle));
     let startMoment = moment(this.selectedConf.getValue().dateRange.start);
     let endMoment = moment(this.selectedConf.getValue().dateRange.end);
     let dates = [];
@@ -208,6 +218,7 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
     this.fillCurrentDetails();
     let dateToRefresh = dateSelected ? dateSelected : this.selectedConfDates.getValue()[0];
     this.updateSelectedDate(dateToRefresh);
+    this.conferences.nativeElement.value = this.selectedConf.getValue().title;
   }
 
   fillCurrentDetails() {
