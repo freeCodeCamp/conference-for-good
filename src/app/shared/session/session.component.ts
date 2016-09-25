@@ -46,7 +46,7 @@ export class SessionComponent implements OnInit, OnDestroy {
   tags = tags;
   
   presentationTypeLabel = `
-    Please note that case studies MUST be presented by at least two parties involved in the case, one of which must be the investigator and/or prosecutor. Additional co-presenters are welcome.
+    *Please note that case studies MUST be presented by at least two parties involved in the case, one of which must be the investigator and/or prosecutor. Additional co-presenters are welcome.
 
     Examples of Acceptable Co-Presenters:
     - Prosecutor + investigator
