@@ -1,5 +1,12 @@
 @import './shared/common-styles';
 
+.logo {
+  height: 64px;
+  position: absolute;
+  left: 10px;
+  top: 0px;
+}
+
 .page-wrapper {
   font-family: 'Roboto';
 }

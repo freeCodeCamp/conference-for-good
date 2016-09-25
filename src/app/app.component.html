@@ -8,8 +8,12 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a *ngIf="user && user.admin" class="navbar-brand" [routerLink]="['/home']">CCAW</a>
-        <a *ngIf="!user?.admin" class="navbar-brand" [routerLink]="['/dashboard']">CCAW</a>
+        <a *ngIf="user && user.admin" class="navbar-brand" [routerLink]="['/home']">
+          <img class="logo" src="/assets/logo.png">
+        </a>
+        <a *ngIf="!user?.admin" class="navbar-brand" [routerLink]="['/dashboard']">
+          <img class="logo" src="/assets/logo.png">
+        </a>
       </div>
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
