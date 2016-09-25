@@ -35,16 +35,6 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label" for="title">Job Title</label><br/>
-            <label class="control-label sub-label" for="title">If you have multiple titles, please choose the most relevant. This title will be included in CCAW materials.</label>
-            <input type="text" class="form-control"
-                    [(ngModel)]="model.title"
-                   id="title"
-                    name="title" #title="ngModel">
-          </div>
-        </div>
-        <div class="row">
           <div class="col-md-4 col-xs-6">
             <label class="control-label primary-label formLabelRequired" for="nameFirst">First Name</label>
             <input type="text" class="form-control"
@@ -60,6 +50,16 @@
                   [(ngModel)]="model.nameLast"
                    id="nameLast"
                   name="nameLast" #nameLast="ngModel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="title">Job Title</label><br/>
+            <label class="control-label sub-label" for="title">If you have multiple titles, please choose the most relevant. This title will be included in CCAW materials.</label>
+            <input type="text" class="form-control"
+                    [(ngModel)]="model.title"
+                   id="title"
+                    name="title" #title="ngModel">
           </div>
         </div>
         <div class="row">
@@ -120,8 +120,8 @@
                   [(ngModel)]="model.phoneWork"
                   name="phoneWork" #phoneWork="ngModel">
           </div>
-          <div class="col-md-4 col-xs-6">
-            <label class="control-label primary-label" for="phoneCell">Cell Phone</label><br/>
+          <div class="col-md-7 col-xs-6">
+            <label class="control-label primary-label" for="phoneCell">Cell Phone</label>
             <label class="control-label sub-label" for="phoneCell">This is only for use by conference staff and will not be shared.</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.phoneCell"
@@ -137,9 +137,6 @@
                   name="email" #email="ngModel">
           </div>
         </div>
-      </div>
-
-      <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
             <label class="control-label primary-label" for="assistantOrCC">Assistant/CC Email</label>
@@ -148,6 +145,9 @@
                   name="assistantOrCC" #assistantOrCC="ngModel">
           </div>
         </div>
+      </div>
+
+      <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
             <label class="control-label primary-label formLabelRequired" for="bioWebsite">Website Bio</label><br/>
