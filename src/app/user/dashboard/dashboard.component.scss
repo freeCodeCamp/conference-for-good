@@ -2,11 +2,16 @@
 
 .title {
   color: $brand-primary;
+  margin-top: 0px;
 }
 
 .block {
   margin-top: 40px;
   margin-bottom: 40px;
+}
+
+.contact {
+  cursor: pointer;
 }
 
 .dashboard-item {
@@ -62,12 +67,20 @@
 
 #sessions {
   margin-bottom: 16px;
+  border: 1px solid $brand-primary;
+  border-radius: 5px;
+  padding: 5px;
 }
 
-.existing-copres {
+.box {
   border: 1px dashed hsl(0, 0%, 50%);
   padding: 30px;
   border-radius: 20px;
+  margin-top: 10px;
+}
+
+.existing-copres {
+  @extend .box;
   button {
     margin-top: 20px;
   }

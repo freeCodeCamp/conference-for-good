@@ -130,4 +130,12 @@ export class DashboardComponent {
     copresLink.scrollIntoView(true);
   }
 
+  email() {
+    window.open("mailto:bmeyer@genesisshelter.org");
+  }
+
+  call() {
+    window.open("tel:2143997733");
+  }
+
 }
