@@ -26,6 +26,7 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
+          <li *ngIf="user && user.admin"><a [routerLink]="['/select-active']">{{ (adminService.defaultConference | async).title }}</a></li>
           <li *ngIf="user" class="dropdown">
             <a href="#" id="cog-link" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
               <i class="fa fa-cog" aria-hidden="true"></i>
