@@ -44,6 +44,7 @@ router.post('/createconference', (req, res) => {
         if (saveSuccess) {
             let newConf = new Conference();
             newConf.lastActive = true;
+            newConf.defaultConf = true;
             newConf.title = conf.title;
             newConf.dateRange = {
                 start: conf.dateRange.start,
@@ -132,7 +133,6 @@ router.post('/updateconference', (req, res) => {
         .exec()
         .then(serverConf => {
             serverConf.title = conf.title;
-            serverConf.dateRange = conf.dateRange;
             serverConf.save(err => {
                 if (err) res.status(500).json({message: 'Conference save error'});
                 else res.status(200).json({message: 'Conference saved'});
@@ -263,7 +263,6 @@ function updateActiveConfs(activeConf) {
                     let serverConf = conferences[i];
                     serverConf.lastActive = serverConf.title === activeConf.title;
                     serverConf.save(err => {
-                        console.log('conf saved');
                         if (err) {
                             console.log(err);
                             allSavesSuccessful = false;
@@ -287,9 +286,8 @@ function updateDefaultConfs(defaultConf) {
                 let allSavesSuccessful = true;
                 for (let i = 0; i < conferences.length; i++) {
                     let serverConf = conferences[i];
-                    serverConf.default = serverConf.title === defaultConf.title;
+                    serverConf.defaultConf = serverConf.title === defaultConf.title;
                     serverConf.save(err => {
-                        console.log('conf saved');
                         if (err) {
                             console.log(err);
                             allSavesSuccessful = false;

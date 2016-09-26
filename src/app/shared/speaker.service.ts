@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { environment } from '../../environments/environment';
 import { handleError, parseJson, packageForPost } from './http-helpers';
 import { AdminService } from './admin.service';
+import { Session } from './session.model';
 import { Speaker } from './speaker.model';
 import { SessionService } from './session.service';
 
@@ -63,14 +64,23 @@ export class SpeakerService {
       sessions.forEach(session => {
         let speakers = session.speakers;
         if (speakers) {
-          if (speakers.mainPresenter === speaker._id) speaker.sessions.push(session._id);
+          if (speakers.mainPresenter === speaker._id) {
+            if (!_.find(speaker.sessions, s => s === session._id)) speaker.sessions.push(session._id);
+          }
           else if (speakers.coPresenters.length > 0) {
             speakers.coPresenters.forEach(coPres => {
-              if (coPres === speaker._id) speaker.sessions.push(session._id);
+              if (coPres === speaker._id) {
+                if (!_.find(speaker.sessions, s => s === session._id)) speaker.sessions.push(session._id);
+              }
             });
           }
         }
       });
+    });
+
+    // Hacky fix, not sure why I'm getting duplicates from the above, but this removes them
+    allSpeakers.forEach(speaker => {
+      speaker.sessions = _.uniq(speaker.sessions);
     });
 
     return allSpeakers;
@@ -117,6 +127,13 @@ export class SpeakerService {
     this.speakersUnfiltered.next(sortedUnfiltered);
   }
 
+  getSpeakerSessions(sessionIds: string[]): Session[] {
+    let speakerSessions: Session[] = [];
+    sessionIds.forEach(sessionId => {
+      speakerSessions.push(this.sessionService.getSession(sessionId));
+    });
+    return speakerSessions;
+  }
 
   /** Get a list of speaker objects from a list of speaker ID's */
   getSpeakerList(speakerIdList): SpeakerList {

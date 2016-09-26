@@ -26,6 +26,8 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   @ViewChild('setSessionModal') setSessionModalRef: ElementRef;
   setSessionModal;
 
+  activeConf: Conference;
+
   selectedSlot: TimeSlot;
   selectedRoom: string;
   twoParter = false;
@@ -34,10 +36,15 @@ export class CalendarComponent implements OnInit, AfterViewInit {
               private adminService: AdminService,
               private sessionService: SessionService,
               private speakerService: SpeakerService,
-              private router: Router) { }
+              private router: Router) {
+    this.adminService.activeConference.subscribe(activeConf => {
+      this.activeConf = activeConf;
+    });
+  }
 
   ngOnInit() {
     this.transitionService.transition();
+    this.activeConf = this.adminService.activeConference.getValue();
   }
 
   ngAfterViewInit() {
@@ -89,6 +96,13 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       } else return session.title + partStr;
     }
 
+  }
+
+  getDaySlots(dayId) {
+    console.log('day ID', dayId);
+    let slots = _.find(this.activeConf.days, day => day._id === dayId).timeSlots;
+    console.log('slots of day', slots);
+    return slots;
   }
 
   isTwoParter(sessionId: string) {

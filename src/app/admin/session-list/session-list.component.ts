@@ -57,6 +57,24 @@ export class SessionListComponent implements OnInit {
     }
   }
 
+  getType(type: string) {
+    let displayType = '';
+    switch (type) {
+      case 'casestudy':
+        displayType = 'Case Study';
+        break;
+      case 'workshop':
+        displayType = 'Workshop';
+        break;
+      case 'computerlab':
+        displayType = 'Computer Lab';
+        break;
+      default:
+        break;
+    }
+    return displayType;
+  }
+
   gotoSession(sessionId: string) {
     this.router.navigate(['/session', {id: sessionId}]);
   }

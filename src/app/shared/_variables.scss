@@ -15,7 +15,7 @@ $gray:                   #666 !default;
 $gray-light:             #bbb !default;
 $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
-$brand-primary:         #D32F2F !default;
+$brand-primary:         #cc0000 !default;
 $brand-success:         hsl(120, 35%, 48%) !default;
 $brand-info:            #9C27B0 !default;
 $brand-warning:         #ff9800 !default;
@@ -23,8 +23,8 @@ $brand-danger:          #e51c23 !default;
 
 $brand-dark:              darken($brand-primary, 8%);
 $brand-light:             lighten($brand-primary, 8%);
-$brand-transparent:      hsla(0, 65%, 44%, 0.2);
-$brand-semi-transparent: hsla(0, 65%, 44%, 0.5);
+$brand-transparent:      hsla(0, 100%, 44%, 0.2);
+$brand-semi-transparent: hsla(0, 100%, 44%, 0.5);
 $brand-accent:           #607D8B;
 $brand-dark-bg:          #2B252C;
 $brand-success-transparent: hsla(120, 35%, 48%, 0.2);
@@ -406,9 +406,9 @@ $navbar-inverse-border:                     transparent !default;
 // Inverted navbar links
 $navbar-inverse-link-color:                 #fff !default;
 $navbar-inverse-link-hover-color:           #fff !default;
-$navbar-inverse-link-hover-bg:              lighten($brand-primary, 6%) !default;
+$navbar-inverse-link-hover-bg:              lighten($brand-primary, 3%) !default;
 $navbar-inverse-link-active-color:          $navbar-inverse-link-hover-color !default;
-$navbar-inverse-link-active-bg:             darken($navbar-inverse-bg, 10%) !default;
+$navbar-inverse-link-active-bg:             darken($navbar-inverse-bg, 4%) !default;
 $navbar-inverse-link-disabled-color:        #444 !default;
 $navbar-inverse-link-disabled-bg:           transparent !default;
 

@@ -10,18 +10,27 @@
         <h3>Admin Fields</h3>
 
         <div class="row section speaker">
-        <div class="col-md-8 col-xs-12 speaker-notes">
-          <label class="control-label primary-label" for="speakerNotes">Speaker Notes</label><br/>
-          <textarea class="form-control" rows="3"
-                    [(ngModel)]="model.adminNotes"
-                    #speakerNotes="ngModel" id="admin-notes"
-                    name="speakerNotes"></textarea>
+          <div class="col-md-8 col-xs-12 speaker-notes">
+            <label class="control-label primary-label" for="speakerNotes">Speaker Notes</label><br/>
+            <textarea class="form-control" rows="3"
+                      [(ngModel)]="model.adminNotes"
+                      #speakerNotes="ngModel" id="admin-notes"
+                      name="speakerNotes"></textarea>
+          </div>
+          <div class="col-xs-12">
+            <button class="btn btn-primary"
+                    (click)="updateSpeaker(model)">Save Notes</button>
+          </div>
         </div>
-        <div class="col-xs-12">
-          <button class="btn btn-primary"
-                  (click)="updateSpeaker(model)">Save Notes</button>
+        <div class="row section">
+          <p><b>Sessions speaker is involved in:</b></p>
+          <ul>
+            <li *ngFor="let session of speakerSessions">
+              <a [routerLink]="['/session', {id: session._id}]">{{ session.title }}</a>
+            </li>
+          </ul>
         </div>
-        </div>
+        <h3>Public Fields</h3>
       </div>
 
       <div class="row section">
@@ -32,16 +41,6 @@
                   [(ngModel)]="model.salutation"
                    id="salutation"
                   name="salutation" #salutation="ngModel">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label" for="title">Title</label><br/>
-            <label class="control-label sub-label" for="title">If you have multiple titles, please choose the most relevant. This title will be included in CCAW materials.</label>
-            <input type="text" class="form-control"
-                    [(ngModel)]="model.title"
-                   id="title"
-                    name="title" #title="ngModel">
           </div>
         </div>
         <div class="row">
@@ -60,6 +59,16 @@
                   [(ngModel)]="model.nameLast"
                    id="nameLast"
                   name="nameLast" #nameLast="ngModel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="title">Job Title</label><br/>
+            <label class="control-label sub-label" for="title">If you have multiple titles, please choose the most relevant. This title will be included in CCAW materials.</label>
+            <input type="text" class="form-control"
+                    [(ngModel)]="model.title"
+                   id="title"
+                    name="title" #title="ngModel">
           </div>
         </div>
         <div class="row">
@@ -120,8 +129,8 @@
                   [(ngModel)]="model.phoneWork"
                   name="phoneWork" #phoneWork="ngModel">
           </div>
-          <div class="col-md-4 col-xs-6">
-            <label class="control-label primary-label" for="phoneCell">Cell Phone</label><br/>
+          <div class="col-md-7 col-xs-6">
+            <label class="control-label primary-label" for="phoneCell">Cell Phone</label>
             <label class="control-label sub-label" for="phoneCell">This is only for use by conference staff and will not be shared.</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.phoneCell"
@@ -137,17 +146,17 @@
                   name="email" #email="ngModel">
           </div>
         </div>
-      </div>
-
-      <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label" for="assistantOrCC">Assistant/CC</label>
+            <label class="control-label primary-label" for="assistantOrCC">Assistant/CC Email</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.assistantOrCC"
                   name="assistantOrCC" #assistantOrCC="ngModel">
           </div>
         </div>
+      </div>
+
+      <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
             <label class="control-label primary-label formLabelRequired" for="bioWebsite">Website Bio</label><br/>

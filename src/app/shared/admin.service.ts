@@ -26,7 +26,7 @@ export class AdminService {
     this.resetDefaultConfs();
     let newConf: Conference = {
       lastActive: true,
-      default: true,
+      defaultConf: true,
       title: title,
       dateRange: {
         start: startDate,
@@ -60,7 +60,7 @@ export class AdminService {
   changeDefaultConf(confTitle: string) {
     let conf = _.find(this.conferences, conf => conf.title === confTitle);
     this.resetDefaultConfs();
-    conf.default = true;
+    conf.defaultConf = true;
     this.defaultConference.next(conf);
     let pkg = packageForPost(conf);
     return this.http
@@ -78,17 +78,13 @@ export class AdminService {
 
   resetDefaultConfs() {
     this.conferences.forEach(conf => {
-      conf.default = false;
+      conf.defaultConf = false;
     });
   }
 
-  updateConference(currentTitle: string, newTitle, startDate, endDate) {
+  updateConference(currentTitle: string, newTitle) {
     let conference = _.find(this.conferences, conf => conf.title === currentTitle);
     conference.title = newTitle;
-    conference.dateRange = {
-      start: startDate,
-      end: endDate
-    };
     let pkg = packageForPost({currentTitle: currentTitle, conference: conference});
     return this.http
               .post(this.baseUrl + '/api/updateconference', pkg.body, pkg.opts)
@@ -100,32 +96,33 @@ export class AdminService {
   addTimeslot(startTime: string, endTime: string,
               conferenceTitle: string, date: string) {
     let conference = _.find(this.conferences, conf => conf.title === conferenceTitle);
-    let confDate = _.find(conference.days, day => day.date === date);
+    // Shallow clone to prevent premature updates
+    let confCopy = _.clone(conference);
+
+    let confDate = _.find(confCopy.days, day => day.date === date);
     let newTimeSlot = {start: startTime, end: endTime};
+    
 
     // If day has no slots yet, make it and add the new slot
     if (typeof confDate === 'undefined') {
-      if (typeof conference.days === 'undefined') conference.days = [];
-      let newDay = {
+      if (typeof confCopy.days === 'undefined') confCopy.days = [];
+      let newDay: (any) = {
         date: date,
         timeSlots: [newTimeSlot]
       };
-      conference.days.push(newDay);
+      confCopy.days.push(newDay);
     } else {
       confDate.timeSlots.push(newTimeSlot);
     }
-    let pkg = packageForPost(conference);
+    let pkg = packageForPost(confCopy);
     return this.http
               .post(this.baseUrl + '/api/changetimeslot', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .then(serverConf => {
-                // Need conference ID
-                conference = serverConf;
-                conference = this.sortConfSlotsAndDays(conference);
-                if (conference.title === this.activeConference.getValue().title) {
-                  this.activeConference.next(conference);
-                }
+                // Need slot ID
+                this.getAllConferences();
+                return serverConf;
               })
               .catch(handleError);
   }
@@ -161,9 +158,11 @@ export class AdminService {
   addRoom(conferenceTitle: string, room: string) {
     let conf = _.find(this.conferences, conf => conf.title === conferenceTitle);
 
-    if (typeof conf.rooms === 'undefined') conf.rooms = [];
+    if (!conf.rooms) conf.rooms = [];
     // Sync front end
     conf.rooms.push(room);
+    console.log('room conf', conf);
+    if (conf.title === this.activeConference.getValue().title) this.activeConference.next(conf);
 
     let pkg = packageForPost(conf);
     return this.http
@@ -206,7 +205,7 @@ export class AdminService {
                 });
                 let activeConf = _.find(this.conferences, conf => conf.lastActive === true);
                 this.activeConference.next(activeConf);
-                let defaultConf = _.find(this.conferences, conf => conf.default === true);
+                let defaultConf = _.find(this.conferences, conf => conf.defaultConf === true);
                 this.defaultConference.next(defaultConf);
                 return conferences;
               })

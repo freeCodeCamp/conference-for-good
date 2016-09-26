@@ -3,13 +3,16 @@
   <div id="dropdown" class="row">
     <div class="col-md-4">
       <label for="conferences" class="control-label">Select Conference to Modify</label>
-      <select #conferences class="form-control" id="conferences" (input)="refreshSelectedConf()">
+      <select #conferences class="form-control" id="conferences">
         <option *ngFor="let conf of adminService.conferences">
           {{ conf.title }}
         </option>
       </select>
+      <button class="btn btn-primary" (click)="updateSelectedConf(conferences.value)">Select</button>
     </div>
   </div>
+
+  <p class="modifying"><b>Now modifying: </b><span class="text-info">{{ (selectedConf | async).title }}</span></p>
 
   <ul class="nav nav-tabs" id="tab-bar">
     <li role="presentation" class="active">
@@ -31,19 +34,9 @@
             <input #title type="text" class="form-control" id="title">
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-4 col-xs-6">
-            <label class="control-label" for="start-date">Start Date</label>
-            <input #startDate type="date" class="form-control" id="start-date">
-          </div>
-          <div class="col-md-4 col-xs-6">
-            <label class="control-label" for="end-date">End Date</label>
-            <input #endDate type="date" class="form-control" id="end-date">
-          </div>
-        </div>
       </div>
       <button id="update" class="btn btn-primary" 
-              (click)="updateConf(conferences.value, title, startDate, endDate)">Update</button>
+              (click)="updateConf(title)">Update</button>
     </div>
 
     <div class="tab-pane" id="tabTimeslot">
@@ -68,11 +61,11 @@
             <input #endTime type="time" class="form-control" id="end-time">
           </div>
         </div>
-        <button class="btn btn-primary add" (click)="addTimeslot(startTime, endTime, conferences, dates)">Add</button>
+        <button class="btn btn-primary add" (click)="addTimeslot(startTime, endTime, dates)">Add</button>
         <div class="current-items">
           <h4>Current TimeSlots</h4>
             <div *ngFor="let slot of (selectedDaySlots | async)">
-              <i class="fa fa-ban delete" (click)="deleteTimeSlot(dates.value, conferences.value, slot)"></i> 
+              <i class="fa fa-ban delete" (click)="deleteTimeSlot(dates.value, slot)"></i> 
               {{ slot.start | time }} to {{ slot.end | time }}
             </div>
         </div>
@@ -86,13 +79,13 @@
           <input #roomName type="text" class="form-control" id="roomName">
         </div>
       </div>
-      <button class="btn btn-primary add" (click)="addRoom(conferences, roomName)">Add</button>
+      <button class="btn btn-primary add" (click)="addRoom(roomName)">Add</button>
       <div class="current-items">
         <h4>Current Rooms</h4>
           <div *ngFor="let room of (selectedConf | async)?.rooms">
-            <i class="fa fa-ban delete" (click)="deleteRoom(conferences, room)"></i> {{ room }}
-            <i class="fa fa-arrow-up arrow" aria-hidden="true" (click)="moveRoom(conferences, room, '-')"></i>
-            <i class="fa fa-arrow-down arrow" aria-hidden="true" (click)="moveRoom(conferences, room, '+')"></i>
+            <i class="fa fa-ban delete" (click)="deleteRoom( room)"></i> {{ room }}
+            <i class="fa fa-arrow-up arrow" aria-hidden="true" (click)="moveRoom(room, '-')"></i>
+            <i class="fa fa-arrow-down arrow" aria-hidden="true" (click)="moveRoom(room, '+')"></i>
           </div>
       </div>
     </div>

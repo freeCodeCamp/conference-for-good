@@ -7,6 +7,7 @@ import { AuthService } from '../auth.service';
 import { SpeakerService } from '../speaker.service';
 import { TransitionService } from '../transition.service';
 import { ToastComponent } from '../toast.component';
+import { Session } from '../session.model';
 import { Speaker } from '../speaker.model';
 
 @Component({
@@ -21,6 +22,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   private paramsub: any;
 
   model: Speaker;
+  speakerSessions: Session[] = [];
   leadPresId: string = null;
   requiredProfileFields = ['nameFirst', 'nameLast', 'email', 'organization', 'bioWebsite', 'bioProgram'];
 
@@ -57,6 +59,9 @@ export class SpeakerComponent implements OnInit, OnDestroy {
         this.model.assistantOrCC = '';
       } else {
         this.model = this.speakerService.getSpeaker(params['id']);
+        if (this.model.sessions.length > 0) {
+          this.speakerSessions = this.speakerService.getSpeakerSessions(this.model.sessions);
+        }
       }
       if (params['leadPresId']) {
         this.leadPresId = params['leadPresId'];

@@ -1,8 +1,8 @@
 export interface Conference {
   /** Active = displayed in calendar */
   lastActive: boolean,
-  /** Default = associated with speaker submissions */
-  default: boolean,
+  /** DefaultConf = associated with speaker submissions */
+  defaultConf: boolean,
   title: string,
   /** Date format: 2016-12-30 */
   dateRange: {
@@ -11,6 +11,7 @@ export interface Conference {
   };
   days?: {
     /** Date format: 2016-12-30 */
+    _id: string,
     date: string,
     timeSlots: TimeSlot[]
   }[],
