@@ -7,6 +7,7 @@
     <div class="row section">
 
       <div class="row">
+        <h4>Lodging Information</h4>
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" for="securedLodging">Have you already secured lodging for the conference?</label>
           <div class="radio">
@@ -113,6 +114,7 @@
     </div>
 
     <div class="row section">
+      <h4>Transportation Information</h4>
       <div class="col-md-8 col-xs-12">
         <label class="control-label primary-label" for="agreedTransport">Please note that if you will be taking advantage of CCAW's complimentary transportation to/from the airport, you must send your complete & official flight itinerary to bmeyer@genesisshelter.org <u>no later than **March 4, 2016.**</u></label>
         <div class="radio">
@@ -132,6 +134,34 @@
         <div *ngIf="model.agreedTransport === 'no'" class="alert alert-warning">
           <p>You must agree to the Terms & Conditions</p>
         </div>
+      </div>
+    </div>
+
+    <div class="row section">
+      <h4>Workshop Agenda</h4>
+      <div class="col-md-8 col-xs-12">
+        <label class="control-label primary-label" for="agreedDates">Do you agree to ALL dates and times listed on the preliminary agenda included on your Speaker Agreement?</label>
+        <div class="radio">
+          <label>
+            <input type="radio" name="agreedDates" [(ngModel)]="model.agreedDates"
+                    id="agreedDatesYes" [value]="'yes'" #agreedDates="ngModel" checked="">
+            Yes
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="agreedDates" [(ngModel)]="model.agreedDates"
+                    id="agreedDatesNo" [value]="'no'" #agreedDates="ngModel">
+            No
+          </label>
+        </div>
+      </div>
+      <div *ngIf="model.agreedDates === 'no'" class="col-md-8 col-xs-12">
+        <label class="control-label primary-label" for="whyConflict">Please specify which workshop(s) conflict with your schedule and why:</label><br/>
+        <label class="control-label sub-label" for="whyConflict">We will be in touch to let you know if it is possible to schedule during a different time slot.</label>
+        <textarea class="form-control" rows="3"
+              [(ngModel)]="model.whyConflict"
+              name="whyConflict" #whyConflict="ngModel"></textarea>
       </div>
     </div>
 
