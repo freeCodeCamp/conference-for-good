@@ -227,13 +227,9 @@ export class SessionComponent implements OnInit, OnDestroy {
       if (typeof form[item] !== undefined) {
         // If type is boolean, form item is completed
         if (typeof form[item] !== 'boolean') {
-          if (!form[item]) {
-            flag = false;
-          }
+          if (!form[item]) flag = false;
         }
-      } else {
-        flag = false;
-      }
+      } else flag = false;
     });
 
     let atLeastOne = false;

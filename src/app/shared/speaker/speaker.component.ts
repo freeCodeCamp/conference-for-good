@@ -24,7 +24,8 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   model: Speaker;
   speakerSessions: Session[] = [];
   leadPresId: string = null;
-  requiredProfileFields = ['nameFirst', 'nameLast', 'email', 'organization', 'bioWebsite', 'bioProgram'];
+
+  incompleteFields: string[] = [];
 
   costsCovered = [
     {
@@ -119,11 +120,18 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   checkProfile(form: any) {
     var flag = true;
 
-    this.requiredProfileFields.forEach(function(item) {
-      if (!form[item]) {
-        flag = false;
+    for (let field in form) {
+      if (form.hasOwnProperty(field)) {
+        if (field !== 'assistantOrCC' && field !== 'address2') {
+          if (typeof form[field] !== undefined) {
+            // If type is boolean, form item is completed
+            if (typeof form[field] !== 'boolean') {
+              if (!form[field]) flag = false;
+            }
+          } else flag = false;
+        }
       }
-    });
+    }
 
     return flag;
   }
