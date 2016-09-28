@@ -120,15 +120,30 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   checkProfile(form: any) {
     var flag = true;
 
+    let expReq = !form['hasPresentedAtCCAWInPast2years'];
+
     for (let field in form) {
       if (form.hasOwnProperty(field)) {
-        if (field !== 'assistantOrCC' && field !== 'address2') {
-          if (typeof form[field] !== undefined) {
-            // If type is boolean, form item is completed
-            if (typeof form[field] !== 'boolean') {
-              if (!form[field]) flag = false;
-            }
-          } else flag = false;
+        if (!expReq) {
+          // Experience fields not required if has presented at ccaw
+          if (field !== 'assistantOrCC' && field !== 'address2' &&
+              field !== 'recentSpeakingExp' && field !== 'speakingReferences') {
+                if (typeof form[field] !== undefined) {
+                  // If type is boolean, form item is completed
+                  if (typeof form[field] !== 'boolean') {
+                    if (!form[field]) flag = false;
+                  }
+                } else flag = false;
+              }
+        } else {
+          if (field !== 'assistantOrCC' && field !== 'address2') {
+            if (typeof form[field] !== undefined) {
+              // If type is boolean, form item is completed
+              if (typeof form[field] !== 'boolean') {
+                if (!form[field]) flag = false;
+              }
+            } else flag = false;
+          }
         }
       }
     }
