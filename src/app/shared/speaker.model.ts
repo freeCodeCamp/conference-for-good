@@ -45,6 +45,43 @@ export interface Speaker {
 
   // _id's of sessions speaker is involved in
   sessions?: string[]
+
+  //**** Response Form
+  responseForm: {
+    securedLodging: string, // yes, no, name
+    // If not securedLodging fields
+    dateArrival: string,
+    dateDeparture: string,
+    ccawCoveringHotel: string, // yes, no
+    agreedHotel: string, // yes, no
+    secureOwnLodging: string, // ccawSecure, selfSecure
+
+    agreedTransport: string,
+
+    agreedDates: string,
+    // If not agreedDates
+    whyConflict: string,
+
+    mealDates: {
+      date: string, // Based on conf dates
+      meal: string, // Breakfast or lunch
+      label: string,
+      attending: boolean
+    }[],
+    dietaryNeeds: {
+      need: string,
+      checked: boolean
+    }[],
+    // If other dietary needs:
+    otherDietary: string,
+
+    bookAvailable: string, // yes, no
+    // If bookAvailable
+    bookTitle: string,
+    bookAuthor: string,
+
+    w9: string, // whether uploaded to dropbox?
+  }
 }
 
 export interface Credentials {

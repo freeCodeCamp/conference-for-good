@@ -41,7 +41,7 @@ let speakerSchema = new mongoose.Schema({
   }, // pending, accepted, denied, notifed: boolean
   statusNotification: {
     type: Boolean,
-    defualt: false
+    default: false
   }, // After accepting/denying, whether they were notified
   title: String,
   organization: String,
@@ -68,7 +68,42 @@ let speakerSchema = new mongoose.Schema({
   adminNotes: String,
 
   // Session ids that the speaker is involved in
-  sessions: [String]
+  sessions: [String],
+
+  //**** Response Form
+    securedLodging: String, // yes, no, name
+    // If not securedLodging fields
+    dateArrival: String,
+    dateDeparture: String,
+    ccawCoveringHotel: String,
+    agreedHotel: String,
+    secureOwnLodging: String, // ccawSecure, selfSecure
+
+    agreedTransport: String,
+
+    agreedDates: String,
+    // If not agreedDates
+    whyConflict: String,
+
+    mealDates: [{
+      date: String, // Based on conf dates
+      meal: String, // Breakfast or lunch
+      label: String,
+      attending: Boolean
+    }],
+    dietaryNeeds: [{
+      need: String,
+      checked: Boolean
+    }],
+    // If other dietary needs:
+    otherDietary: String,
+
+    bookAvailable: String,
+    // If bookAvailable
+    bookTitle: String,
+    bookAuthor: String,
+
+    w9: String, // whether uploaded to dropbox?
 });
 
 speakerSchema.methods.generateHash = password => {
