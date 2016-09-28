@@ -236,6 +236,12 @@ export class SessionComponent implements OnInit, OnDestroy {
       }
     });
 
+    let atLeastOne = false;
+    this.model.tags.forEach(tag => {
+      if (tag.checked) atLeastOne = true;
+    });
+    flag = atLeastOne;
+
     return flag;
   }
 
