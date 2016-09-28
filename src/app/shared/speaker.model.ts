@@ -65,6 +65,7 @@ export interface Speaker {
     mealDates: {
       date: string, // Based on conf dates
       meal: string, // Breakfast or lunch
+      label: string,
       attending: boolean
     }[],
     dietaryNeeds: {

@@ -17,35 +17,31 @@ import { TransitionService } from '../transition.service';
   templateUrl: './response.component.html',
   styleUrls: ['./response.component.scss']
 })
-export class ResponseComponent implements OnInit {
+export class ResponseComponent implements OnInit, OnDestroy {
   
   private paramsub: any;
 
   model: Speaker;
-  mealDates;
+
   dietaryNeeds = [ 
     {
-      name: 'None',
-      checked: false 
-    },
-    {
-      name: 'Vegetarian',
+      need: 'Vegetarian',
       checked: false
     },
     {
-      name: 'Vegan',
+      need: 'Vegan',
       checked: false
     },
     {
-      name: 'Gluten-Free',
+      need: 'Gluten-Free',
       checked: false
     },
     {
-      name: 'Dairy-Free',
+      need: 'Dairy-Free',
       checked: false
     },
     {
-      name: 'Other',
+      need: 'Other',
       checked: false
     }
   ];
@@ -65,13 +61,15 @@ export class ResponseComponent implements OnInit {
       this.model = this.speakerService.getSpeaker(params['id']);
 
       if (!this.model.responseForm) {
+        this.model.responseForm = <any>{};
+        this.model.responseForm.dietaryNeeds = this.dietaryNeeds;
         this.generateMealDates();
-        this.model.responseForm = <any>{
-          mealDates: this.mealDates,
-          dietaryNeeds: this.dietaryNeeds
-        }
       }
     });
+  }
+  
+  ngOnDestroy() {
+    this.paramsub.unsubscribe();
   }
 
   /** Generate meal date choices based on conference dates */
@@ -82,20 +80,37 @@ export class ResponseComponent implements OnInit {
     let mealDates = [];
     for (let i = startMoment; i.isSameOrBefore(endMoment); i.add(1, 'd')) {
       let breakfast = {
-        date: i.format(this.dateService.userFormatDate),
+        date: i.format(this.dateService.dbFormatDate),
         meal: 'Breakfast',
+        label: `Breakfast- ${i.format(this.dateService.userFormatDate)}`,
         attending: false
       };
       let lunch = {
-        date: i.format(this.dateService.userFormatDate),
-        meal: 'Breakfast',
+        date: i.format(this.dateService.dbFormatDate),
+        meal: 'Lunch',
+        label: `Lunch- ${i.format(this.dateService.userFormatDate)}`,
         attending: false
       };
       mealDates.push(breakfast);
       mealDates.push(lunch);
     }
 
-    this.mealDates = mealDates;
+    this.model.responseForm.mealDates = mealDates;
+  }
+
+  changeDate(isChecked: boolean, dateChecked) {
+    let date = _.find(this.model.responseForm.mealDates, date => date.label === dateChecked.label);
+    date.attending = isChecked;
+  }
+
+  changeNeed(isChecked: boolean, needChecked) {
+    let need = _.find(this.model.responseForm.dietaryNeeds, need => need.need === needChecked.need);
+    need.checked = isChecked;
+  }
+
+  otherDietaryChecked() {
+    let otherNeed = _.find(this.model.responseForm.dietaryNeeds, need => need.need === 'Other');
+    return otherNeed.checked;
   }
 
 }

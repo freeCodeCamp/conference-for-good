@@ -88,6 +88,7 @@ let speakerSchema = new mongoose.Schema({
     mealDates: [{
       date: String, // Based on conf dates
       meal: String, // Breakfast or lunch
+      label: String,
       attending: Boolean
     }],
     dietaryNeeds: [{
