@@ -2,5 +2,115 @@
      [class.page-transition]="transitionService.isTransitioning()">
   <h2>Speaker Response</h2>
 
-  
+  <form #responseForm="ngForm" (submit)="updateSpeaker(responseForm.value)">
+
+    <div class="row section">
+
+      <div class="row">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="securedLodging">Have you already secured lodging for the conference?</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="securedLodging" [(ngModel)]="model.securedLodging"
+                      id="securedLodgingYes" [value]="'yes'" #securedLodging="ngModel" checked="">
+              Yes
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="securedLodging" [(ngModel)]="model.securedLodging"
+                      id="securedLodgingNo" [value]="'no'" #securedLodging="ngModel">
+              No
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="securedLodging" [(ngModel)]="model.securedLodging"
+                      id="securedLodgingNo" [value]="'na'" #securedLodging="ngModel">
+              N/A - I do not need lodging
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="model.securedLodging === 'no'" class="row">
+        <div class="col-xs-6">
+          <label class="control-label" for="dateArrival">What is your arrival date?</label>
+          <input type="date" class="form-control" id="dateArrival" name="dateArrival"
+                 #dateArrival="ngModel" [(ngModel)]="model.dateArrival">
+        </div>
+        <div class="col-xs-6">
+          <label class="control-label" for="dateDeparture">What is your departure date?</label>
+          <input type="date" class="form-control" id="dateDeparture" name="dateArrival"
+                 #dateDeparture="ngModel" [(ngModel)]="model.dateDeparture">
+        </div>
+
+        <div class="row">
+          <div class="col-md-8 col-xs-12 space-top">
+            <label class="control-label primary-label" for="ccawCoveringHotel">Is CCAW covering the cost of your hotel (as listed on your Speaker Agreement)?</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="ccawCoveringHotel" [(ngModel)]="model.ccawCoveringHotel"
+                        id="ccawCoveringHotelYes" [value]="'yes'" #ccawCoveringHotel="ngModel" checked="">
+                Yes
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="ccawCoveringHotel" [(ngModel)]="model.ccawCoveringHotel"
+                        id="ccawCoveringHotelNo" [value]="'no'" #ccawCoveringHotel="ngModel">
+                No
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div *ngIf="model.ccawCoveringHotel === 'yes'" class="col-xs-12">
+            <label class="control-label primary-label" for="agreedHotel">CCAW will secure your lodging. Confirmation numbers will be sent no later than **March 1, 2016**</label>
+            <label class="control-label sub-label" for="agreedHotel">Please indicate that you agree to these terms.</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="agreedHotel" [(ngModel)]="model.agreedHotel"
+                        id="agreedHotelYes" [value]="'yes'" #agreedHotel="ngModel" checked="">
+                I accept
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="agreedHotel" [(ngModel)]="model.agreedHotel"
+                        id="agreedHotelNo" [value]="'no'" #agreedHotel="ngModel">
+                I don't accept
+              </label>
+            </div>
+            <div *ngIf="model.agreedHotel === 'no'" class="alert alert-warning">
+              <p>You must agree to the Terms & Conditions</p>
+            </div>
+          </div>
+          <div *ngIf="model.ccawCoveringHotel === 'no'" class="col-xs-12">
+            <label class="control-label primary-label" for="secureOwnLodging">CCAW will secure your lodging <u>unless you indicate otherwise below.</u> Confirmation numbers will be sent no later than **March 1, 2016**.</label>
+            <label class="control-label primary-label" for="secureOwnLodging"><u>Please note that payment may be required upon arrival. Consult your speaking agreement for additional details.</u></label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="secureOwnLodging" [(ngModel)]="model.secureOwnLodging"
+                        id="secureOwnLodgingYes" [value]="'ccawSecure'" #secureOwnLodging="ngModel" checked="">
+                I would like CCAW to secure my lodging.
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="secureOwnLodging" [(ngModel)]="model.secureOwnLodging"
+                        id="secureOwnLodgingNo" [value]="'selfSecure'" #secureOwnLodging="ngModel">
+                I would like to secure my own lodging.
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </form>
 </div>

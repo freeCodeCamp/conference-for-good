@@ -75,12 +75,13 @@ let speakerSchema = new mongoose.Schema({
     // If not securedLodging fields
     dateArrival: String,
     dateDeparture: String,
-    ccawCoveringHotel: Boolean,
-    agreedToTerms: Boolean,
+    ccawCoveringHotel: String,
+    agreedHotel: String,
+    secureOwnLodging: String, // ccawSecure, selfSecure
 
-    agreedTransport: Boolean,
+    agreedTransport: String,
 
-    agreedDates: Boolean,
+    agreedDates: String,
     // If not agreedDates
     whyConflict: String,
 
@@ -96,12 +97,12 @@ let speakerSchema = new mongoose.Schema({
     // If other dietary needs:
     otherDietary: String,
 
-    bookAvailable: Boolean,
+    bookAvailable: String,
     // If bookAvailable
     bookTitle: String,
     bookAuthor: String,
 
-    w9: Boolean, // whether uploaded to dropbox?
+    w9: String, // whether uploaded to dropbox?
 });
 
 speakerSchema.methods.generateHash = password => {

@@ -52,12 +52,13 @@ export interface Speaker {
     // If not securedLodging fields
     dateArrival: string,
     dateDeparture: string,
-    ccawCoveringHotel: boolean,
-    agreedToTerms: boolean,
+    ccawCoveringHotel: string, // yes, no
+    agreedHotel: string, // yes, no
+    secureOwnLodging: string, // ccawSecure, selfSecure
 
-    agreedTransport: boolean,
+    agreedTransport: string,
 
-    agreedDates: boolean,
+    agreedDates: string,
     // If not agreedDates
     whyConflict: string,
 
@@ -73,12 +74,12 @@ export interface Speaker {
     // If other dietary needs:
     otherDietary: string,
 
-    bookAvailable: boolean,
+    bookAvailable: string,
     // If bookAvailable
     bookTitle: string,
     bookAuthor: string,
 
-    w9: boolean, // whether uploaded to dropbox?
+    w9: string, // whether uploaded to dropbox?
   }
 }
 
