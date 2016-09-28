@@ -30,6 +30,7 @@ import { LandingComponent } from './auth/landing/landing.component';
 import { AdministrationComponent } from './admin/administration/administration.component';
 import { ForgotPasswordComponent } from './auth/forgotpassword/forgotpassword.component';
 import { ToastComponent } from './shared/toast.component';
+import { ResponseComponent } from './shared/response/response.component';
 
 /** App-wide Services */
 import { AdminService } from './shared/admin.service';
@@ -61,7 +62,7 @@ import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
     DashboardComponent, ModifyConfComponent, SelectActiveComponent, SessionComponent,
     SessionListComponent, SpeakerComponent, SpeakerListComponent, LoginComponent,
     SignupComponent, SettingsComponent, LandingComponent, AdministrationComponent, 
-    ForgotPasswordComponent, ToastComponent,
+    ForgotPasswordComponent, ToastComponent, ResponseComponent,
 
     // Pipes
     DatePipe, CapitalizePipe, TimePipe,
