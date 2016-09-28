@@ -3,7 +3,7 @@
 .backgroundContainer {
   background-image: url('/assets/bg-pattern.png')!important;
   background-repeat: repeat;
-  height: 100%;
+  height: calc(100% - 64px);
   overflow-y: hidden;
 }
 
