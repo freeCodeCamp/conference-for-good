@@ -52,9 +52,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       // Initialize fields for brand new speakers
       if (!params['id']) {
         this.model = <Speaker>{
-          mediaWilling: true,
-          costsCoveredByOrg: this.costsCovered,
-          hasPresentedAtCCAWInPast2years: false,
+          costsCoveredByOrg: this.costsCovered
         }
         this.model.address2 = '';
         this.model.assistantOrCC = '';
@@ -81,6 +79,10 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   changeCostCovered(isChecked: boolean, costChecked) {
     let cost = _.find(this.model.costsCoveredByOrg, cost => cost.name === costChecked.name);
     cost.covered = isChecked;
+  }
+
+  checkRecentExp() {
+    return typeof this.model.hasPresentedAtCCAWInPast2years === 'boolean' && !this.model.hasPresentedAtCCAWInPast2years;
   }
 
   updateSpeaker(form: any) {

@@ -76,13 +76,7 @@ export class SessionComponent implements OnInit, OnDestroy {
         // Initialize default values for fields that need it
         this.model = <Session>{
           approval: 'pending',
-          type: 'casestudy',
-          length: '90',
           tags: this.tags,
-          level: 'beginner',
-          willingToBeRecorded: 'audio',
-          isMediaOrPressFriendly: 'yes',
-          willingToRepeat: true
         }
       } else {
         this.model = this.sessionService.getSession(params['id']);
