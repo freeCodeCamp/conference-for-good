@@ -76,13 +76,7 @@ export class SessionComponent implements OnInit, OnDestroy {
         // Initialize default values for fields that need it
         this.model = <Session>{
           approval: 'pending',
-          type: 'casestudy',
-          length: '90',
           tags: this.tags,
-          level: 'beginner',
-          willingToBeRecorded: 'audio',
-          isMediaOrPressFriendly: 'yes',
-          willingToRepeat: true
         }
       } else {
         this.model = this.sessionService.getSession(params['id']);
@@ -227,14 +221,16 @@ export class SessionComponent implements OnInit, OnDestroy {
       if (typeof form[item] !== undefined) {
         // If type is boolean, form item is completed
         if (typeof form[item] !== 'boolean') {
-          if (!form[item]) {
-            flag = false;
-          }
+          if (!form[item]) flag = false;
         }
-      } else {
-        flag = false;
-      }
+      } else flag = false;
     });
+
+    let atLeastOne = false;
+    this.model.tags.forEach(tag => {
+      if (tag.checked) atLeastOne = true;
+    });
+    if (!atLeastOne) flag = false;
 
     return flag;
   }

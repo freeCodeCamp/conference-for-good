@@ -26,6 +26,8 @@ export class DashboardComponent {
   pendingSessions: Session[] = [];
   scheduledSessions: Session[] = [];
 
+  incompleteSessions: Session[] = [];
+
   leadOnlySessions: Session[] = [];
 
   constructor(private transitionService: TransitionService,
@@ -41,6 +43,8 @@ export class DashboardComponent {
 
     this.sessionService.sessionsUnfiltered.subscribe(sessions => {
       this.allSpeakerSessions = this.sessionService.getSpeakerSessions(this.speaker._id);
+
+      this.incompleteSessions = _.filter(this.allSpeakerSessions, session => !session.sessionComplete);
 
       this.pendingSessions = _.filter(this.allSpeakerSessions, session => {
         // Approved but unscheduled sessions are considered pending for dashboard

@@ -24,7 +24,8 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   model: Speaker;
   speakerSessions: Session[] = [];
   leadPresId: string = null;
-  requiredProfileFields = ['nameFirst', 'nameLast', 'email', 'organization', 'bioWebsite', 'bioProgram'];
+
+  incompleteFields: string[] = [];
 
   costsCovered = [
     {
@@ -51,9 +52,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       // Initialize fields for brand new speakers
       if (!params['id']) {
         this.model = <Speaker>{
-          mediaWilling: true,
-          costsCoveredByOrg: this.costsCovered,
-          hasPresentedAtCCAWInPast2years: false,
+          costsCoveredByOrg: this.costsCovered
         }
         this.model.address2 = '';
         this.model.assistantOrCC = '';
@@ -80,6 +79,10 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   changeCostCovered(isChecked: boolean, costChecked) {
     let cost = _.find(this.model.costsCoveredByOrg, cost => cost.name === costChecked.name);
     cost.covered = isChecked;
+  }
+
+  checkRecentExp() {
+    return typeof this.model.hasPresentedAtCCAWInPast2years === 'boolean' && !this.model.hasPresentedAtCCAWInPast2years;
   }
 
   updateSpeaker(form: any) {
@@ -119,11 +122,33 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   checkProfile(form: any) {
     var flag = true;
 
-    this.requiredProfileFields.forEach(function(item) {
-      if (!form[item]) {
-        flag = false;
+    let expReq = !form['hasPresentedAtCCAWInPast2years'];
+
+    for (let field in form) {
+      if (form.hasOwnProperty(field)) {
+        if (!expReq) {
+          // Experience fields not required if has presented at ccaw
+          if (field !== 'assistantOrCC' && field !== 'address2' &&
+              field !== 'recentSpeakingExp' && field !== 'speakingReferences') {
+                if (typeof form[field] !== undefined) {
+                  // If type is boolean, form item is completed
+                  if (typeof form[field] !== 'boolean') {
+                    if (!form[field]) flag = false;
+                  }
+                } else flag = false;
+              }
+        } else {
+          if (field !== 'assistantOrCC' && field !== 'address2') {
+            if (typeof form[field] !== undefined) {
+              // If type is boolean, form item is completed
+              if (typeof form[field] !== 'boolean') {
+                if (!form[field]) flag = false;
+              }
+            } else flag = false;
+          }
+        }
       }
-    });
+    }
 
     return flag;
   }
