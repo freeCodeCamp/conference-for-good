@@ -185,12 +185,51 @@
         </div>
       </div>
       <div *ngIf="otherDietaryChecked()" class="col-md-8 col-xs-12 space-top">
-        <label class="control-label primary-label" for="otherDietary">Other Dietary need(s)</label>
+        <label class="control-label primary-label" for="otherDietary">Other Dietary need(s):</label>
         <input type="text" class="form-control" 
                 [(ngModel)]="model.otherDietary" id="otherDietary"
                 name="otherDietary" #otherDietary="ngModel">
       </div>
 
+    </div>
+
+    <div class="row section">
+      <h4>Book Sales</h4>
+      <div class="col-md-8 col-xs-12">
+        <label class="control-label primary-label" for="bookAvailable">Is there a book that you would like our bookseller to have available at CCAW?</label><br/>
+        <label class="control-label sub-label" for="bookAvailable">This book can be self-authored or used as a reference in your presentation.</label>
+        <div class="radio">
+          <label>
+            <input type="radio" name="bookAvailable" [(ngModel)]="model.responseForm.bookAvailable"
+                    id="bookAvailableYes" [value]="'yes'" #bookAvailable="ngModel" checked="">
+            Yes
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="bookAvailable" [(ngModel)]="model.responseForm.bookAvailable"
+                    id="bookAvailableNo" [value]="'no'" #bookAvailable="ngModel">
+            No
+          </label>
+        </div>
+      </div>
+      <div *ngIf="model.responseForm.bookAvailable === 'yes'" class="col-md-8 col-xs-12 space-top">
+        <label class="control-label primary-label" for="bookTitle">Full Title of Book:</label>
+        <input type="text" class="form-control" 
+                [(ngModel)]="model.bookTitle" id="bookTitle"
+                name="bookTitle" #bookTitle="ngModel">
+      </div>
+      <div *ngIf="model.responseForm.bookAvailable === 'yes'" class="col-md-8 col-xs-12 space-top">
+        <label class="control-label primary-label" for="bookAuthor">Author:</label>
+        <input type="text" class="form-control" 
+                [(ngModel)]="model.bookAuthor" id="bookAuthor"
+                name="bookAuthor" #bookAuthor="ngModel">
+      </div>
+    </div>
+
+    <div class="row section">
+      <h4>W9</h4>
+      **W9 form upload here
     </div>
 
   </form>

@@ -75,7 +75,7 @@ export interface Speaker {
     // If other dietary needs:
     otherDietary: string,
 
-    bookAvailable: string,
+    bookAvailable: string, // yes, no
     // If bookAvailable
     bookTitle: string,
     bookAuthor: string,
