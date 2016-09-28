@@ -240,7 +240,7 @@ export class SessionComponent implements OnInit, OnDestroy {
     this.model.tags.forEach(tag => {
       if (tag.checked) atLeastOne = true;
     });
-    flag = atLeastOne;
+    if (!atLeastOne) flag = false;
 
     return flag;
   }
