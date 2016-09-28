@@ -112,5 +112,28 @@
 
     </div>
 
+    <div class="row section">
+      <div class="col-md-8 col-xs-12">
+        <label class="control-label primary-label" for="agreedTransport">Please note that if you will be taking advantage of CCAW's complimentary transportation to/from the airport, you must send your complete & official flight itinerary to bmeyer@genesisshelter.org <u>no later than **March 4, 2016.**</u></label>
+        <div class="radio">
+          <label>
+            <input type="radio" name="agreedTransport" [(ngModel)]="model.agreedTransport"
+                    id="agreedTransportYes" [value]="'yes'" #agreedTransport="ngModel" checked="">
+            I accept
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="agreedTransport" [(ngModel)]="model.agreedTransport"
+                    id="agreedTransportNo" [value]="'no'" #agreedTransport="ngModel">
+            I don't accept
+          </label>
+        </div>
+        <div *ngIf="model.agreedTransport === 'no'" class="alert alert-warning">
+          <p>You must agree to the Terms & Conditions</p>
+        </div>
+      </div>
+    </div>
+
   </form>
 </div>
