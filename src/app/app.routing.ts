@@ -22,6 +22,7 @@ import { LandingComponent } from './auth/landing/landing.component';
 import { AdministrationComponent } from './admin/administration/administration.component';
 import { ForgotPasswordComponent } from './auth/forgotpassword/forgotpassword.component';
 import { ResponseComponent } from './shared/response/response.component';
+import { HeadshotComponent } from './user/headshot/headshot.component';
 
 const appRoutes: Routes = [
   { path: '',                 component: LandingComponent },
@@ -40,7 +41,8 @@ const appRoutes: Routes = [
   { path: 'settings',         component: SettingsComponent, canActivate: [SpeakerGuard] },
   { path: 'administration',   component: AdministrationComponent, canActivate: [AdminGuard] },
   { path: 'forgotpassword',   component: ForgotPasswordComponent },
-  { path: 'response',         component: ResponseComponent, canActivate: [SpeakerGuard] }
+  { path: 'response',         component: ResponseComponent, canActivate: [SpeakerGuard] },
+  { path: 'headshot',         component: HeadshotComponent, canActivate: [SpeakerGuard] }
 ];
 
 export const appRoutingProviders: any[] = [
