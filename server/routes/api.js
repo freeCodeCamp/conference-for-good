@@ -5,6 +5,29 @@ const Speaker = require('../models/speaker');
 const Conference = require('../models/conference');
 const Session = require('../models/session');
 const _ = require('lodash');
+const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, '~/Documents')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now());
+    }
+});
+var upload = multer({ storage: storage, limits: { fileSize: 2000000 } });
+
+router.post('/upload', upload.any(), (req, res) => {
+    var originalName = req.body.originalname;
+    var newName = req.body.filename;
+
+    res.json({
+        originalName: originalName,
+        filename: newName
+    });
+});
 
 router.get('/getallconferences', (req, res) => {
     Conference
