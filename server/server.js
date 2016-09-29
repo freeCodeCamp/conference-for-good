@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const compress = require('compression');
 const _ = require('lodash');
+const cors = require('cors');
 const passport = require('passport');
 const expressSession = require('express-session');
 require('./config/passport')(passport);
@@ -30,12 +31,13 @@ mongoose.connect(mongoURI);
 
 /*if (process.env.SEED_DB && process.env.SEED_DB==='true') {
   require('./seed');
-}*/ 
+}*/
 
 /** True = get response details on served node modules **/
 let verboseLogging = false;
 
 /**  Configure middleware **/
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev', {
