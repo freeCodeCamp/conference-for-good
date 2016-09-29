@@ -37,7 +37,7 @@ export class HeadshotComponent implements OnInit {
         this.transitionService.transition();
         this.zone = new NgZone({ enableLongStackTrace: false });
         this.basicOptions = {
-            url: 'http://api.ng2-uploader.com:10050/upload'
+            url: 'http://localhost:4200/api/upload'
         };
     }
 
