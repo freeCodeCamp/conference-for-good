@@ -16,12 +16,13 @@
 
   <ul class="nav nav-tabs" id="tab-bar">
     <li role="presentation" class="active">
-      <a href="#tabDetails" data-toggle="tab">Change details</a>
+      <a href="#tabDetails" data-toggle="tab">Change title</a>
     </li>
     <li role="presentation" (click)="updateSelectedDate(dates.value)">
       <a href="#tabTimeslot" data-toggle="tab">Add Timeslots</a>
     </li>
     <li role="presentation"><a href="#tabRoom" data-toggle="tab">Add Rooms</a></li>
+    <li role="presentation"><a href="#tabArchive" data-toggle="tab">Archive Conference</a></li>
   </ul>
 
   <div class="tab-content clearfix">
@@ -87,6 +88,23 @@
             <i class="fa fa-arrow-up arrow" aria-hidden="true" (click)="moveRoom(room, '-')"></i>
             <i class="fa fa-arrow-down arrow" aria-hidden="true" (click)="moveRoom(room, '+')"></i>
           </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="tabArchive">
+      <div class="tab-body">
+        <p>Archived conferences are not visible in menus.</p>
+        <div id="dropdown" class="row">
+          <div class="col-md-4">
+            <label for="conferences" class="control-label">Select Conference to Archive</label>
+            <select #conferences class="form-control" id="conferences">
+              <option *ngFor="let conf of adminService.conferences">
+                {{ conf.title }}
+              </option>
+            </select>
+            <button class="btn btn-primary" (click)="updateSelectedConf(conferences.value)">Select</button>
+          </div>
+        </div>
       </div>
     </div>
     

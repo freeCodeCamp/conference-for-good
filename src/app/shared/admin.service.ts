@@ -15,7 +15,15 @@ export class AdminService {
 
   baseUrl = environment.production ? '' : 'http://localhost:3000';
 
+  // All conferences (including archived)
+  allConferences: Conference[] = [];
+
+  // Archived only
+  archivedConferences: Conference[] = [];
+
+  // Active only
   conferences: Conference[] = [];
+
   activeConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
   defaultConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
 
@@ -25,6 +33,7 @@ export class AdminService {
     this.resetActiveConfs();
     this.resetDefaultConfs();
     let newConf: Conference = {
+      archived: false,
       lastActive: true,
       defaultConf: true,
       title: title,
@@ -199,10 +208,17 @@ export class AdminService {
               .toPromise()
               .then(parseJson)
               .then(conferences => {
-                this.conferences = conferences;
+                this.allConferences = conferences;
+
+                // Sort conferences in reverse order(2017 first, 2016 second...)
+                this.allConferences = _.reverse(_.sortBy(this.allConferences, conf => conf.title));
                 this.conferences.forEach(conf => {
                   conf = this.sortConfSlotsAndDays(conf);
                 });
+
+                this.archivedConferences = _.filter(this.allConferences, conf => conf.archived);
+                this.conferences = _.filter(this.allConferences, conf => !conf.archived);
+                
                 let activeConf = _.find(this.conferences, conf => conf.lastActive === true);
                 this.activeConference.next(activeConf);
                 let defaultConf = _.find(this.conferences, conf => conf.defaultConf === true);
