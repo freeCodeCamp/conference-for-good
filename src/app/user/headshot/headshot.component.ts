@@ -29,22 +29,24 @@ export class HeadshotComponent implements OnInit {
     };
 
     private zone: NgZone;
-    private basicOptions: Object;
+    private options: Object = {
+        url: 'http://localhost:4200/api/upload',
+        filterExtensions: true,
+        allowedExtensions: ['image/png', 'image/jpg'],
+        calculateSpeed: true
+    };
     private progress: number = 0;
     private response: any = {};
 
     ngOnInit() {
         this.transitionService.transition();
         this.zone = new NgZone({ enableLongStackTrace: false });
-        this.basicOptions = {
-            url: 'http://api.ng2-uploader.com:10050/upload'
-        };
     }
 
     handleUpload(data: any): void {
         this.zone.run(() => {
             this.response = data;
-            this.progress = data.progress.percent / 100;
+            this.progress = Math.floor(data.progress.percent / 100);
         });
     }
 }
