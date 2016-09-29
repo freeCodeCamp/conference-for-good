@@ -48,6 +48,8 @@ export interface Speaker {
 
   //**** Response Form
   responseForm: {
+    completed: boolean,
+
     securedLodging: string, // yes, no, name
     // If not securedLodging fields
     dateArrival: string,

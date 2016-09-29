@@ -53,6 +53,7 @@ let speakerSchema = new mongoose.Schema({
   phoneWork: String,
   phoneCell: String,
   assistantOrCC: String, // Not sure what this is, not required
+  
   bioWebsite: String, // For website/app, 125 word limit
   bioProgram: String, // For pamphlet/printed program, 60 word limit
   headshot: String, // file handling ourselves (typeform has drag/drop file selection) sanitize extensions after MVP, min/max size
@@ -72,6 +73,11 @@ let speakerSchema = new mongoose.Schema({
 
   //**** Response Form
   responseForm: {
+    completed: {
+      type: Boolean,
+      default: false
+    },
+
     securedLodging: String, // yes, no, name
     // If not securedLodging fields
     dateArrival: String,

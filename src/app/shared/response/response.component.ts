@@ -63,7 +63,7 @@ export class ResponseComponent implements OnInit, OnDestroy {
     this.paramsub = this.route.params.subscribe(params => {
       this.model = this.speakerService.getSpeaker(params['id']);
 
-      if (!this.model.responseForm) {
+      if (!this.model.responseForm.completed) {
         this.model.responseForm = <any>{};
         this.model.responseForm.dietaryNeeds = this.dietaryNeeds;
         this.generateMealDates();
@@ -128,6 +128,7 @@ export class ResponseComponent implements OnInit, OnDestroy {
   }
 
   submitResponse() {
+    this.model.responseForm.completed = true;
     this.speakerService
         .updateSpeaker(this.model)
         .then(res => {

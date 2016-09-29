@@ -62,14 +62,14 @@
           <b>Action Required</b>
 
           <div>
-            <div *ngIf="speaker.profileComplete && incompleteSessions.length === 0 && speaker.responseForm">None</div>
+            <div *ngIf="speaker.profileComplete && incompleteSessions.length === 0 && speaker.responseForm.completed">None</div>
             <div *ngIf="!speaker.profileComplete"><a [routerLink]="['/speaker', {id: speaker._id}]">Profile Incomplete</a></div>
             <div *ngIf="incompleteSessions.length > 0">
               <div class="small-pad" *ngFor="let session of incompleteSessions">
                 <a [routerLink]="['/session', {id: session._id}]">Incomplete Session: {{ session.title }}</a>
               </div>
             </div>
-            <div *ngIf="!speaker.responseForm">
+            <div *ngIf="!speaker.responseForm.completed">
               <a [routerLink]="['/response', {id: speaker._id}]">Speaker Response Form</a>
             </div>
             
