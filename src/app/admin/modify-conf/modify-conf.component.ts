@@ -233,6 +233,10 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
     return typeof duplicateTitle !== 'undefined';
   }
 
+  archiveSelectedConf(confTitle: string, archive: boolean) {
+    this.adminService.archiveConf(confTitle, archive);
+  }
+
 /*  overlappingTimeslot(startTime: string, endTime: string,
                       conferenceTitle: string, date: string): boolean {
     // TODO: This doesn't validate properly yet

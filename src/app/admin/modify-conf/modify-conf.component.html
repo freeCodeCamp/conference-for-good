@@ -92,19 +92,29 @@
     </div>
 
     <div class="tab-pane" id="tabArchive">
-      <div class="tab-body">
-        <p>Archived conferences are not visible in menus.</p>
-        <div id="dropdown" class="row">
-          <div class="col-md-4">
-            <label for="conferences" class="control-label">Select Conference to Archive</label>
-            <select #conferences class="form-control" id="conferences">
-              <option *ngFor="let conf of adminService.conferences">
-                {{ conf.title }}
-              </option>
-            </select>
-            <button class="btn btn-primary" (click)="updateSelectedConf(conferences.value)">Select</button>
-          </div>
+      <div class="tab-body row">
+        <p class="col-md-9"><i>Archived conferences are not visible in menus.</i></p>
+        <div class="col-md-4">
+          <b>Archive</b><br/>
+          <label for="unarchived" class="control-label">Select Conference to Archive</label>
+          <select #unarchived class="form-control" id="unarchived">
+            <option *ngFor="let conf of adminService.conferences">
+              {{ conf.title }}
+            </option>
+          </select>
+          <button class="btn btn-primary" (click)="archiveSelectedConf(unarchived.value, true)">Archive</button>
         </div>
+        <div class="col-md-4">
+          <b>Unarchive</b><br/>
+          <label for="archived" class="control-label">Select Conference to Archive</label>
+          <select #archived class="form-control" id="archived">
+            <option *ngFor="let conf of adminService.archivedConferences">
+              {{ conf.title }}
+            </option>
+          </select>
+          <button class="btn btn-primary" (click)="archiveSelectedConf(archived.value, false)">Unarchive</button>
+        </div>
+
       </div>
     </div>
     
