@@ -1,5 +1,6 @@
 import { Component, ViewChild, OnInit, NgZone } from '@angular/core';
 
+import { environment } from '../../../environments/environment';
 import { Speaker } from '../../shared/speaker.model';
 import { SpeakerService } from '../../shared/speaker.service';
 import { AuthService } from '../../shared/auth.service';
@@ -13,6 +14,8 @@ import { ToastComponent } from '../../shared/toast.component';
 })
 
 export class HeadshotComponent implements OnInit {
+
+    baseUrl = environment.production ? '' : 'http://localhost:3000';
 
     @ViewChild('toast') toast: ToastComponent;
 
@@ -30,7 +33,7 @@ export class HeadshotComponent implements OnInit {
 
     private zone: NgZone;
     private options: Object = {
-        url: 'http://localhost:4200/api/upload',
+        url: this.baseUrl + '/api/upload',
         filterExtensions: true,
         allowedExtensions: ['image/png', 'image/jpg'],
         calculateSpeed: true
