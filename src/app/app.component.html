@@ -33,6 +33,7 @@
             </a>
             <ul class="dropdown-menu" role="menu">
               <li><a [routerLink]="['/speaker', { id: user?._id }]">Edit Profile</a></li>
+              <li><a [routerLink]="['/headshot']">Headshot</a></li>
               <li><a [routerLink]="['/settings']">Change Password</a></li>
               <li *ngIf="user && user.admin"><a [routerLink]="['/administration']">Administration</a></li>
               <li><a id="logout" (click)="logout()">Logout</a></li>

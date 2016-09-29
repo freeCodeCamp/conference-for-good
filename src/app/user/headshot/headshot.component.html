@@ -1,0 +1,30 @@
+<div class="container" [class.page-transition]="transitionService.isTransitioning()">
+    <div class="row">
+        <h1 class="text-center">Hello, {{speaker.nameFirst}}!</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="row block">
+        <h3 class="text-center title">Upload Headshot</h3>
+        <label class="upload-button">
+            <input class="hidden"
+            type="file"
+            ngFileSelect
+            [options]="basicOptions"
+            (onUpload)="handleUpload($event)">
+            Select File
+        </label>
+
+        <div>
+            Response: {{ response | json }}
+        </div>
+
+        <div>
+            Progress: {{ progress }}%
+        </div>
+
+    </div>
+
+    <toast #toast></toast>
+</div>
