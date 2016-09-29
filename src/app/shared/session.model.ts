@@ -4,7 +4,7 @@ export interface Session {
     approval: string, // pending, approved, denied (by brooke) 
     type: string, // casestudy, workshop or computerlab
     length: string, // 90 minutes('90''), 3 hours('180') (parts 1 and 2)
-  title: string,
+    title: string,
     descriptionWebsite: string,  // To appear on CCAW website and conference appear 150 word limit
     descriptionProgram: string, // To be printed on pamphlet? 60 word limit
     tags: { // Option to add tags after MVP
@@ -16,6 +16,8 @@ export interface Session {
     willingToBeRecorded: string, // audio, audioVisual, no
     isMediaOrPressFriendly: string, // yes, yesNoPhotos, yesNoAudioRecOrPhotos, no
     willingToRepeat: boolean,
+    hasAVneeds: string, // yes, no
+    avNeeds: string, 
     hasCopresentor: boolean,
     speakers?: { // _id's of presentor and copresenters
       mainPresenter: string,

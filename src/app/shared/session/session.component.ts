@@ -41,7 +41,7 @@ export class SessionComponent implements OnInit, OnDestroy {
   model: Session;
   requiredSessionFields = ['type', 'length', 'title', 'descriptionWebsite',
                            'descriptionProgram', 'level', 'willingToBeRecorded', 
-                           'isMediaOrPressFriendly', 'willingToRepeat'];
+                           'isMediaOrPressFriendly', 'willingToRepeat', 'hasAVneeds', 'avNeeds'];
 
   tags = tags;
   
@@ -218,12 +218,18 @@ export class SessionComponent implements OnInit, OnDestroy {
     var flag = true;
 
     this.requiredSessionFields.forEach(item => {
-      if (typeof form[item] !== undefined) {
-        // If type is boolean, form item is completed
-        if (typeof form[item] !== 'boolean') {
-          if (!form[item]) flag = false;
+      if (item === 'avNeeds') {
+        if (form['hasAVneeds'] === 'yes') {
+          if (!form['avNeeds']) flag = false;
         }
-      } else flag = false;
+      } else {
+        if (typeof form[item] !== undefined) {
+          // If type is boolean, form item is completed
+          if (typeof form[item] !== 'boolean') {
+            if (!form[item]) flag = false;
+          }
+        } else flag = false;
+      }
     });
 
     let atLeastOne = false;
