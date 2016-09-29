@@ -163,6 +163,21 @@ router.post('/updateconference', (req, res) => {
         });
 });
 
+router.post('/archiveconf', (req, res) => {
+    let conf = req.body;
+
+    Conference
+        .findOne({ title: conf.title })
+        .exec()
+        .then(serverConf => {
+            serverConf.archived = conf.archived;
+            serverConf.save(err => {
+                if (err) res.status(500).json({message: 'Conference save error'});
+                else res.status(200).json({message: 'Conference saved'});
+            });
+        });
+});
+
 router.post('/updateconfrooms', (req, res) => {
     let conf = req.body;
 

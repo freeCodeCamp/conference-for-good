@@ -15,7 +15,15 @@ export class AdminService {
 
   baseUrl = environment.production ? '' : 'http://localhost:3000';
 
+  // All conferences (including archived)
+  allConferences: Conference[] = [];
+
+  // Archived only
+  archivedConferences: Conference[] = [];
+
+  // Active only
   conferences: Conference[] = [];
+
   activeConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
   defaultConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
 
@@ -25,6 +33,7 @@ export class AdminService {
     this.resetActiveConfs();
     this.resetDefaultConfs();
     let newConf: Conference = {
+      archived: false,
       lastActive: true,
       defaultConf: true,
       title: title,
@@ -34,6 +43,7 @@ export class AdminService {
       }
     };
     this.conferences.push(newConf);
+    this.setFilterAndSort();
     this.activeConference.next(newConf);
     this.defaultConference.next(newConf);
     let pkg = packageForPost(newConf);
@@ -45,7 +55,7 @@ export class AdminService {
   }
 
   changeActiveConf(confTitle: string) {
-    let conf = _.find(this.conferences, conf => conf.title === confTitle);
+    let conf = _.find(this.allConferences, conf => conf.title === confTitle);
     this.resetActiveConfs();
     conf.lastActive = true;
     this.activeConference.next(conf);
@@ -58,7 +68,7 @@ export class AdminService {
   }
 
   changeDefaultConf(confTitle: string) {
-    let conf = _.find(this.conferences, conf => conf.title === confTitle);
+    let conf = _.find(this.allConferences, conf => conf.title === confTitle);
     this.resetDefaultConfs();
     conf.defaultConf = true;
     this.defaultConference.next(conf);
@@ -82,9 +92,22 @@ export class AdminService {
     });
   }
 
+  archiveConf(confTitle: string, archive: boolean) {
+    let conf = _.find(this.allConferences, conf => conf.title === confTitle);
+    conf.archived = archive;
+    this.setFilterAndSort();
+    let pkg = packageForPost(conf);
+    return this.http
+              .post(this.baseUrl + '/api/archiveconf', pkg.body, pkg.opts)
+              .toPromise()
+              .then(parseJson)
+              .catch(handleError);
+  }
+
   updateConference(currentTitle: string, newTitle) {
-    let conference = _.find(this.conferences, conf => conf.title === currentTitle);
+    let conference = _.find(this.allConferences, conf => conf.title === currentTitle);
     conference.title = newTitle;
+    this.setFilterAndSort();
     let pkg = packageForPost({currentTitle: currentTitle, conference: conference});
     return this.http
               .post(this.baseUrl + '/api/updateconference', pkg.body, pkg.opts)
@@ -95,7 +118,7 @@ export class AdminService {
 
   addTimeslot(startTime: string, endTime: string,
               conferenceTitle: string, date: string) {
-    let conference = _.find(this.conferences, conf => conf.title === conferenceTitle);
+    let conference = _.find(this.allConferences, conf => conf.title === conferenceTitle);
     // Shallow clone to prevent premature updates
     let confCopy = _.clone(conference);
 
@@ -156,7 +179,7 @@ export class AdminService {
   }
 
   addRoom(conferenceTitle: string, room: string) {
-    let conf = _.find(this.conferences, conf => conf.title === conferenceTitle);
+    let conf = _.find(this.allConferences, conf => conf.title === conferenceTitle);
 
     if (!conf.rooms) conf.rooms = [];
     // Sync front end
@@ -173,7 +196,7 @@ export class AdminService {
   }
 
   moveRoom(conferenceTitle: string, room: string, direction: string) {
-    let conf = _.find(this.conferences, conf => conf.title === conferenceTitle);
+    let conf = _.find(this.allConferences, conf => conf.title === conferenceTitle);
 
     let roomStarti = conf.rooms.indexOf(room);
     let roomEndi = direction === '+' ? roomStarti+1 : roomStarti-1;
@@ -199,17 +222,28 @@ export class AdminService {
               .toPromise()
               .then(parseJson)
               .then(conferences => {
-                this.conferences = conferences;
-                this.conferences.forEach(conf => {
-                  conf = this.sortConfSlotsAndDays(conf);
-                });
-                let activeConf = _.find(this.conferences, conf => conf.lastActive === true);
+                this.allConferences = conferences;
+                this.setFilterAndSort();
+                
+                let activeConf = _.find(this.allConferences, conf => conf.lastActive === true);
                 this.activeConference.next(activeConf);
-                let defaultConf = _.find(this.conferences, conf => conf.defaultConf === true);
+                let defaultConf = _.find(this.allConferences, conf => conf.defaultConf === true);
                 this.defaultConference.next(defaultConf);
                 return conferences;
               })
               .catch(handleError);
+  }
+
+  /** Update conference filters */
+  setFilterAndSort() {
+    // Sort conferences in reverse order(2017 first, 2016 second...)
+    this.allConferences = _.reverse(_.sortBy(this.allConferences, conf => conf.title));
+    this.conferences.forEach(conf => {
+      conf = this.sortConfSlotsAndDays(conf);
+    });
+
+    this.archivedConferences = _.filter(this.allConferences, conf => conf.archived);
+    this.conferences = _.filter(this.allConferences, conf => !conf.archived);
   }
   
 }

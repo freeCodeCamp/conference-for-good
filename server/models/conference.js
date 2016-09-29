@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 
 let conferenceSchema = new mongoose.Schema({
+  archived: Boolean,
   lastActive: Boolean,
   defaultConf: Boolean,
   title: String,

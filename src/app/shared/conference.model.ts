@@ -1,4 +1,5 @@
 export interface Conference {
+  archived: boolean,
   /** Active = displayed in calendar */
   lastActive: boolean,
   /** DefaultConf = associated with speaker submissions */

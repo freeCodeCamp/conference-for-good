@@ -16,12 +16,13 @@
 
   <ul class="nav nav-tabs" id="tab-bar">
     <li role="presentation" class="active">
-      <a href="#tabDetails" data-toggle="tab">Change details</a>
+      <a href="#tabDetails" data-toggle="tab">Change title</a>
     </li>
     <li role="presentation" (click)="updateSelectedDate(dates.value)">
       <a href="#tabTimeslot" data-toggle="tab">Add Timeslots</a>
     </li>
     <li role="presentation"><a href="#tabRoom" data-toggle="tab">Add Rooms</a></li>
+    <li role="presentation"><a href="#tabArchive" data-toggle="tab">Archive Conference</a></li>
   </ul>
 
   <div class="tab-content clearfix">
@@ -87,6 +88,33 @@
             <i class="fa fa-arrow-up arrow" aria-hidden="true" (click)="moveRoom(room, '-')"></i>
             <i class="fa fa-arrow-down arrow" aria-hidden="true" (click)="moveRoom(room, '+')"></i>
           </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="tabArchive">
+      <div class="tab-body row">
+        <p class="col-md-9"><i>Archived conferences are not visible in menus.</i></p>
+        <div class="col-md-4">
+          <b>Archive</b><br/>
+          <label for="unarchived" class="control-label">Select Conference to Archive</label>
+          <select #unarchived class="form-control" id="unarchived">
+            <option *ngFor="let conf of adminService.conferences">
+              {{ conf.title }}
+            </option>
+          </select>
+          <button class="btn btn-primary" (click)="archiveSelectedConf(unarchived.value, true)">Archive</button>
+        </div>
+        <div class="col-md-4">
+          <b>Unarchive</b><br/>
+          <label for="archived" class="control-label">Select Conference to Archive</label>
+          <select #archived class="form-control" id="archived">
+            <option *ngFor="let conf of adminService.archivedConferences">
+              {{ conf.title }}
+            </option>
+          </select>
+          <button class="btn btn-primary" (click)="archiveSelectedConf(archived.value, false)">Unarchive</button>
+        </div>
+
       </div>
     </div>
     
