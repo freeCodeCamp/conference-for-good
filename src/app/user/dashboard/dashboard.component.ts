@@ -80,7 +80,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.toast.success(params['msg']);
       }
     });
-    console.log('response form: ', this.speaker);
   }
 
   ngOnDestroy() {

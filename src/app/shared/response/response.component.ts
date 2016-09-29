@@ -132,7 +132,6 @@ export class ResponseComponent implements OnInit, OnDestroy {
     this.speakerService
         .updateSpeaker(this.model)
         .then(res => {
-          console.log('we good to go?');
           if (this.authService.user.getValue().admin) {
             this.toast.success('Speaker response submitted.')
           } else {

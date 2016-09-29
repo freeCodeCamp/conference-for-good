@@ -126,12 +126,12 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
               .then(res => {
                 start.value = "";
                 end.value = "";
+                this.selectedConf.next(res);
                 this.refreshSelectedConf(this.datesSelect.value);
                 this.toast.success('Timeslot added!');
               });
       }
     } else if (!startValid) {
-      console.log(startVal);
       this.toast.error('Start time invalid');
     } else if (!endValid) {
       this.toast.error('End time invalid');
@@ -146,7 +146,7 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
           if (res.message && res.message === 'slot has sessions') {
             this.toast.error('This slot has scheduled sessions! Remove them first to delete it.');
           } else {
-            this.refreshSelectedConf(this.datesSelect.value);
+            this.updateSelectedConf(this.selectedConf.getValue().title, this.datesSelect.value);
             this.toast.success('Timeslot deleted!');
           }
         });
@@ -183,7 +183,6 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
 
   moveRoom(room: string, direction: string) {
     let conferenceTitle = this.selectedConf.getValue().title;
-
     this.adminService.moveRoom(conferenceTitle, room, direction);
   }
 
@@ -202,9 +201,10 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
     this.conferences.nativeElement.value = this.selectedConf.getValue().title;
   }
 
-  updateSelectedConf(confTitle: string) {
-    this.selectedConf.next(_.find(this.adminService.conferences, d => d.title === confTitle));
-    this.refreshSelectedConf();
+  updateSelectedConf(confTitle: string, dateSelected?: string) {
+    this.selectedConf.next(_.find(this.adminService.allConferences, d => d.title === confTitle));
+    if (dateSelected) this.refreshSelectedConf(dateSelected);
+    else this.refreshSelectedConf();
   }
 
   refreshSelectedConf(dateSelected?: string) {

@@ -102,7 +102,42 @@ router.post('/changedefaultconf', (req, res) => {
     });
 });
 
-router.post('/changetimeslot', (req, res) => {
+router.post('/addtimeslot', (req, res) => {
+    let confTitle = req.body.title;
+    let newSlot = req.body.newSlot;
+    let date = req.body.date;
+
+    Conference
+        .findOne({ title: confTitle })
+        .exec()
+        .then(serverConf => {
+            let confDate = _.find(serverConf.days, day => day.date === date);
+
+            if (typeof confDate === undefined) {
+                if (typeof serverConf.days === undefined) serverConf.days = [];
+                let newDay = {
+                    date: date,
+                    timeSlots: [{
+                        start: newSlot.start,
+                        end: newSlot.end
+                    }]
+                };
+            } else {
+                confDate.timeSlots.push({
+                    start: newSlot.start,
+                    end: newSlot.end
+                });
+            }
+            //serverConf.days.push(newTimeSlot);
+            console.log(confDate);
+            serverConf.save(err => {
+                if (err) res.status(500).json({message: 'Conference save error'});
+                else res.status(200).json(serverConf);
+            });
+        });
+});
+
+router.post('/deletetimeslot', (req, res) => {
     let conf = req.body;
 
     Conference
