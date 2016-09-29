@@ -2,7 +2,7 @@
      [class.page-transition]="transitionService.isTransitioning()">
   <h2>Speaker Response</h2>
 
-  <form #responseForm="ngForm" (submit)="updateSpeaker(responseForm.value)">
+  <form #responseForm="ngForm">
 
     <div class="row section">
       <h4>Lodging Information</h4>
@@ -166,7 +166,7 @@
         <label class="control-label sub-label" for="mealDates">Choose as many as you like or none</label>
         <div class="checkbox-group">
           <label *ngFor="let date of model.responseForm.mealDates">
-            <input type="checkbox" [checked]="date.checked" 
+            <input type="checkbox" [checked]="date.attending" 
                     (change)="changeDate($event.target.checked, date)"
                     name="date"> {{ date.label }}
           </label>
@@ -233,6 +233,8 @@
     </div>
     <button type="submit" [disabled]="!isFormValid(responseForm.form.valid)"
             class="btn btn-primary" (click)="submitResponse()">Submit</button>
-
+  <toast #toast></toast>
   </form>
+
+<!--  <div class="debug">{{diagnostic}}</div>-->
 </div>

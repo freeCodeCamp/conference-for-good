@@ -1,5 +1,5 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 
 import { AdminService } from '../../shared/admin.service';
@@ -16,7 +16,7 @@ import { ToastComponent } from '../../shared/toast.component';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit, OnDestroy {
 
   @ViewChild('toast') toast: ToastComponent;
   @ViewChild('copresLink') copresLink: ElementRef;
@@ -30,9 +30,12 @@ export class DashboardComponent {
 
   leadOnlySessions: Session[] = [];
 
+  private paramsub: any;
+
   constructor(private transitionService: TransitionService,
               private adminService: AdminService,
               private authService: AuthService,
+              private route: ActivatedRoute,
               private router: Router,
               private sessionService: SessionService,
               private speakerService: SpeakerService) {
@@ -71,6 +74,17 @@ export class DashboardComponent {
 
   ngOnInit() {
     this.transitionService.transition();
+
+    this.paramsub = this.route.params.subscribe(params => {
+      if (params['msg']) {
+        this.toast.success(params['msg']);
+      }
+    });
+    console.log('response form: ', this.speaker);
+  }
+
+  ngOnDestroy() {
+    this.paramsub.unsubscribe();
   }
 
   getPart(session: Session, occurrence) {

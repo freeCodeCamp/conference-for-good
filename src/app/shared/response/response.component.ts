@@ -11,6 +11,7 @@ import { DateService } from '../date.service';
 import { Speaker } from '../speaker.model';
 import { SpeakerService } from '../speaker.service';
 import { TransitionService } from '../transition.service';
+import { ToastComponent } from '../toast.component';
 
 @Component({
   selector: 'response',
@@ -18,6 +19,8 @@ import { TransitionService } from '../transition.service';
   styleUrls: ['./response.component.scss']
 })
 export class ResponseComponent implements OnInit, OnDestroy {
+
+  @ViewChild('toast') toast: ToastComponent;
   
   private paramsub: any;
 
@@ -123,5 +126,21 @@ export class ResponseComponent implements OnInit, OnDestroy {
     if (form.agreedTransport === 'no') formValid = false;
     return formValid;
   }
+
+  submitResponse() {
+    this.speakerService
+        .updateSpeaker(this.model)
+        .then(res => {
+          console.log('we good to go?');
+          if (this.authService.user.getValue().admin) {
+            this.toast.success('Speaker response submitted.')
+          } else {
+            this.router.navigate(['/dashboard', { msg: 'Response form submitted!' }]);
+          }
+        });
+  }
+
+  // DEBUG
+  get diagnostic() { return JSON.stringify(this.model); }
 
 }

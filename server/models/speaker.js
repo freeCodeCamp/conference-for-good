@@ -71,6 +71,7 @@ let speakerSchema = new mongoose.Schema({
   sessions: [String],
 
   //**** Response Form
+  responseForm: {
     securedLodging: String, // yes, no, name
     // If not securedLodging fields
     dateArrival: String,
@@ -104,6 +105,7 @@ let speakerSchema = new mongoose.Schema({
     bookAuthor: String,
 
     w9: String, // whether uploaded to dropbox?
+  }
 });
 
 speakerSchema.methods.generateHash = password => {
