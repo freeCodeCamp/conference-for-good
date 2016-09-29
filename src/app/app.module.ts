@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { CommonModule } from '@angular/common';
+import { UPLOAD_DIRECTIVES } from 'ng2-uploader';
 
 import { routing } from './app.routing';
 
@@ -31,6 +33,7 @@ import { AdministrationComponent } from './admin/administration/administration.c
 import { ForgotPasswordComponent } from './auth/forgotpassword/forgotpassword.component';
 import { ToastComponent } from './shared/toast.component';
 import { ResponseComponent } from './shared/response/response.component';
+import { HeadshotComponent } from './user/headshot/headshot.component';
 
 /** App-wide Services */
 import { AdminService } from './shared/admin.service';
@@ -54,21 +57,25 @@ import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    routing
+    routing,
+      CommonModule
   ],
   declarations: [
     // Components
     AppComponent, HomeComponent, CalendarComponent, CreateConfComponent,
     DashboardComponent, ModifyConfComponent, SelectActiveComponent, SessionComponent,
     SessionListComponent, SpeakerComponent, SpeakerListComponent, LoginComponent,
-    SignupComponent, SettingsComponent, LandingComponent, AdministrationComponent, 
-    ForgotPasswordComponent, ToastComponent, ResponseComponent,
+    SignupComponent, SettingsComponent, LandingComponent, AdministrationComponent,
+    ForgotPasswordComponent, ToastComponent, ResponseComponent, HeadshotComponent,
 
     // Pipes
     DatePipe, CapitalizePipe, TimePipe,
 
     // Directives
-    MaxWordsValidatorDirective
+    MaxWordsValidatorDirective,
+
+    // Uploads
+    UPLOAD_DIRECTIVES
   ],
   providers: [
     // Route guards
@@ -77,6 +84,7 @@ import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
     AdminService, AuthService, DateService,
     SessionService, SpeakerService, TransitionService
   ],
+  entryComponents: [AppComponent],
   bootstrap: [AppComponent],
 })
 
