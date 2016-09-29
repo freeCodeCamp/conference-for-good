@@ -5,7 +5,6 @@ const Speaker = require('../models/speaker');
 const Conference = require('../models/conference');
 const Session = require('../models/session');
 const _ = require('lodash');
-const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 
@@ -20,6 +19,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage, limits: { fileSize: 2000000 } });
 
 router.post('/upload', upload.any(), (req, res) => {
+    console.log('upload');
     var originalName = req.body.originalname;
     var newName = req.body.filename;
 
