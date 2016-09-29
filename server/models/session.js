@@ -19,6 +19,8 @@ let sessionSchema = new mongoose.Schema({
   willingToBeRecorded: String, // audio, audioVisual, no
   isMediaOrPressFriendly: String, // yes, yesNophotos, yesNoAudioRecOrPhotos, no
   willingToRepeat: Boolean,
+  hasAVneeds: String, // yes, no
+  avNeeds: String, 
   hasCopresentor: Boolean,
   speakers: { // _id's of presentor and copresenters
     mainPresenter: String,

@@ -369,6 +369,32 @@
         </div>
       </div>
 
+      <div class="row section">
+        <div class="col-md-8 col-xs-12">
+          <label class="control-label primary-label" for="hasAVneeds">An LCD projector connected to the house sound system, screen, and one or two wireless microphones will be provided. <u>Do you have additional A/V needs?</u></label><br/>
+          <div class="radio">
+            <label>
+              <input type="radio" name="hasAVneeds" [(ngModel)]="model.hasAVneeds"
+                     [value]="'yes'" #hasAVneeds="ngModel" checked="">
+              Yes
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="hasAVneeds" [(ngModel)]="model.hasAVneeds"
+                     [value]="'no'" #hasAVneeds="ngModel">
+              No
+            </label>
+          </div>
+        </div>
+        <div *ngIf="model.hasAVneeds === 'yes'" class="col-md-8 col-xs-12 space-top">
+          <label class="control-label primary-label" for="avNeeds">Additional A/V Needs:</label>
+          <input type="text" class="form-control" 
+                  [(ngModel)]="model.avNeeds" id="avNeeds"
+                  name="avNeeds" #avNeeds="ngModel">
+        </div>
+      </div>
+
     </div>
     <button type="submit"
             class="btn btn-primary" 
