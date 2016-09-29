@@ -64,3 +64,12 @@
 .space-top {
   margin-top: 20px;
 }
+
+.debug {
+  position: fixed;
+  right: 10px;
+  top: 64px;
+  width: 400px;
+  word-break: break-word;
+  white-space: pre-line;
+}

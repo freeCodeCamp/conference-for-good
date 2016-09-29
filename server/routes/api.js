@@ -167,6 +167,8 @@ router.post('/updatespeaker', (req, res) => {
                 console.log('speaker save error', err);
                 return res.status(500).json({ alert: 'failed' });
             }
+            console.log('user updated');
+            console.log(user);
             return res.status(200).json(user);
         });
 });
