@@ -113,4 +113,15 @@ export class ResponseComponent implements OnInit, OnDestroy {
     return otherNeed.checked;
   }
 
+  isFormValid(validFields: boolean) {
+    if (!validFields) return false;
+    let formValid = true;
+    let form = this.model.responseForm;
+    if (form.ccawCoveringHotel === 'yes') {
+      if (form.agreedHotel === 'no') formValid = false;
+    }
+    if (form.agreedTransport === 'no') formValid = false;
+    return formValid;
+  }
+
 }
