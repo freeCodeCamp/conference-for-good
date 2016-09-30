@@ -112,9 +112,8 @@ router.post('/addtimeslot', (req, res) => {
         .exec()
         .then(serverConf => {
             let confDate = _.find(serverConf.days, day => day.date === date);
-
-            if (typeof confDate === undefined) {
-                if (typeof serverConf.days === undefined) serverConf.days = [];
+            if (typeof confDate === 'undefined') {
+                if (typeof serverConf.days === 'undefined') serverConf.days = [];
                 let newDay = {
                     date: date,
                     timeSlots: [{
@@ -122,14 +121,13 @@ router.post('/addtimeslot', (req, res) => {
                         end: newSlot.end
                     }]
                 };
+                serverConf.days.push(newDay);
             } else {
                 confDate.timeSlots.push({
                     start: newSlot.start,
                     end: newSlot.end
                 });
             }
-            //serverConf.days.push(newTimeSlot);
-            console.log(confDate);
             serverConf.save(err => {
                 if (err) res.status(500).json({message: 'Conference save error'});
                 else res.status(200).json(serverConf);
