@@ -99,9 +99,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   }
 
   getDaySlots(dayId) {
-    console.log('day ID', dayId);
     let slots = _.find(this.activeConf.days, day => day._id === dayId).timeSlots;
-    console.log('slots of day', slots);
     return slots;
   }
 

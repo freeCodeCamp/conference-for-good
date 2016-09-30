@@ -34,9 +34,7 @@ export class SessionService {
   sessionsDenied: BehaviorSubject<Session[]> = new BehaviorSubject([]);
 
   constructor(private http: Http,
-              private adminService: AdminService) {
-
-  }
+              private adminService: AdminService) { }
 
   getAllSessions() {
     return this.http
@@ -212,11 +210,11 @@ export class SessionService {
   }
 
   deleteTimeSlot(date: string, confTitle: string, slot: TimeSlot) {
-    let conf = _.find(this.adminService.conferences, conf => conf.title === confTitle);
+    let conf = _.find(this.adminService.allConferences, conf => conf.title === confTitle);
     let confDate = _.find(conf.days, day => day.date === date);
     
     // Sync front end
-    let slotIndex = _.findIndex(confDate.timeSlots, existSlot => existSlot === slot);
+    let slotIndex = _.findIndex(confDate.timeSlots, existSlot => existSlot._id === slot._id);
 
     if (this.slotHasScheduledSessions(conf, confDate, slotIndex)) {
       return Promise.resolve({message: 'slot has sessions'});
@@ -226,7 +224,7 @@ export class SessionService {
 
     let pkg = packageForPost(conf);
     return this.http
-              .post(this.baseUrl + '/api/changetimeslot', pkg.body, pkg.opts)
+              .post(this.baseUrl + '/api/deletetimeslot', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .catch(handleError);
@@ -247,7 +245,7 @@ export class SessionService {
   }
 
   deleteRoom(conferenceTitle: string, room: string) {
-    let conf = _.find(this.adminService.conferences, conf => conf.title === conferenceTitle);
+    let conf = _.find(this.adminService.allConferences, conf => conf.title === conferenceTitle);
     
     
     if (this.roomHasScheduledSessions(conf, room)) {
