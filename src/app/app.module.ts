@@ -34,6 +34,7 @@ import { ForgotPasswordComponent } from './auth/forgotpassword/forgotpassword.co
 import { ToastComponent } from './shared/toast.component';
 import { ResponseComponent } from './shared/response/response.component';
 import { HeadshotComponent } from './user/headshot/headshot.component';
+import { ExportingComponent } from './admin/exporting/exporting.component';
 
 /** App-wide Services */
 import { AdminService } from './shared/admin.service';
@@ -75,7 +76,9 @@ import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
     MaxWordsValidatorDirective,
 
     // Uploads
-    UPLOAD_DIRECTIVES
+    UPLOAD_DIRECTIVES,
+
+    ExportingComponent
   ],
   providers: [
     // Route guards

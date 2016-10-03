@@ -22,6 +22,7 @@
           <li *ngIf="user && user.admin"><a [routerLink]="['/calendar']">Calendar</a></li>
           <li *ngIf="user && user.admin"><a [routerLink]="['/session-list']">Sessions</a></li>
           <li *ngIf="user && user.admin"><a [routerLink]="['/speaker-list']">Speakers</a></li>
+          <li *ngIf="user && user.admin"><a [routerLink]="['/exporting']">Exporting</a></li>
           <li *ngIf="user && !user.admin"><a [routerLink]="['/dashboard']">Dashboard</a></li>
         </ul>
 
