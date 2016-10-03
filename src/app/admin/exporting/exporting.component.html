@@ -1,3 +1,24 @@
-<p>
-  exporting works!
-</p>
+<div class="container" [class.page-transition]="transitionService.isTransitioning()">
+  <h1 class="text-center">Exporting data</h1>
+  <p class="text-center" id="subtitle">
+    Select all database fields you would like to export.
+  </p>
+  <div class="divider"></div>
+
+  <h3>Sessions</h3>
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <label class="control-label primary-label" for="mealDates">Select session fields to export.</label><br/>
+      <div class="checkbox-group">
+        <label *ngFor="let field of sessionFields" class="fieldBox">
+          <input type="checkbox" name="sessionField" 
+                 (change)="field.checked = $event.target.checked"> {{ field.name }}
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" (click)="export()">Export</button>
+
+  <toast #toast></toast>
+</div>
