@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { ExportingService } from './exporting.service';
 import { Session } from '../../shared/session.model';
 import { SessionService } from '../../shared/session.service';
 import { TransitionService } from '../../shared/transition.service';
@@ -8,7 +9,8 @@ import { ToastComponent } from '../../shared/toast.component';
 @Component({
   selector: 'app-exporting',
   templateUrl: './exporting.component.html',
-  styleUrls: ['./exporting.component.scss']
+  styleUrls: ['./exporting.component.scss'],
+  providers: [ExportingService]
 })
 export class ExportingComponent implements OnInit {
 
@@ -17,6 +19,7 @@ export class ExportingComponent implements OnInit {
   sessionFields: {name: string; checked: boolean}[] = [];
 
   constructor(private transitionService: TransitionService,
+              private exportingService: ExportingService,
               private sessionService: SessionService) { }
 
   ngOnInit() {
@@ -36,7 +39,11 @@ export class ExportingComponent implements OnInit {
   }
 
   export() {
-    console.log(this.sessionFields);
+    this.exportingService
+        .exportSessions(this.sessionFields)
+        .then(res => {
+          this.toast.success('exported');
+        });
   }
 
 }

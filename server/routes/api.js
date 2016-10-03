@@ -323,6 +323,14 @@ router.post('/updatesessionslots', (req, res) => {
         });
 });
 
+/** Exporting API */
+router.post('/exportsessions', (req, res) => {
+    let exportFields = req.body;
+    console.log(exportFields);
+    
+    res.status(200).end();
+});
+
 function updateActiveConfs(activeConf) {
     // If no active conf passed, make all confs inactive
     if (activeConf === null) activeConf = {title: ''};
