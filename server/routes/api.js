@@ -338,17 +338,19 @@ router.post('/exportsessions', (req, res) => {
         .find({})
         .exec()
         .then(sessions => {
-            let result = json2csv({ data: sessions, fields: desiredFields });
-            fs.writeFile('sessions.csv', result, (err) => {
+            let csv = json2csv({ data: sessions, fields: desiredFields });
+            let filerand = _.random(0, 10000);
+            let filename = `sessions${filerand}.csv`;
+            fs.writeFile(filename, csv, (err) => {
                 if (err) {
                     console.log(err);
                     res.status(500).end();
                 }
                 else {
                     console.log('file saved');
-                    res.download('sessions.csv');/*, 'sessionsFinal.csv', (err) => {
-                        if (!err) fs.unlink('sessions.csv');
-                    });*/
+                    res.download(filename, 'sessionsFinal.csv', (err) => {
+                        if (!err) fs.unlink(filename);
+                    });
                 }
             });
         });
