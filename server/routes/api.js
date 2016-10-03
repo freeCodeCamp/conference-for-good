@@ -18,6 +18,9 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage, limits: { fileSize: 2000000 } });
 
+const json2csv = require('json2csv');
+const fs = require('fs');
+
 router.post('/upload', upload.any(), (req, res) => {
     console.log('upload');
     var originalName = req.body.originalname;
@@ -326,9 +329,30 @@ router.post('/updatesessionslots', (req, res) => {
 /** Exporting API */
 router.post('/exportsessions', (req, res) => {
     let exportFields = req.body;
-    console.log(exportFields);
+    let desiredFields = [];
+    for (let i = 0; i < exportFields.length; i++) {
+        if (exportFields[i].checked) desiredFields.push(exportFields[i].name);
+    }
+
+    Session
+        .find({})
+        .exec()
+        .then(sessions => {
+            let result = json2csv({ data: sessions, fields: desiredFields });
+            fs.writeFile('sessions.csv', result, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).end();
+                }
+                else {
+                    console.log('file saved');
+                    res.download('sessions.csv');/*, 'sessionsFinal.csv', (err) => {
+                        if (!err) fs.unlink('sessions.csv');
+                    });*/
+                }
+            });
+        });
     
-    res.status(200).end();
 });
 
 function updateActiveConfs(activeConf) {

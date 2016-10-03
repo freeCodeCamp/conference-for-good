@@ -17,7 +17,10 @@ export class ExportingService {
     return this.http
               .post(this.baseUrl + '/api/exportsessions', pkg.body, pkg.opts)
               .toPromise()
-              .then(parseJson)
+              .then((res: any) => {
+                let blob = new Blob([res._body], {type: "text/csv;charset=utf8;"});
+                return blob;
+              })
               .catch(handleError);
   }
 }

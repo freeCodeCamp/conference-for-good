@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+let fileSaver = require('file-saver');
 
 import { ExportingService } from './exporting.service';
 import { Session } from '../../shared/session.model';
@@ -41,7 +42,8 @@ export class ExportingComponent implements OnInit {
   export() {
     this.exportingService
         .exportSessions(this.sessionFields)
-        .then(res => {
+        .then((data: Blob) => {
+          fileSaver.saveAs(data, 'sessions.csv');
           this.toast.success('exported');
         });
   }
