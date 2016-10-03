@@ -338,24 +338,70 @@ router.post('/exportsessions', (req, res) => {
         .find({})
         .exec()
         .then(sessions => {
-            let csv = json2csv({ data: sessions, fields: desiredFields });
-            let filerand = _.random(0, 10000);
-            let filename = `sessions${filerand}.csv`;
-            fs.writeFile(filename, csv, (err) => {
-                if (err) {
-                    console.log(err);
-                    res.status(500).end();
-                }
-                else {
-                    console.log('file saved');
-                    res.download(filename, 'sessionsFinal.csv', (err) => {
-                        if (!err) fs.unlink(filename);
+            Speaker
+                .find({})
+                .exec()
+                .then(speakers => {
+                    let csv = parseSessionData(desiredFields, sessions, speakers);
+
+                    //let csv = json2csv({ data: sessions, fields: desiredFields });
+                    let filerand = _.random(0, 10000);
+                    let filename = `sessions${filerand}.csv`;
+                    fs.writeFile(filename, csv, (err) => {
+                        if (err) {
+                            console.log(err);
+                            res.status(500).end();
+                        }
+                        else {
+                            console.log('file saved');
+                            res.download(filename, 'sessionsFinal.csv', (err) => {
+                                if (!err) fs.unlink(filename);
+                            });
+                        }
                     });
-                }
-            });
+
+                });
         });
     
 });
+
+function parseSessionData(desiredFields, sessions, speakers) {
+    let exportJson = sessions.slice();
+    let wantSpeakers = _.findIndex(desiredFields, field => field === 'speakers') >= 0;
+    let wantSchedule = _.findIndex(desiredFields, 'statusTimeLocation') >= 0;
+    if (wantSpeakers) {
+        for (let i = 0; i < sessions.length; i++) {
+            if (sessions[i].speakers && sessions[i].speakers.mainPresenter) {
+                let leadSpeaker = _.find(speakers, speaker => speaker._id.toString() === sessions[i].speakers.mainPresenter);
+                if (leadSpeaker) {
+                    exportJson[i].leadSpeakerFirst = leadSpeaker.nameFirst;
+                    exportJson[i].leadSpeakerLast = leadSpeaker.nameLast;
+                    if (_.findIndex(desiredFields, field => field === 'leadSpeakerFirst') < 0) {
+                        desiredFields.push('leadSpeakerFirst');
+                        desiredFields.push('leadSpeakerLast');
+                    }
+                }
+            }
+            if (sessions[i].speakers && sessions[i].speakers.coPresenters && sessions[i].speakers.coPresenters.length > 0) {
+                console.log('got here');
+                for (let j = 0; j < sessions[i].speakers.coPresenters.length; j++) {
+                    let coPres = _.find(speakers, speaker => speaker._id.toString() === sessions[i].speakers.coPresenters[j]);
+                    exportJson[i][`coSpeakerFirst${j+1}`] = coPres.nameFirst;
+                    exportJson[i][`coSpeakerLast${j+1}`] = coPres.nameLast;
+                    desiredFields.push(`coSpeakerFirst${j+1}`);
+                    desiredFields.push(`coSpeakerLast${j+1}`);
+                }
+            }
+        }
+        // Remove duplicates of copresenter fields
+        desiredFields = _.uniq(desiredFields);
+        _.remove(desiredFields, field => field === 'speakers');
+        console.log(desiredFields);
+        delete exportJson.speakers;
+    }
+    let csv = json2csv({ data: exportJson, fields: desiredFields });
+    return csv;
+}
 
 function updateActiveConfs(activeConf) {
     // If no active conf passed, make all confs inactive
