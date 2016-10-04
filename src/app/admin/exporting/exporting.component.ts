@@ -29,7 +29,8 @@ export class ExportingComponent implements OnInit {
   }
 
   getFields() {
-    let refSess = this.sessionService.sessionsActive.getValue()[0];
+    let refSess: Session = this.genRefSession();
+    //let refSess = this.sessionService.sessionsActive.getValue()[0];
     for (let field in refSess) {
       if (refSess.hasOwnProperty(field)) {
         if (field !== '_id' && field !== '__v') {
@@ -37,6 +38,20 @@ export class ExportingComponent implements OnInit {
         }
       }
     }
+  }
+
+  /** Empty session with all fields to loop through */
+  genRefSession() {
+    let refSess: Session = {
+      associatedConf: '', approval: '', type: '', length: '',
+      title: '', descriptionWebsite: '', descriptionProgram: '',
+      tags: [], level: '', willingToBeRecorded: '',
+      isMediaOrPressFriendly: '', willingToRepeat: true, 
+      hasAVneeds: '', avNeeds: '', speakers: {mainPresenter: '', coPresenters: []}, 
+      statusTimeLocation: [],
+      miscRequirements: '', sessionComplete: false
+    }
+    return refSess;
   }
 
   export() {

@@ -17,8 +17,7 @@ export interface Session {
     isMediaOrPressFriendly: string, // yes, yesNoPhotos, yesNoAudioRecOrPhotos, no
     willingToRepeat: boolean,
     hasAVneeds: string, // yes, no
-    avNeeds: string, 
-    hasCopresentor: boolean,
+    avNeeds: string,
     speakers?: { // _id's of presentor and copresenters
       mainPresenter: string,
       coPresenters: string[]
