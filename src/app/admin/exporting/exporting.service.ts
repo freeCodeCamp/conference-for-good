@@ -23,4 +23,16 @@ export class ExportingService {
               })
               .catch(handleError);
   }
+
+  exportSpeakers(speakerFields) {
+    let pkg = packageForPost(speakerFields);
+    return this.http
+              .post(this.baseUrl + '/api/exportspeakers', pkg.body, pkg.opts)
+              .toPromise()
+              .then((res: any) => {
+                let blob = new Blob([res._body], {type: "text/csv;charset=utf8;"});
+                return blob;
+              })
+              .catch(handleError);
+  }
 }

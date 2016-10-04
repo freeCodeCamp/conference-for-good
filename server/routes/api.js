@@ -369,6 +369,38 @@ router.post('/exportsessions', (req, res) => {
         });
 });
 
+router.post('/exportspeakers', (req, res) => {
+    let exportFields = req.body;
+    let desiredFields = [];
+    for (let i = 0; i < exportFields.length; i++) {
+        if (exportFields[i].checked) desiredFields.push(exportFields[i].name);
+    }
+
+    Speaker
+        .find({})
+        .exec()
+        .then(speakers => {
+            let csv = parseSpeakerData(desiredFields, speakers);
+
+            // In case we get sequential requests
+            let filerand = _.random(0, 10000);
+            let filename = `speakers${filerand}.csv`;
+            fs.writeFile(filename, csv, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).end();
+                }
+                else {
+                    console.log('file saved');
+                    res.download(filename, 'speakersFinal.csv', (err) => {
+                        if (!err) fs.unlink(filename);
+                    });
+                }
+            });
+        });
+
+});
+
 /** Flatten and format nested data for export */
 function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
     let exportJson = sessions.slice();
@@ -463,6 +495,14 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
     }
 
     let csv = json2csv({ data: exportJson, fields: desiredFields });
+    return csv;
+}
+
+/** Flatten and format nested data for export  */
+function parseSpeakerData(desiredFields, speakers) {
+    let exportJson = speakers.slice();
+
+    let csv = json2csv({ data: speakers, fields: desiredFields });
     return csv;
 }
 
