@@ -374,6 +374,7 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
     let exportJson = sessions.slice();
     let wantSpeakers = _.findIndex(desiredFields, field => field === 'speakers') >= 0;
     let wantSchedule = _.findIndex(desiredFields, field => field === 'statusTimeLocation') >= 0;
+    let wantTags = _.findIndex(desiredFields, field => field === 'tags') >= 0;
 
     // Speakers are just stored as reference ids on the session, get the full object for more info
     if (wantSpeakers) {
@@ -441,6 +442,24 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
         }
         desiredFields.push('date', 'timeSlot', 'room');
         _.remove(desiredFields, field => field === 'statusTimeLocation');
+    }
+    // Flatten tags into comma separated list of tag names that are checked
+    if (wantTags) {
+        for (let i = 0; i < sessions.length; i++) {
+            let tagString = '';
+            if (sessions[i].tags && sessions[i].tags.length > 0) {
+                for (let j = 0; j < sessions[i].tags.length; j++) {
+                    let tag = sessions[i].tags[j].toObject();
+                    if (tag.checked) {
+                        if (tagString === '') tagString += tag.name
+                        else tagString += `, ${tag.name}`; 
+                    }
+                }
+            }
+            exportJson[i].sessTags = tagString;
+        }
+        desiredFields.push('sessTags');
+        _.remove(desiredFields, field => field === 'tags');
     }
 
     let csv = json2csv({ data: exportJson, fields: desiredFields });
