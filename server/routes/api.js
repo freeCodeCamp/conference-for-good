@@ -342,33 +342,40 @@ router.post('/exportsessions', (req, res) => {
                 .find({})
                 .exec()
                 .then(speakers => {
-                    let csv = parseSessionData(desiredFields, sessions, speakers);
+                    Conference
+                        .find({defaultConf: true})
+                        .exec()
+                        .then(confs => {
+                            let defaultConf = confs[0];
+                            let csv = parseSessionData(desiredFields, sessions, speakers, defaultConf);
 
-                    //let csv = json2csv({ data: sessions, fields: desiredFields });
-                    let filerand = _.random(0, 10000);
-                    let filename = `sessions${filerand}.csv`;
-                    fs.writeFile(filename, csv, (err) => {
-                        if (err) {
-                            console.log(err);
-                            res.status(500).end();
-                        }
-                        else {
-                            console.log('file saved');
-                            res.download(filename, 'sessionsFinal.csv', (err) => {
-                                if (!err) fs.unlink(filename);
+                            // In case we get sequential requests
+                            let filerand = _.random(0, 10000);
+                            let filename = `sessions${filerand}.csv`;
+                            fs.writeFile(filename, csv, (err) => {
+                                if (err) {
+                                    console.log(err);
+                                    res.status(500).end();
+                                }
+                                else {
+                                    console.log('file saved');
+                                    res.download(filename, 'sessionsFinal.csv', (err) => {
+                                        if (!err) fs.unlink(filename);
+                                    });
+                                }
                             });
-                        }
-                    });
-
+                        });
                 });
         });
-    
 });
 
-function parseSessionData(desiredFields, sessions, speakers) {
+/** Flatten and format nested data for export */
+function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
     let exportJson = sessions.slice();
     let wantSpeakers = _.findIndex(desiredFields, field => field === 'speakers') >= 0;
-    let wantSchedule = _.findIndex(desiredFields, 'statusTimeLocation') >= 0;
+    let wantSchedule = _.findIndex(desiredFields, field => field === 'statusTimeLocation') >= 0;
+
+    // Speakers are just stored as reference ids on the session, get the full object for more info
     if (wantSpeakers) {
         for (let i = 0; i < sessions.length; i++) {
             if (sessions[i].speakers && sessions[i].speakers.mainPresenter) {
@@ -383,7 +390,6 @@ function parseSessionData(desiredFields, sessions, speakers) {
                 }
             }
             if (sessions[i].speakers && sessions[i].speakers.coPresenters && sessions[i].speakers.coPresenters.length > 0) {
-                console.log('got here');
                 for (let j = 0; j < sessions[i].speakers.coPresenters.length; j++) {
                     let coPres = _.find(speakers, speaker => speaker._id.toString() === sessions[i].speakers.coPresenters[j]);
                     exportJson[i][`coSpeakerFirst${j+1}`] = coPres.nameFirst;
@@ -396,9 +402,47 @@ function parseSessionData(desiredFields, sessions, speakers) {
         // Remove duplicates of copresenter fields
         desiredFields = _.uniq(desiredFields);
         _.remove(desiredFields, field => field === 'speakers');
-        console.log(desiredFields);
         delete exportJson.speakers;
     }
+    // Schedule timeslots are stored as reference ids, need more info
+    if (wantSchedule) {
+        for (let i = 0; i < sessions.length; i++) {
+            if (sessions[i].statusTimeLocation && sessions[i].statusTimeLocation.length > 0) {
+                for (let j = 0; j < sessions[i].statusTimeLocation.length; j++) {
+                    let slotId = sessions[i].statusTimeLocation[j].timeSlot;
+                    let confDay;
+                    let slotWeLookinFo;
+                    // Find the timeslot by id
+                    for (let k = 0; k < defaultConf.days.length; k++) {
+                        confDay = defaultConf.days[k].toObject();
+                        slotWeLookinFo = _.find(confDay.timeSlots, slot => slot._id.toString() === slotId);
+                        if (slotWeLookinFo) break;
+                    }
+                    if (!slotWeLookinFo) {
+                        // This only happens when things are scheduled
+                        continue;
+                    }
+                    if (j === 0) {
+                        exportJson[i].date = confDay.date;
+                        exportJson[i].timeSlot = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
+                        exportJson[i].room = sessions[i].statusTimeLocation[j].room;
+                        delete exportJson[i].statusTimeLocation;
+                    } else {
+                        // For sessions with multiple schedules, split into dupes with other sched info
+                        let dupeSess = _.clone(sessions[i]);
+                        dupeSess.date = confDay.date;
+                        dupeSess.timeSlot = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
+                        dupeSess.room = sessions[i].statusTimeLocation[j].room;
+                        delete dupeSess.statusTimeLocation;
+                        exportJson.splice(i+1, 0, dupeSess);
+                    }
+                }
+            }
+        }
+        desiredFields.push('date', 'timeSlot', 'room');
+        _.remove(desiredFields, field => field === 'statusTimeLocation');
+    }
+
     let csv = json2csv({ data: exportJson, fields: desiredFields });
     return csv;
 }
