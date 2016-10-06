@@ -8,26 +8,27 @@ const _ = require('lodash');
 const multer = require('multer');
 const path = require('path');
 
-var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, '~/Documents')
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + '-' + Date.now());
-    }
-});
-var upload = multer({ storage: storage, limits: { fileSize: 2000000 } });
+const upload = multer({
+      storage: multer.diskStorage({
+          filename: (req, file, cb) => {
+              cb(null , file.originalname);
+          },
+        destination: function(req, file, cb){
+            cb(null, __dirname + '/../uploads');
+        },
+      })
+  });
 
-router.post('/upload', upload.any(), (req, res) => {
-    console.log('upload');
-    var originalName = req.body.originalname;
-    var newName = req.body.filename;
-
-    res.json({
-        originalName: originalName,
-        filename: newName
-    });
+router.post('/upload', upload.any(), (req, res) => { //todo maybe single
+    res.json(req.files.map(file => {
+        let ext = path.extname(file.originalname);
+        return {
+            originalName: file.originalname,
+            filename: file.filename
+        }
+    }));
 });
+
 
 router.get('/getallconferences', (req, res) => {
     Conference
