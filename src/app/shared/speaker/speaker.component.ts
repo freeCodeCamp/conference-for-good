@@ -53,7 +53,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       if (!params['id']) {
         this.model = <Speaker>{
           costsCoveredByOrg: this.costsCovered
-        }
+        };
         this.model.address2 = '';
         this.model.assistantOrCC = '';
       } else {
