@@ -84,7 +84,7 @@
               <div *ngIf="session.speakers?.mainPresenter !== speaker._id">{{ session.title }}</div>
               <div class="small-pad"><i>Status: </i> {{ session.approval }}</div>
               <div class="small-pad" *ngIf="session.speakers?.coPresenters?.length > 0" class="copres-list">
-                <div><i>Copresenters:</i></div>
+                <div><b>Copresenters:</b></div>
                 <div *ngFor="let coPres of speakerService.getSpeakerList(session.speakers).coPresenters">
                   <i *ngIf="session.speakers?.mainPresenter === speaker._id" class="fa fa-ban delete" (click)="removeCopres(session._id, coPres._id)"></i>
                   {{ coPres.nameFirst }} {{ coPres.nameLast }}
