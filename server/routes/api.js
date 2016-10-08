@@ -7,6 +7,8 @@ const Session = require('../models/session');
 const _ = require('lodash');
 const multer = require('multer');
 const path = require('path');
+const json2csv = require('json2csv');
+const fs = require('fs');
 
 const upload = multer({
       storage: multer.diskStorage({
@@ -28,10 +30,6 @@ router.post('/upload', upload.any(), (req, res) => { //todo maybe single
         }
     }));
 });
-
-const json2csv = require('json2csv');
-const fs = require('fs');
-
 
 router.get('/getallconferences', (req, res) => {
     Conference
