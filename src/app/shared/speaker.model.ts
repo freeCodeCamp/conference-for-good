@@ -43,8 +43,8 @@ export interface Speaker {
   // _id's of sessions speaker is involved in
   sessions?: string[]
 
-  //**** Response Form
-  responseForm?: ResponseForm
+  responseForm?: ResponseForm,
+  arrangements: Arrangements
 }
 
 export interface Credentials {
@@ -88,4 +88,23 @@ export interface ResponseForm {
   bookAuthor: string,
 
   w9: string, // whether uploaded to dropbox?
+}
+
+export interface Arrangements {
+  travel: string, // yes no
+  travelAmount: string,
+  lodging: string, // yes no
+  lodgingAmount: string,
+  honorarium: string,
+  lodgingConfirm: string,
+
+  receivedFlightItin: string, // yes no
+  arrivalAirport: string,
+  arrivalDate: string,
+  arrivalAirline: string,
+  arrivalFlightNum: string,
+  departAirport: string,
+  departDate: string,
+  departAirline: string,
+  departFlightNum: string,
 }
