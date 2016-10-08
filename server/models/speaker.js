@@ -120,7 +120,7 @@ let speakerSchema = new mongoose.Schema({
     lodging: String, // yes no
     lodgingAmount: String,
     honorarium: String,
-    lodgingConfirm: String,
+    lodgingConfirmNum: String,
 
     receivedFlightItin: String, // yes no
     arrivalAirport: String,

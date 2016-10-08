@@ -37,9 +37,76 @@
             </li>
           </ul>
         </div>
+
         <div class="row section">
+          <h4>Speaking Terms</h4>
+
+          <div class="col-md-8 col-xs-12">
+            <label class="control-label primary-label" for="travel">Travel</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="travel" [(ngModel)]="model.arrangements.travel"
+                        id="travelYes" [value]="'yes'" #travel="ngModel" checked="">
+                Yes
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="travel" [(ngModel)]="model.arrangements.travel"
+                        id="travelNo" [value]="'no'" #travel="ngModel">
+                No
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-8 col-xs-12 space-top">
+            <label class="control-label primary-label" for="travelAmount">Travel Amount</label><br/>
+            <span class="dollar">$</span><input type="number" step="0.01" class="form-control money" 
+                    [(ngModel)]="model.arrangements.travelAmount" id="travelAmount"
+                    name="travelAmount" #travelAmount="ngModel">
+          </div>
+
+          <div class="col-md-8 col-xs-12 space-top">
+            <label class="control-label primary-label" for="travel">Lodging</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="lodging" [(ngModel)]="model.arrangements.lodging"
+                        id="lodgingYes" [value]="'yes'" #lodging="ngModel" checked="">
+                Yes
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="lodging" [(ngModel)]="model.arrangements.lodging"
+                        id="lodgingNo" [value]="'no'" #lodging="ngModel">
+                No
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-8 col-xs-12 space-top">
+            <label class="control-label primary-label" for="lodgingAmount">Lodging Amount</label><br/>
+            <span class="dollar">$</span><input type="number" step="0.01" class="form-control money" 
+                    [(ngModel)]="model.arrangements.lodgingAmount" id="lodgingAmount"
+                    name="lodgingAmount" #lodgingAmount="ngModel">
+          </div>
+          
+          <div class="col-md-8 col-xs-12 space-top">
+            <label class="control-label primary-label" for="honorarium">Honorarium</label><br/>
+            <span class="dollar">$</span><input type="number" step="0.01" class="form-control money" 
+                    [(ngModel)]="model.arrangements.honorarium" id="honorarium"
+                    name="honorarium" #honorarium="ngModel">
+          </div>
+        </div>
+
+        <div class="row section">
+
+        <div class="col-md-8 col-xs-12 space-top">
           
         </div>
+
+        </div>
+
         <h3>Public Fields</h3>
       </div>
 
@@ -53,7 +120,8 @@
         </ul>
 
       </div>-->
-
+      
+      <!--**** PUBLIC FIELDS ****-->
       <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">

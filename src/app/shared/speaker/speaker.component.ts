@@ -66,7 +66,9 @@ export class SpeakerComponent implements OnInit, OnDestroy {
         this.leadPresId = params['leadPresId'];
       }
       if (this.authService.user.getValue().admin) {
-        
+        if (!this.model.arrangements) {
+          this.model.arrangements = <any> {};
+        }
       }
     });
   }

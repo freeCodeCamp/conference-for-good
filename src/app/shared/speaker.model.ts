@@ -96,7 +96,7 @@ export interface Arrangements {
   lodging: string, // yes no
   lodgingAmount: string,
   honorarium: string,
-  lodgingConfirm: string,
+  lodgingConfirmNum: string,
 
   receivedFlightItin: string, // yes no
   arrivalAirport: string,

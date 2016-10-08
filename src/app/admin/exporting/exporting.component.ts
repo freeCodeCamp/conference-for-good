@@ -86,7 +86,7 @@ export class ExportingComponent implements OnInit {
       assistantOrCC: '', bioWebsite: '', bioProgram: '', headshot: '',
       mediaWilling: false, costsCoveredByOrg: [], speakingFees: '',
       hasPresentedAtCCAWInPast2years: false, recentSpeakingExp: '',
-      speakingReferences: '', adminNotes: '', responseForm: <any>{}
+      speakingReferences: '', adminNotes: '', responseForm: <any>{}, arrangements: <any>{}
     }
     return refSpeaker;
   }

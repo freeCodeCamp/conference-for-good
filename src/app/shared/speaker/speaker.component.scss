@@ -43,6 +43,15 @@ input.ng-invalid.ng-dirty.ng-touched {
   resize: both;
 }
 
+.dollar {
+  padding-right: 10px;
+}
+
+.money {
+  display: inline-block;
+  width: 200px;
+}
+
 #phones {
   display: flex;
   align-items: flex-end;
