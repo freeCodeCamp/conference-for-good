@@ -410,6 +410,8 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
     let wantSchedule = _.findIndex(desiredFields, field => field === 'statusTimeLocation') >= 0;
     let wantTags = _.findIndex(desiredFields, field => field === 'tags') >= 0;
 
+    for (let i = 0; i < exportJson.length; i++) exportJson[i] = exportJson[i].toObject();
+
     // Speakers are just stored as reference ids on the session, get the full object for more info
     if (wantSpeakers) {
         for (let i = 0; i < sessions.length; i++) {
@@ -443,6 +445,8 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
     if (wantSchedule) {
         for (let i = 0; i < sessions.length; i++) {
             if (sessions[i].statusTimeLocation && sessions[i].statusTimeLocation.length > 0) {
+                let refTitle = sessions[i].toObject();
+                let watchy = exportJson[i];
                 for (let j = 0; j < sessions[i].statusTimeLocation.length; j++) {
                     let slotId = sessions[i].statusTimeLocation[j].timeSlot;
                     let confDay;
@@ -458,13 +462,20 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
                         continue;
                     }
                     if (j === 0) {
+                        let refSess = _.clone(sessions[i].toObject());
+                        if (sessions[i].statusTimeLocation[j].part !== '0') {
+                            exportJson[i].title = `(Part ${sessions[i].statusTimeLocation[j].part}) ${refTitle.title.slice()}`;
+                        }
                         exportJson[i].date = confDay.date;
                         exportJson[i].timeSlot = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
                         exportJson[i].room = sessions[i].statusTimeLocation[j].room;
                         delete exportJson[i].statusTimeLocation;
                     } else {
                         // For sessions with multiple schedules, split into dupes with other sched info
-                        let dupeSess = _.clone(sessions[i]);
+                        let dupeSess = _.clone(exportJson[i]);
+                        if (sessions[i].statusTimeLocation[j].part !== '0') {
+                            dupeSess.title = `(Part ${refTitle.statusTimeLocation[j].part}) ${refTitle.title.slice()}`;
+                        }
                         dupeSess.date = confDay.date;
                         dupeSess.timeSlot = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
                         dupeSess.room = sessions[i].statusTimeLocation[j].room;
