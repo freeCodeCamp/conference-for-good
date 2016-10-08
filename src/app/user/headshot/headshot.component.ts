@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, NgZone } from '@angular/core';
+import { EventEmitter, Component, ViewChild, OnInit, NgZone } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { Speaker } from '../../shared/speaker.model';
@@ -41,6 +41,9 @@ export class HeadshotComponent implements OnInit {
     private progress: number = 0;
     private response: any = {};
 
+    private uploadEvents: EventEmitter<any> = new EventEmitter();
+
+
     ngOnInit() {
         this.transitionService.transition();
         this.zone = new NgZone({ enableLongStackTrace: false });
@@ -51,5 +54,9 @@ export class HeadshotComponent implements OnInit {
             this.response = data;
             this.progress = Math.floor(data.progress.percent / 100);
         });
+    }
+
+    startUpload() {
+        this.uploadEvents.emit('startUpload');
     }
 }

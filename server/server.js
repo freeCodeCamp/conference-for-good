@@ -29,9 +29,9 @@ const mongoose = require('mongoose');
 let mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/ccaw-app';
 mongoose.connect(mongoURI);
 
-/*if (process.env.SEED_DB && process.env.SEED_DB==='true') {
-  require('./seed');
-}*/
+// if (process.env.SEED_DB && process.env.SEED_DB==='true') {
+//   require('./seed');
+// }
 
 /** True = get response details on served node modules **/
 let verboseLogging = false;
@@ -52,6 +52,7 @@ if (production) {
   app.use( express.static( path.join(__dirname, '../dist') ));
   app.use('/scripts', express.static( path.join(__dirname, '../node_modules') ));
   app.use('/app', express.static( path.join(__dirname, '../dist/app') ));
+  app.use('/uploads', express.static( path.join(__dirname, './uploads') ));
 } else {
   // In development, livereload server provides front end, backend is just api, need CORS
   app.use(function(req, res, next) {

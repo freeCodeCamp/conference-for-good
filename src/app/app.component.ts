@@ -8,6 +8,7 @@ import { SessionService } from './shared/session.service';
 import { SpeakerService } from './shared/speaker.service';
 import { TransitionService } from './shared/transition.service';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,7 +17,7 @@ import { TransitionService } from './shared/transition.service';
 export class AppComponent implements OnInit {
 
   user;
-  
+
   constructor(private adminService: AdminService,
               private sessionService: SessionService,
               private speakerService: SpeakerService,
@@ -37,7 +38,7 @@ export class AppComponent implements OnInit {
     this.adminService.getAllConferences();
     this.sessionService
         .getAllSessions()
-        .then(res => this.speakerService.getAllSpeakers());    
+        .then(res => this.speakerService.getAllSpeakers());
   }
 
   logout() {
