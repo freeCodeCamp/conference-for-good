@@ -327,7 +327,8 @@ router.post('/updatesessionslots', (req, res) => {
         });
 });
 
-/** Exporting API */
+/**** Exporting API ****/
+
 router.post('/exportsessions', (req, res) => {
     let exportFields = req.body;
     let desiredFields = [];
@@ -502,8 +503,44 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
 /** Flatten and format nested data for export  */
 function parseSpeakerData(desiredFields, speakers) {
     let exportJson = speakers.slice();
+    let wantCostsCovered = _.findIndex(desiredFields, field => field === 'costsCoveredByOrg') >= 0;
+    let wantResponse = _.findIndex(desiredFields, field => field === 'responseForm') >= 0;
 
-    let csv = json2csv({ data: speakers, fields: desiredFields });
+    // Don't need these in speaker exports
+    _.remove(desiredFields, field => field === 'sessions');
+
+    
+    // Flattened into main object
+    if (wantResponse) {
+        _.remove(desiredFields, field => field === 'responseForm');
+    }
+    if (wantCostsCovered) desiredFields.push('costsCoveredByOrgn');
+
+    for (let i = 0; i < speakers.length; i++) {
+        if (wantCostsCovered) {
+            let costsString = '';
+            for (let j = 0; j < speakers[i].costsCoveredByOrg.length; j++) {
+                let costCovered = speakers[i].costsCoveredByOrg[j].toObject();
+                if (costCovered.covered) {
+                    if (costsString === '') costsString += costCovered.name;
+                    else costsString += `, ${costCovered.name}`;
+                }
+            }
+            exportJson[i].costsCoveredByOrgn = costsString;
+            _.remove(desiredFields, field => field === 'costsCoveredByOrg');
+        }
+
+        if (wantResponse) {
+            let resForm = speakers[i].responseForm.toObject();
+            for (let field in resForm) {
+                if (resForm.hasOwnProperty(field)) {
+                    exportJson[i][field] = resForm[field];
+                }
+            }
+        }
+    }
+
+    let csv = json2csv({ data: exportJson, fields: desiredFields });
     return csv;
 }
 
