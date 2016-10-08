@@ -124,12 +124,13 @@ export class SpeakerComponent implements OnInit, OnDestroy {
 
     let expReq = !form['hasPresentedAtCCAWInPast2years'];
 
-    for (let field in form) {
+    let refSpeaker = this.genRefSpeaker();
+
+    for (let field in refSpeaker) {
       if (form.hasOwnProperty(field)) {
         if (!expReq) {
           // Experience fields not required if has presented at ccaw
-          if (field !== 'assistantOrCC' && field !== 'address2' &&
-              field !== 'recentSpeakingExp' && field !== 'speakingReferences') {
+          if (field !== 'recentSpeakingExp' && field !== 'speakingReferences') {
                 if (typeof form[field] !== undefined) {
                   // If type is boolean, form item is completed
                   if (typeof form[field] !== 'boolean') {
@@ -138,19 +139,30 @@ export class SpeakerComponent implements OnInit, OnDestroy {
                 } else flag = false;
               }
         } else {
-          if (field !== 'assistantOrCC' && field !== 'address2') {
-            if (typeof form[field] !== undefined) {
-              // If type is boolean, form item is completed
-              if (typeof form[field] !== 'boolean') {
-                if (!form[field]) flag = false;
-              }
-            } else flag = false;
-          }
+          if (typeof form[field] !== undefined) {
+            // If type is boolean, form item is completed
+            if (typeof form[field] !== 'boolean') {
+              if (!form[field]) flag = false;
+            }
+          } else flag = false;
         }
       }
     }
 
     return flag;
+  }
+
+  genRefSpeaker() {
+    let refSpeaker = {
+      salutation: '', nameFirst: '', nameLast: '', email: '',
+      title: '', organization: '', address1: '',
+      city: '', state: '', zip: '', phoneWork: '', phoneCell: '',
+      bioWebsite: '', bioProgram: '', headshot: '',
+      mediaWilling: false, speakingFees: '',
+      hasPresentedAtCCAWInPast2years: false, recentSpeakingExp: '',
+      speakingReferences: ''
+    }
+    return refSpeaker;
   }
 
 }
