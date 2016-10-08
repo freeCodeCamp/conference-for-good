@@ -187,7 +187,7 @@
       <div *ngIf="otherDietaryChecked()" class="col-md-8 col-xs-12 space-top">
         <label class="control-label primary-label" for="otherDietary">Other Dietary need(s):</label>
         <input type="text" class="form-control" 
-                [(ngModel)]="model.otherDietary" id="otherDietary"
+                [(ngModel)]="model.responseForm.otherDietary" id="otherDietary"
                 name="otherDietary" #otherDietary="ngModel">
       </div>
 
@@ -216,13 +216,13 @@
       <div *ngIf="model.responseForm.bookAvailable === 'yes'" class="col-md-8 col-xs-12 space-top">
         <label class="control-label primary-label" for="bookTitle">Full Title of Book:</label>
         <input type="text" class="form-control" 
-                [(ngModel)]="model.bookTitle" id="bookTitle"
+                [(ngModel)]="model.responseForm.bookTitle" id="bookTitle"
                 name="bookTitle" #bookTitle="ngModel" required>
       </div>
       <div *ngIf="model.responseForm.bookAvailable === 'yes'" class="col-md-8 col-xs-12 space-top">
         <label class="control-label primary-label" for="bookAuthor">Author:</label>
         <input type="text" class="form-control" 
-                [(ngModel)]="model.bookAuthor" id="bookAuthor"
+                [(ngModel)]="model.responseForm.bookAuthor" id="bookAuthor"
                 name="bookAuthor" #bookAuthor="ngModel" required>
       </div>
     </div>

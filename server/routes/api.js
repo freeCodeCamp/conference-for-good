@@ -7,6 +7,8 @@ const Session = require('../models/session');
 const _ = require('lodash');
 const multer = require('multer');
 const path = require('path');
+const json2csv = require('json2csv');
+const fs = require('fs');
 
 const upload = multer({
       storage: multer.diskStorage({
@@ -28,7 +30,6 @@ router.post('/upload', upload.any(), (req, res) => { //todo maybe single
         }
     }));
 });
-
 
 router.get('/getallconferences', (req, res) => {
     Conference
@@ -323,6 +324,255 @@ router.post('/updatesessionslots', (req, res) => {
             }
         });
 });
+
+/**** Exporting API ****/
+
+router.post('/exportsessions', (req, res) => {
+    let exportFields = req.body;
+    let desiredFields = [];
+    for (let i = 0; i < exportFields.length; i++) {
+        if (exportFields[i].checked) desiredFields.push(exportFields[i].name);
+    }
+
+    Session
+        .find({})
+        .exec()
+        .then(sessions => {
+            Speaker
+                .find({})
+                .exec()
+                .then(speakers => {
+                    Conference
+                        .find({defaultConf: true})
+                        .exec()
+                        .then(confs => {
+                            let defaultConf = confs[0];
+                            let csv = parseSessionData(desiredFields, sessions, speakers, defaultConf);
+
+                            // In case we get sequential requests
+                            let filerand = _.random(0, 10000);
+                            let filename = `sessions${filerand}.csv`;
+                            fs.writeFile(filename, csv, (err) => {
+                                if (err) {
+                                    console.log(err);
+                                    res.status(500).end();
+                                }
+                                else {
+                                    console.log('file saved');
+                                    res.download(filename, 'sessionsFinal.csv', (err) => {
+                                        if (!err) fs.unlink(filename);
+                                    });
+                                }
+                            });
+                        });
+                });
+        });
+});
+
+router.post('/exportspeakers', (req, res) => {
+    let exportFields = req.body;
+    let desiredFields = [];
+    for (let i = 0; i < exportFields.length; i++) {
+        if (exportFields[i].checked) desiredFields.push(exportFields[i].name);
+    }
+
+    Speaker
+        .find({})
+        .exec()
+        .then(speakers => {
+            let csv = parseSpeakerData(desiredFields, speakers);
+
+            // In case we get sequential requests
+            let filerand = _.random(0, 10000);
+            let filename = `speakers${filerand}.csv`;
+            fs.writeFile(filename, csv, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).end();
+                }
+                else {
+                    console.log('file saved');
+                    res.download(filename, 'speakersFinal.csv', (err) => {
+                        if (!err) fs.unlink(filename);
+                    });
+                }
+            });
+        });
+
+});
+
+/** Flatten and format nested data for export */
+function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
+    let exportJson = sessions.slice();
+    let wantSpeakers = _.findIndex(desiredFields, field => field === 'speakers') >= 0;
+    let wantSchedule = _.findIndex(desiredFields, field => field === 'statusTimeLocation') >= 0;
+    let wantTags = _.findIndex(desiredFields, field => field === 'tags') >= 0;
+
+    for (let i = 0; i < exportJson.length; i++) exportJson[i] = exportJson[i].toObject();
+
+    // Speakers are just stored as reference ids on the session, get the full object for more info
+    if (wantSpeakers) {
+        for (let i = 0; i < sessions.length; i++) {
+            if (sessions[i].speakers && sessions[i].speakers.mainPresenter) {
+                let leadSpeaker = _.find(speakers, speaker => speaker._id.toString() === sessions[i].speakers.mainPresenter);
+                if (leadSpeaker) {
+                    exportJson[i].leadSpeakerFirst = leadSpeaker.nameFirst;
+                    exportJson[i].leadSpeakerLast = leadSpeaker.nameLast;
+                    if (_.findIndex(desiredFields, field => field === 'leadSpeakerFirst') < 0) {
+                        desiredFields.push('leadSpeakerFirst');
+                        desiredFields.push('leadSpeakerLast');
+                    }
+                }
+            }
+            if (sessions[i].speakers && sessions[i].speakers.coPresenters && sessions[i].speakers.coPresenters.length > 0) {
+                for (let j = 0; j < sessions[i].speakers.coPresenters.length; j++) {
+                    let coPres = _.find(speakers, speaker => speaker._id.toString() === sessions[i].speakers.coPresenters[j]);
+                    exportJson[i][`coSpeakerFirst${j+1}`] = coPres.nameFirst;
+                    exportJson[i][`coSpeakerLast${j+1}`] = coPres.nameLast;
+                    desiredFields.push(`coSpeakerFirst${j+1}`);
+                    desiredFields.push(`coSpeakerLast${j+1}`);
+                }
+            }
+        }
+        // Remove duplicates of copresenter fields
+        desiredFields = _.uniq(desiredFields);
+        _.remove(desiredFields, field => field === 'speakers');
+        delete exportJson.speakers;
+    }
+    // Schedule timeslots are stored as reference ids, need more info
+    if (wantSchedule) {
+        for (let i = 0; i < sessions.length; i++) {
+            if (sessions[i].statusTimeLocation && sessions[i].statusTimeLocation.length > 0) {
+                let refTitle = sessions[i].toObject();
+                let watchy = exportJson[i];
+                for (let j = 0; j < sessions[i].statusTimeLocation.length; j++) {
+                    let slotId = sessions[i].statusTimeLocation[j].timeSlot;
+                    let confDay;
+                    let slotWeLookinFo;
+                    // Find the timeslot by id
+                    for (let k = 0; k < defaultConf.days.length; k++) {
+                        confDay = defaultConf.days[k].toObject();
+                        slotWeLookinFo = _.find(confDay.timeSlots, slot => slot._id.toString() === slotId);
+                        if (slotWeLookinFo) break;
+                    }
+                    if (!slotWeLookinFo) {
+                        // This only happens when things are scheduled
+                        continue;
+                    }
+                    if (j === 0) {
+                        let refSess = _.clone(sessions[i].toObject());
+                        if (sessions[i].statusTimeLocation[j].part !== '0') {
+                            exportJson[i].title = `(Part ${sessions[i].statusTimeLocation[j].part}) ${refTitle.title.slice()}`;
+                        }
+                        exportJson[i].date = confDay.date;
+                        exportJson[i].timeSlot = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
+                        exportJson[i].room = sessions[i].statusTimeLocation[j].room;
+                        delete exportJson[i].statusTimeLocation;
+                    } else {
+                        // For sessions with multiple schedules, split into dupes with other sched info
+                        let dupeSess = _.clone(exportJson[i]);
+                        if (sessions[i].statusTimeLocation[j].part !== '0') {
+                            dupeSess.title = `(Part ${refTitle.statusTimeLocation[j].part}) ${refTitle.title.slice()}`;
+                        }
+                        dupeSess.date = confDay.date;
+                        dupeSess.timeSlot = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
+                        dupeSess.room = sessions[i].statusTimeLocation[j].room;
+                        delete dupeSess.statusTimeLocation;
+                        exportJson.splice(i+1, 0, dupeSess);
+                    }
+                }
+            }
+        }
+        desiredFields.push('date', 'timeSlot', 'room');
+        _.remove(desiredFields, field => field === 'statusTimeLocation');
+    }
+    // Flatten tags into comma separated list of tag names that are checked
+    if (wantTags) {
+        for (let i = 0; i < sessions.length; i++) {
+            let tagString = '';
+            if (sessions[i].tags && sessions[i].tags.length > 0) {
+                for (let j = 0; j < sessions[i].tags.length; j++) {
+                    let tag = sessions[i].tags[j].toObject();
+                    if (tag.checked) {
+                        if (tagString === '') tagString += tag.name
+                        else tagString += `, ${tag.name}`; 
+                    }
+                }
+            }
+            exportJson[i].sessTags = tagString;
+        }
+        desiredFields.push('sessTags');
+        _.remove(desiredFields, field => field === 'tags');
+    }
+
+    let csv = json2csv({ data: exportJson, fields: desiredFields });
+    return csv;
+}
+
+/** Flatten and format nested data for export  */
+function parseSpeakerData(desiredFields, speakers) {
+    let exportJson = speakers.slice();
+    let wantCostsCovered = _.findIndex(desiredFields, field => field === 'costsCoveredByOrg') >= 0;
+    let wantResponse = _.findIndex(desiredFields, field => field === 'responseForm') >= 0;
+
+    // Don't need these in speaker exports
+    _.remove(desiredFields, field => field === 'sessions');
+
+    
+    // Flattened into main object
+    if (wantResponse) {
+        _.remove(desiredFields, field => field === 'responseForm');
+        //let wantMealDates = _.findIndex(desiredFields, field => field === 'mealDates') >= 0;
+        //let wantDietary = _.findIndex(desiredFields, field => field === 'dietaryNeeds') >= 0;
+        _.remove(desiredFields, field => field === 'mealDates');
+        _.remove(desiredFields, field => field === 'dietaryNeeds');
+    }
+    if (wantCostsCovered) desiredFields.push('costsCoveredByOrgn');
+
+    for (let i = 0; i < speakers.length; i++) {
+        if (wantCostsCovered) {
+            let costsString = '';
+            for (let j = 0; j < speakers[i].costsCoveredByOrg.length; j++) {
+                let costCovered = speakers[i].costsCoveredByOrg[j].toObject();
+                if (costCovered.covered) {
+                    if (costsString === '') costsString += costCovered.name;
+                    else costsString += `, ${costCovered.name}`;
+                }
+            }
+            exportJson[i].costsCoveredByOrgn = costsString;
+            _.remove(desiredFields, field => field === 'costsCoveredByOrg');
+        }
+
+        if (wantResponse) {
+            // Flatten response form into main export
+            let resForm = speakers[i].responseForm.toObject();
+            for (let field in resForm) {
+                if (resForm.hasOwnProperty(field)) {
+                    exportJson[i][field] = resForm[field];
+                }
+            }
+
+            // Flatten meal dates and dietary needs into main export as individual fields
+            for (let j = 0; j < speakers[i].responseForm.mealDates.length; j++) {
+                let meal = speakers[i].responseForm.mealDates[j].toObject();
+                if (meal.attending) {
+                    exportJson[i][meal.label] = 1;
+                }
+                if (!_.find(desiredFields, field => field === meal.label)) desiredFields.push(meal.label);
+            }
+            for (let j = 0; j < speakers[i].responseForm.dietaryNeeds.length; j++) {
+                let need = speakers[i].responseForm.dietaryNeeds[j].toObject();
+                if (need.checked) {
+                    exportJson[i][need.need] = 1;
+                }
+                if (!_.find(desiredFields, field => field === need.need)) desiredFields.push(need.need);
+            }
+        }
+    }
+
+    let csv = json2csv({ data: exportJson, fields: desiredFields });
+    return csv;
+}
 
 function updateActiveConfs(activeConf) {
     // If no active conf passed, make all confs inactive
