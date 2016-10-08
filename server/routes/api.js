@@ -513,6 +513,10 @@ function parseSpeakerData(desiredFields, speakers) {
     // Flattened into main object
     if (wantResponse) {
         _.remove(desiredFields, field => field === 'responseForm');
+        //let wantMealDates = _.findIndex(desiredFields, field => field === 'mealDates') >= 0;
+        //let wantDietary = _.findIndex(desiredFields, field => field === 'dietaryNeeds') >= 0;
+        _.remove(desiredFields, field => field === 'mealDates');
+        _.remove(desiredFields, field => field === 'dietaryNeeds');
     }
     if (wantCostsCovered) desiredFields.push('costsCoveredByOrgn');
 
@@ -531,11 +535,28 @@ function parseSpeakerData(desiredFields, speakers) {
         }
 
         if (wantResponse) {
+            // Flatten response form into main export
             let resForm = speakers[i].responseForm.toObject();
             for (let field in resForm) {
                 if (resForm.hasOwnProperty(field)) {
                     exportJson[i][field] = resForm[field];
                 }
+            }
+
+            // Flatten meal dates and dietary needs into main export as individual fields
+            for (let j = 0; j < speakers[i].responseForm.mealDates.length; j++) {
+                let meal = speakers[i].responseForm.mealDates[j].toObject();
+                if (meal.attending) {
+                    exportJson[i][meal.label] = 1;
+                }
+                if (!_.find(desiredFields, field => field === meal.label)) desiredFields.push(meal.label);
+            }
+            for (let j = 0; j < speakers[i].responseForm.dietaryNeeds.length; j++) {
+                let need = speakers[i].responseForm.dietaryNeeds[j].toObject();
+                if (need.checked) {
+                    exportJson[i][need.need] = 1;
+                }
+                if (!_.find(desiredFields, field => field === need.need)) desiredFields.push(need.need);
             }
         }
     }
