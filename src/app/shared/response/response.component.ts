@@ -82,20 +82,25 @@ export class ResponseComponent implements OnInit, OnDestroy {
     let endMoment = moment(conf.dateRange.end);
     let mealDates = [];
     for (let i = startMoment; i.isSameOrBefore(endMoment); i.add(1, 'd')) {
+      
       let breakfast = {
         date: i.format(this.dateService.dbFormatDate),
         meal: 'Breakfast',
         label: `Breakfast- ${i.format(this.dateService.userFormatDate)}`,
         attending: false
       };
-      let lunch = {
-        date: i.format(this.dateService.dbFormatDate),
-        meal: 'Lunch',
-        label: `Lunch- ${i.format(this.dateService.userFormatDate)}`,
-        attending: false
-      };
       mealDates.push(breakfast);
-      mealDates.push(lunch);
+
+      // No lunch on last day
+      if (!i.isSame(endMoment)) {
+        let lunch = {
+          date: i.format(this.dateService.dbFormatDate),
+          meal: 'Lunch',
+          label: `Lunch- ${i.format(this.dateService.userFormatDate)}`,
+          attending: false
+        };
+        mealDates.push(lunch);
+      }
     }
 
     this.model.responseForm.mealDates = mealDates;
