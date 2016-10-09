@@ -114,7 +114,9 @@ let speakerSchema = new mongoose.Schema({
   },
 
   //**** Arrangements
-  arrangements: {
+  arrangements: [{
+    associatedConf: String, //Title of associated conf
+
     travel: String, // yes no
     travelAmount: String,
     lodging: String, // yes no
@@ -131,7 +133,7 @@ let speakerSchema = new mongoose.Schema({
     departDate: String,
     departAirline: String,
     departFlightNum: String,
-  }
+  }]
 });
 
 speakerSchema.methods.generateHash = password => {

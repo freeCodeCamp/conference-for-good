@@ -45,14 +45,14 @@
             <label class="control-label primary-label" for="travel">Travel</label>
             <div class="radio">
               <label>
-                <input type="radio" name="travel" [(ngModel)]="model.arrangements.travel"
+                <input type="radio" name="travel" [(ngModel)]="model.arrangements[viewArrangeIndex].travel"
                         id="travelYes" [value]="'yes'" #travel="ngModel" checked="">
                 Yes
               </label>
             </div>
             <div class="radio">
               <label>
-                <input type="radio" name="travel" [(ngModel)]="model.arrangements.travel"
+                <input type="radio" name="travel" [(ngModel)]="model.arrangements[viewArrangeIndex].travel"
                         id="travelNo" [value]="'no'" #travel="ngModel">
                 No
               </label>
@@ -62,7 +62,7 @@
           <div class="col-md-8 col-xs-12 space-top">
             <label class="control-label primary-label" for="travelAmount">Travel Amount</label><br/>
             <span class="dollar">$</span><input type="number" step="0.01" class="form-control money" 
-                    [(ngModel)]="model.arrangements.travelAmount" id="travelAmount"
+                    [(ngModel)]="model.arrangements[viewArrangeIndex].travelAmount" id="travelAmount"
                     name="travelAmount" #travelAmount="ngModel">
           </div>
 
@@ -70,14 +70,14 @@
             <label class="control-label primary-label" for="travel">Lodging</label>
             <div class="radio">
               <label>
-                <input type="radio" name="lodging" [(ngModel)]="model.arrangements.lodging"
+                <input type="radio" name="lodging" [(ngModel)]="model.arrangements[viewArrangeIndex].lodging"
                         id="lodgingYes" [value]="'yes'" #lodging="ngModel" checked="">
                 Yes
               </label>
             </div>
             <div class="radio">
               <label>
-                <input type="radio" name="lodging" [(ngModel)]="model.arrangements.lodging"
+                <input type="radio" name="lodging" [(ngModel)]="model.arrangements[viewArrangeIndex].lodging"
                         id="lodgingNo" [value]="'no'" #lodging="ngModel">
                 No
               </label>
@@ -87,23 +87,34 @@
           <div class="col-md-8 col-xs-12 space-top">
             <label class="control-label primary-label" for="lodgingAmount">Lodging Amount</label><br/>
             <span class="dollar">$</span><input type="number" step="0.01" class="form-control money" 
-                    [(ngModel)]="model.arrangements.lodgingAmount" id="lodgingAmount"
+                    [(ngModel)]="model.arrangements[viewArrangeIndex].lodgingAmount" id="lodgingAmount"
                     name="lodgingAmount" #lodgingAmount="ngModel">
           </div>
           
           <div class="col-md-8 col-xs-12 space-top">
             <label class="control-label primary-label" for="honorarium">Honorarium</label><br/>
             <span class="dollar">$</span><input type="number" step="0.01" class="form-control money" 
-                    [(ngModel)]="model.arrangements.honorarium" id="honorarium"
+                    [(ngModel)]="model.arrangements[viewArrangeIndex].honorarium" id="honorarium"
                     name="honorarium" #honorarium="ngModel">
           </div>
         </div>
 
         <div class="row section">
+          <h4>Lodging</h4>
 
-        <div class="col-md-8 col-xs-12 space-top">
-          
-        </div>
+          <div class="col-md-8 col-xs-12 space-top">
+            <div><b>CCAW booking:</b> {{ model.responseForm?.securedLodging }}</div>
+            <div class="space-top-sm"><b>Arrival date:</b> {{ model.responseForm?.dateArrival }}</div>
+            <div class="space-top-sm"><b>Departure date:</b> {{ model.responseForm?.dateDeparture }}</div>
+            <div class="space-top-sm"><b># of Nights:</b> {{ getNights(model.responseForm?.dateArrival, model.responseForm?.dateDeparture) }}</div>
+            
+            <div class="space-top-sm">
+              <label class="control-label primary-label" for="lodgingConfirmNum">Confirmation #</label>
+              <input type="text" class="form-control" 
+                      [(ngModel)]="model.arrangements[viewArrangeIndex].lodgingConfirmNum" id="lodgingConfirmNum"
+                      name="lodgingConfirmNum" #lodgingConfirmNum="ngModel">
+            </div>
+          </div>
 
         </div>
 

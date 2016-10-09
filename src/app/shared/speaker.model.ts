@@ -44,7 +44,7 @@ export interface Speaker {
   sessions?: string[]
 
   responseForm?: ResponseForm,
-  arrangements: Arrangements
+  arrangements: Arrangements[]
 }
 
 export interface Credentials {
@@ -55,7 +55,7 @@ export interface Credentials {
 export interface ResponseForm {
   completed: boolean,
 
-  securedLodging: string, // yes, no, name
+  securedLodging: string, // yes, no, na
   // If not securedLodging fields
   dateArrival: string,
   dateDeparture: string,
@@ -91,6 +91,8 @@ export interface ResponseForm {
 }
 
 export interface Arrangements {
+  associatedConf: string; //Title of associated conf
+
   travel: string, // yes no
   travelAmount: string,
   lodging: string, // yes no

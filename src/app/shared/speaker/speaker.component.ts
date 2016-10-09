@@ -2,7 +2,9 @@ import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
+import { AdminService } from '../admin.service';
 import { AuthService } from '../auth.service';
 import { SpeakerService } from '../speaker.service';
 import { TransitionService } from '../transition.service';
@@ -27,6 +29,8 @@ export class SpeakerComponent implements OnInit, OnDestroy {
 
   incompleteFields: string[] = [];
 
+  viewArrangeIndex: number;
+
   costsCovered = [
     {
       name: 'travel',
@@ -39,6 +43,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   ];
 
   constructor(private transitionService: TransitionService,
+              private adminService: AdminService,
               private authService: AuthService,
               private speakerService: SpeakerService,
               private route: ActivatedRoute) { }
@@ -66,8 +71,19 @@ export class SpeakerComponent implements OnInit, OnDestroy {
         this.leadPresId = params['leadPresId'];
       }
       if (this.authService.user.getValue().admin) {
-        if (!this.model.arrangements) {
-          this.model.arrangements = <any> {};
+        // To enable historic viewing, display data based on viewing conf (not default)
+        let viewingConf = this.adminService.activeConference.getValue().title;
+        if (this.model.arrangements && this.model.arrangements.length > 0) {
+          this.viewArrangeIndex = _.findIndex(this.model.arrangements, 
+                                              arrange => arrange.associatedConf === viewingConf);
+          if (this.viewArrangeIndex < 0) {
+            this.model.arrangements.push(<any>{associatedConf: viewingConf});
+            this.viewArrangeIndex = this.model.arrangements.length-1;
+          }
+        } else {
+          if(!this.model.arrangements) this.model.arrangements = [];
+          this.model.arrangements.push(<any>{associatedConf: viewingConf});
+          this.viewArrangeIndex = 0;
         }
       }
     });
@@ -88,6 +104,12 @@ export class SpeakerComponent implements OnInit, OnDestroy {
 
   checkRecentExp() {
     return typeof this.model.hasPresentedAtCCAWInPast2years === 'boolean' && !this.model.hasPresentedAtCCAWInPast2years;
+  }
+
+  getNights(dateArrival: string, dateDeparture: string): number {
+    let arrivalMom = moment(dateArrival);
+    let departureMom = moment(dateDeparture);
+    return departureMom.diff(arrivalMom, 'days');
   }
 
   updateSpeaker(form: any) {
