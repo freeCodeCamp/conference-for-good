@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
 import { AuthService } from '../auth.service';
@@ -10,10 +11,10 @@ import { Session } from '../session.model';
 import { Speaker } from '../speaker.model';
 
 @Component({
-  selector: 'speaker',
-  templateUrl: './speaker.component.html',
-  styleUrls: ['./speaker.component.scss']
-})
+             selector: 'speaker',
+             templateUrl: './speaker.component.html',
+             styleUrls: ['./speaker.component.scss']
+           })
 export class SpeakerComponent implements OnInit, OnDestroy {
 
   @ViewChild('toast') toast: ToastComponent;
@@ -23,6 +24,8 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   model: Speaker;
   speakerSessions: Session[] = [];
   leadPresId: string = null;
+
+  incompleteFields: string[] = [];
 
   costsCovered = [
     {
@@ -38,8 +41,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   constructor(private transitionService: TransitionService,
               private authService: AuthService,
               private speakerService: SpeakerService,
-              private route: ActivatedRoute,
-              private router: Router) { }
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
 
@@ -110,13 +112,10 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           });
     } else {
       this.speakerService
-          // Must user model here rather than form, not all fields are
-          // 2-way data bound and are only updated via model (costsCovered)
+      // Must user model here rather than form, not all fields are
+      // 2-way data bound and are only updated via model (costsCovered)
           .updateSpeaker(this.model)
-          // .then(res => this.toast.success('Speaker updated!'));
-          .then(res =>
-                this.router.navigate(['/dashboard', { msg: 'Profile form saved!' }])
-          );
+          .then(res => this.toast.success('Speaker updated!'));
     }
   }
 
@@ -131,13 +130,13 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           // Experience fields not required if has presented at ccaw
           if (field !== 'assistantOrCC' && field !== 'address2' &&
               field !== 'recentSpeakingExp' && field !== 'speakingReferences') {
-                if (typeof form[field] !== undefined) {
-                  // If type is boolean, form item is completed
-                  if (typeof form[field] !== 'boolean') {
-                    if (!form[field]) flag = false;
-                  }
-                } else flag = false;
+            if (typeof form[field] !== undefined) {
+              // If type is boolean, form item is completed
+              if (typeof form[field] !== 'boolean') {
+                if (!form[field]) flag = false;
               }
+            } else flag = false;
+          }
         } else {
           if (field !== 'assistantOrCC' && field !== 'address2') {
             if (typeof form[field] !== undefined) {
