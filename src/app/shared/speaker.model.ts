@@ -55,7 +55,7 @@ export interface Credentials {
 export interface ResponseForm {
   completed: boolean,
 
-  securedLodging: string, // yes, no, na
+  securedLodging: string, // yes, no, N/A
   // If not securedLodging fields
   dateArrival: string,
   dateDeparture: string,
@@ -100,7 +100,7 @@ export interface Arrangements {
   honorarium: string,
   lodgingConfirmNum: string,
 
-  receivedFlightItin: string, // yes no
+  receivedFlightItin: string, // yes no N/A
   arrivalAirport: string,
   arrivalDate: string,
   arrivalAirline: string,
