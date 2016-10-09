@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -26,6 +26,8 @@ export class AdminService {
 
   activeConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
   defaultConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
+
+  triggerSessionUpdate: EventEmitter<any> = new EventEmitter();
 
   constructor(private http: Http) { }
 
@@ -107,12 +109,15 @@ export class AdminService {
   updateConference(currentTitle: string, newTitle) {
     let conference = _.find(this.allConferences, conf => conf.title === currentTitle);
     conference.title = newTitle;
-    this.setFilterAndSort();
     let pkg = packageForPost({currentTitle: currentTitle, conference: conference});
     return this.http
               .post(this.baseUrl + '/api/updateconference', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
+              .then(res => {
+                this.triggerSessionUpdate.emit('update');
+                return res;
+              })
               .catch(handleError);
   }
 

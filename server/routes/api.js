@@ -188,10 +188,44 @@ router.post('/updateconference', (req, res) => {
         .findOne({ title: currentTitle })
         .exec()
         .then(serverConf => {
-            serverConf.title = conf.title;
-            serverConf.save(err => {
-                if (err) res.status(500).json({message: 'Conference save error'});
-                else res.status(200).json({message: 'Conference saved'});
+
+            /** Super ugly band aid on a massive oversight I made
+             * Conf title is used as an id to search for conf and is used
+             * as a reference in sessions to the conf, so changes
+             * to the title mess up all the references, so we need to update them all
+             * when the title is updated (much simpler than changing all the referencing code)
+             */
+            Session
+                .find({})
+                .exec()
+                .then(sessions => {
+                    for (let i = 0; i < sessions.length; i++) {
+                        let needsUpdate = false;
+                        if (sessions[i].associatedConf === currentTitle) {
+                            sessions[i].associatedConf = conf.title;
+                            needsUpdate = true;
+                        }
+                        if (sessions.statusTimeLocation && sessions.statusTimeLocation.length < 0) {
+                            for (let j = 0; j < sessions[i].statusTimeLocation.length; j++) {
+                                if (sessions[i].statusTimeLocation[j].conferenceTitle === currentTitle) {
+                                    sessions[i].statusTimeLocation[j].conferenceTitl = conf.title;
+                                    needsUpdate = true;
+                                }
+                            }
+                        }
+                        if (needsUpdate) {
+                            sessions[i].save(err => {
+                                if (err) console.log('session save error', err);
+                            });
+                        }
+                    }
+
+                    serverConf.title = conf.title;
+                    serverConf.save(err => {
+                        if (err) res.status(500).json({message: 'Conference save error'});
+                        else res.status(200).json({message: 'Conference saved'});
+                });
+
             });
         });
 });

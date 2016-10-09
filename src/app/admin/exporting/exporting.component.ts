@@ -93,7 +93,7 @@ export class ExportingComponent implements OnInit {
 
   genRefResponse() {
     let refResponse: ResponseForm = {
-      completed: false, securedLodging: '', dateArrival: '', dateDeparture: '',
+      completed: false, ccawLodging: '', dateArrival: '', dateDeparture: '',
       ccawCoveringHotel: '', agreedHotel: '', secureOwnLodging: '',
       agreedTransport: '', agreedDates: '', whyConflict: '', mealDates: [],
       dietaryNeeds: [], otherDietary: '', bookAvailable: '', bookTitle: '',
