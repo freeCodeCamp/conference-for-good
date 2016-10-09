@@ -11,10 +11,11 @@
 
         <div class="row section speaker">
           <div class="col-md-8 col-xs-12 speaker-notes">
-            <label class="control-label primary-label" for="speakerNotes">Speaker Notes</label><br/>
+            <label class="control-label primary-label" for="admin-notes">Speaker Notes</label><br/>
             <textarea class="form-control" rows="3"
                       [(ngModel)]="model.adminNotes"
-                      #speakerNotes="ngModel" id="admin-notes"
+                      id="admin-notes"
+                      #speakerNotes="ngModel"
                       name="speakerNotes"></textarea>
           </div>
           <div class="col-xs-12">
@@ -114,18 +115,21 @@
             <label class="control-label primary-label formLabelRequired" for="city">City</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.city"
+                   id="city"
                   name="city" #city="ngModel">
           </div>
           <div class="col-md-4 col-xs-6">
             <label class="control-label primary-label formLabelRequired" for="state">State</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.state"
+                   id="state"
                   name="state" #state="ngModel">
           </div>
           <div class="col-md-4 col-xs-6">
             <label class="control-label primary-label formLabelRequired" for="zip">Zip Code</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.zip"
+                   id="zip"
                   name="zip" #zip="ngModel">
           </div>
         </div>
@@ -134,6 +138,7 @@
             <label class="control-label primary-label formLabelRequired" for="phoneWork">Work Phone</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.phoneWork"
+                   id="phoneWork"
                   name="phoneWork" #phoneWork="ngModel">
           </div>
           <div class="col-md-7 col-xs-6">
@@ -141,6 +146,7 @@
             <label class="control-label sub-label" for="phoneCell">This is only for use by conference staff and will not be shared.</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.phoneCell"
+                   id="phoneCell"
                   name="phoneCell" #phoneCell="ngModel">
           </div>
         </div>
@@ -150,6 +156,7 @@
             <input type="text" class="form-control"
                    required
                   [(ngModel)]="model.email"
+                   id="email"
                   name="email" #email="ngModel">
           </div>
         </div>
@@ -158,6 +165,7 @@
             <label class="control-label primary-label" for="assistantOrCC">Assistant/CC Email</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.assistantOrCC"
+                   id="assistantOrCC"
                   name="assistantOrCC" #assistantOrCC="ngModel">
           </div>
         </div>
@@ -167,9 +175,10 @@
         <div class="row">
           <div class="col-md-8 col-xs-12">
             <label class="control-label primary-label formLabelRequired" for="bioWebsite">Website Bio</label><br/>
-            <label class="control-label sub-label" for="bioWebsite"><b>125 word limit.</b> This bio will appear on CCAW's website and on the conference app. Please use third person.</label>
+            <label class="control-label sub-label"><b>125 word limit.</b> This bio will appear on CCAW's website and on the conference app. Please use third person.</label>
             <textarea class="form-control" rows="3"
                   [(ngModel)]="model.bioWebsite" maxWords="125"
+                      id="bioWebsite"
                   name="bioWebsite" #bioWebsite="ngModel"></textarea>
             <div *ngIf="!bioWebsite.valid" class="alert alert-warning">
               <p>here is a 125 word limit for the website bio, please edit text to below limit.</p>
@@ -179,10 +188,11 @@
         </div>
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired" for="bioProgram">Program Bio</label><br/>
-            <label class="control-label sub-label" for="bioProgram"><b>60 word limit.</b> In order to cut down on printing costs and reduce paper waste, please shorten your bio to be included in the printed program.</label>
+            <label class="control-label primary-label formLabelRequired" for="bioProgram">Program Bio </label><br/>
+            <label class="control-label sub-label"><b>60 word limit.</b> In order to cut down on printing costs and reduce paper waste, please shorten your bio to be included in the printed program.</label>
             <textarea class="form-control" rows="3"
                   [(ngModel)]="model.bioProgram" maxWords="60"
+                      id="bioProgram"
                   name="bioProgram" #bioProgram="ngModel"></textarea>
             <div *ngIf="!bioProgram.valid" class="alert alert-warning">
               <p>There is a 60 word limit for the program bio, please edit text to below limit.</p>
@@ -199,13 +209,14 @@
           <label class="control-label sub-label" for="headshot">If you prefer not to display a headshot, please upload your organization's logo instead.</label>
           <input type="text" class="form-control"
                  [(ngModel)]="model.headshot"
+                 id="headshot"
                  name="headshot" #headshot="ngModel">
         </div>
       </div>
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label formLabelRequired" for="mediaWilling">Are you willing to be interviewed by the media, if requested?</label>
+          <label class="control-label primary-label formLabelRequired">Are you willing to be interviewed by the media, if requested?</label>
           <div class="radio">
             <label>
               <input type="radio" name="mediaWilling" [(ngModel)]="model.mediaWilling"
@@ -225,7 +236,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label formLabelRequired" for="costsCoveredByOrg">Please select which of the following costs your organization is able to cover (check all that apply or none):</label>
+          <label class="control-label primary-label formLabelRequired">Please select which of the following costs your organization is able to cover (check all that apply or none):</label>
           <div class="checkbox-group">
             <label *ngFor="let cost of model.costsCoveredByOrg">
               <input type="checkbox" [checked]="cost.covered"
@@ -242,6 +253,7 @@
           <label class="control-label sub-label" for="speakingFees"><b>Please note that CCAW does not pay per diems to any speakers.</b> All breakfasts and lunches will be provided free of charge.</label>
           <input type="text" class="form-control"
                  [(ngModel)]="model.speakingFees"
+                 id="speakingFees"
                  name="speakingFees" #speakingFees="ngModel">
         </div>
       </div>
@@ -249,7 +261,7 @@
       <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired" for="hasPresentedAtCCAWInPast2years">Have you presented at CCAW in the past two years?</label>
+            <label class="control-label primary-label formLabelRequired">Have you presented at CCAW in the past two years?</label>
             <div class="radio">
               <label>
                 <input type="radio" name="hasPresentedAtCCAWInPast2years" [(ngModel)]="model.hasPresentedAtCCAWInPast2years"
@@ -273,6 +285,7 @@
               <label class="control-label sub-label" for="recentSpeakingExp">Note date, event name, presentation topic, and number of people in attendance.</label>
               <textarea class="form-control" rows="3"
                     [(ngModel)]="model.recentSpeakingExp"
+                        id="recentSpeakingExp"
                     name="recentSpeakingExp" #recentSpeakingExp="ngModel"></textarea>
             </div>
           </div>
@@ -282,6 +295,7 @@
               <label class="control-label sub-label" for="speakingReferences">Please list at least two references. Include name of contact, city, state, phone number and/or email.</label>
               <textarea class="form-control" rows="3"
                     [(ngModel)]="model.speakingReferences"
+                    id="speakingReferences"
                     name="speakingReferences" #speakingReferences="ngModel"></textarea>
             </div>
           </div>
