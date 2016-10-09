@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 
 import { AuthService } from '../auth.service';
@@ -25,8 +24,6 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   speakerSessions: Session[] = [];
   leadPresId: string = null;
 
-  incompleteFields: string[] = [];
-
   costsCovered = [
     {
       name: 'travel',
@@ -41,7 +38,8 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   constructor(private transitionService: TransitionService,
               private authService: AuthService,
               private speakerService: SpeakerService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
 
@@ -115,7 +113,10 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           // Must user model here rather than form, not all fields are
           // 2-way data bound and are only updated via model (costsCovered)
           .updateSpeaker(this.model)
-          .then(res => this.toast.success('Speaker updated!'));
+          // .then(res => this.toast.success('Speaker updated!'));
+          .then(res =>
+                this.router.navigate(['/dashboard', { msg: 'Profile form saved!' }])
+          );
     }
   }
 
