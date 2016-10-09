@@ -8,25 +8,25 @@
       <h4>Lodging Information</h4>
 
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label">Have you already secured lodging for the conference?</label>
+        <label class="control-label primary-label">Would you like CCAW to reserve a room at the Sheraton for you?</label>
         <div class="radio">
           <label>
-            <input type="radio" name="securedLodging" [(ngModel)]="model.responseForm.securedLodging"
-                    id="securedLodgingYes" [value]="'yes'" #securedLodging="ngModel" required checked="">
+            <input type="radio" name="ccawLodging" [(ngModel)]="model.responseForm.ccawLodging"
+                    id="ccawLodgingYes" [value]="'yes'" #ccawLodging="ngModel" required checked="">
             Yes
           </label>
         </div>
         <div class="radio">
           <label>
-            <input type="radio" name="securedLodging" [(ngModel)]="model.responseForm.securedLodging"
-                    id="securedLodgingNo" [value]="'no'" #securedLodging="ngModel">
+            <input type="radio" name="ccawLodging" [(ngModel)]="model.responseForm.ccawLodging"
+                    id="ccawLodgingNo" [value]="'no'" #ccawLodging="ngModel">
             No
-          </label>`
+          </label>
         </div>
         <div class="radio">
           <label>
-            <input type="radio" name="securedLodging" [(ngModel)]="model.responseForm.securedLodging"
-                    id="securedLodgingNo" [value]="'N/A'" #securedLodging="ngModel">
+            <input type="radio" name="ccawLodging" [(ngModel)]="model.responseForm.ccawLodging"
+                    id="ccawLodgingNo" [value]="'N/A'" #ccawLodging="ngModel">
             N/A - I do not need lodging
           </label>
         </div>

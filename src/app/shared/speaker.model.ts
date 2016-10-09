@@ -55,7 +55,7 @@ export interface Credentials {
 export interface ResponseForm {
   completed: boolean,
 
-  securedLodging: string, // yes, no, N/A
+  ccawLodging: string, // yes, no, N/A
   // If not securedLodging fields
   dateArrival: string,
   dateDeparture: string,

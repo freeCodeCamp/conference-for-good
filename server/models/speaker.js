@@ -78,7 +78,7 @@ let speakerSchema = new mongoose.Schema({
       default: false
     },
 
-    securedLodging: String, // yes, no, name
+    ccawLodging: String, // yes, no, name
     // If not securedLodging fields
     dateArrival: String,
     dateDeparture: String,
