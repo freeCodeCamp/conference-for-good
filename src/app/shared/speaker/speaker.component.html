@@ -97,6 +97,11 @@
                     [(ngModel)]="model.arrangements[viewArrangeIndex].honorarium" id="honorarium"
                     name="honorarium" #honorarium="ngModel">
           </div>
+
+          <div class="col-xs-12">
+            <button class="btn btn-primary space-top"
+                    (click)="updateSpeaker(model)">Save</button>
+          </div>
         </div>
 
         <div class="row section">
@@ -104,8 +109,8 @@
 
           <div class="col-md-8 col-xs-12 space-top">
             <div><b>CCAW booking:</b> {{ model.responseForm?.securedLodging }}</div>
-            <div class="space-top-sm"><b>Arrival date:</b> {{ model.responseForm?.dateArrival }}</div>
-            <div class="space-top-sm"><b>Departure date:</b> {{ model.responseForm?.dateDeparture }}</div>
+            <div class="space-top-sm"><b>Arrival date:</b> {{ model.responseForm?.dateArrival | dateCustom }}</div>
+            <div class="space-top-sm"><b>Departure date:</b> {{ model.responseForm?.dateDeparture | dateCustom }}</div>
             <div class="space-top-sm"><b># of Nights:</b> {{ getNights(model.responseForm?.dateArrival, model.responseForm?.dateDeparture) }}</div>
             
             <div class="space-top-sm">
@@ -116,80 +121,90 @@
             </div>
           </div>
 
+          <div class="col-xs-12">
+            <button class="btn btn-primary space-top"
+                    (click)="updateSpeaker(model)">Save</button>
+          </div>
         </div>
 
         <div class="row section">
           <h4>Travel Arrangements</h4>
 
-          <label class="control-label primary-label" for="receivedFlightItin">Received Flight Itinerary?</label>
-          <div class="radio">
-            <label>
-              <input type="radio" name="receivedFlightItin" [(ngModel)]="model.arrangements[viewArrangeIndex].receivedFlightItin"
-                      id="receivedFlightItinYes" [value]="'yes'" #receivedFlightItin="ngModel" checked="">
-              Yes
-            </label>
+          <div class="col-md-8 col-xs-12 space-top">
+            <label class="control-label primary-label" for="receivedFlightItin">Received Flight Itinerary?</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="receivedFlightItin" [(ngModel)]="model.arrangements[viewArrangeIndex].receivedFlightItin"
+                        id="receivedFlightItinYes" [value]="'yes'" #receivedFlightItin="ngModel" checked="">
+                Yes
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="receivedFlightItin" [(ngModel)]="model.arrangements[viewArrangeIndex].receivedFlightItin"
+                        id="receivedFlightItinNo" [value]="'no'" #receivedFlightItin="ngModel">
+                No
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="receivedFlightItin" [(ngModel)]="model.arrangements[viewArrangeIndex].receivedFlightItin"
+                        id="receivedFlightItinNo" [value]="'N/A'" #receivedFlightItin="ngModel">
+                N/A
+              </label>
+            </div>
+
+            <div *ngIf="model.arrangements[viewArrangeIndex].receivedFlightItin === 'yes'" class="col-md-8 col-xs-12 space-top flight">
+              <h5>Arrival:</h5>
+              <label class="control-label primary-label space-top-sm" for="arrivalAirport">Airport</label>
+              <input type="text" class="form-control"
+                      [(ngModel)]="model.arrangements[viewArrangeIndex].arrivalAirport" id="arrivalAirport"
+                      name="arrivalAirport" #arrivalAirport="ngModel">
+
+              <label class="control-label primary-label space-top-sm" for="arrivalDate">Date</label>
+              <input type="date" class="form-control"
+                      [(ngModel)]="model.arrangements[viewArrangeIndex].arrivalDate" id="arrivalDate"
+                      name="arrivalDate" #arrivalDate="ngModel">
+
+              <label class="control-label primary-label space-top-sm" for="arrivalAirline">Airline</label>
+              <input type="text" class="form-control"
+                      [(ngModel)]="model.arrangements[viewArrangeIndex].arrivalAirline" id="arrivalAirline"
+                      name="arrivalAirline" #arrivalAirline="ngModel">
+
+              <label class="control-label primary-label space-top-sm" for="arrivalFlightNum">Flight #</label>
+              <input type="text" class="form-control"
+                      [(ngModel)]="model.arrangements[viewArrangeIndex].arrivalFlightNum" id="arrivalFlightNum"
+                      name="arrivalFlightNum" #arrivalFlightNum="ngModel">
+            </div>
+
+            <div *ngIf="model.arrangements[viewArrangeIndex].receivedFlightItin === 'yes'" class="col-md-8 col-xs-12 space-top flight">
+              <h5>Departure:</h5>
+              <label class="control-label primary-label space-top-sm" for="departAirport">Airport</label>
+              <input type="text" class="form-control"
+                      [(ngModel)]="model.arrangements[viewArrangeIndex].departAirport" id="departAirport"
+                      name="departAirport" #departAirport="ngModel">
+
+              <label class="control-label primary-label space-top-sm" for="departDate">Date</label>
+              <input type="date" class="form-control"
+                      [(ngModel)]="model.arrangements[viewArrangeIndex].departDate" id="departDate"
+                      name="departDate" #departDate="ngModel">
+
+              <label class="control-label primary-label space-top-sm" for="departAirline">Airline</label>
+              <input type="text" class="form-control"
+                      [(ngModel)]="model.arrangements[viewArrangeIndex].departAirline" id="departAirline"
+                      name="departAirline" #departAirline="ngModel">
+
+              <label class="control-label primary-label space-top-sm" for="departFlightNum">Flight #</label>
+              <input type="text" class="form-control"
+                      [(ngModel)]="model.arrangements[viewArrangeIndex].departFlightNum" id="departFlightNum"
+                      name="departFlightNum" #departFlightNum="ngModel">
+            </div>
           </div>
-          <div class="radio">
-            <label>
-              <input type="radio" name="receivedFlightItin" [(ngModel)]="model.arrangements[viewArrangeIndex].receivedFlightItin"
-                      id="receivedFlightItinNo" [value]="'no'" #receivedFlightItin="ngModel">
-              No
-            </label>
+
+          <div class="col-xs-12">
+            <button class="btn btn-primary space-top"
+                    (click)="updateSpeaker(model)">Save</button>
           </div>
-          <div class="radio">
-            <label>
-              <input type="radio" name="receivedFlightItin" [(ngModel)]="model.arrangements[viewArrangeIndex].receivedFlightItin"
-                      id="receivedFlightItinNo" [value]="'N/A'" #receivedFlightItin="ngModel">
-              N/A
-            </label>
-          </div>
-
-          <div *ngIf="model.arrangements[viewArrangeIndex].receivedFlightItin === 'yes'" class="col-md-8 col-xs-12 space-top flight">
-            <h5>Arrival:</h5>
-            <label class="control-label primary-label space-top-sm" for="arrivalAirport">Airport</label>
-            <input type="text" class="form-control"
-                    [(ngModel)]="model.arrangements[viewArrangeIndex].arrivalAirport" id="arrivalAirport"
-                    name="arrivalAirport" #arrivalAirport="ngModel">
-
-            <label class="control-label primary-label space-top-sm" for="arrivalDate">Date</label>
-            <input type="date" class="form-control"
-                    [(ngModel)]="model.arrangements[viewArrangeIndex].arrivalDate" id="arrivalDate"
-                    name="arrivalDate" #arrivalDate="ngModel">
-
-            <label class="control-label primary-label space-top-sm" for="arrivalAirline">Airline</label>
-            <input type="text" class="form-control"
-                    [(ngModel)]="model.arrangements[viewArrangeIndex].arrivalAirline" id="arrivalAirline"
-                    name="arrivalAirline" #arrivalAirline="ngModel">
-
-            <label class="control-label primary-label space-top-sm" for="arrivalFlightNum">Flight #</label>
-            <input type="text" class="form-control"
-                    [(ngModel)]="model.arrangements[viewArrangeIndex].arrivalFlightNum" id="arrivalFlightNum"
-                    name="arrivalFlightNum" #arrivalFlightNum="ngModel">
-          </div>
-
-          <div *ngIf="model.arrangements[viewArrangeIndex].receivedFlightItin === 'yes'" class="col-md-8 col-xs-12 space-top flight">
-            <h5>Departure:</h5>
-            <label class="control-label primary-label space-top-sm" for="departAirport">Airport</label>
-            <input type="text" class="form-control"
-                    [(ngModel)]="model.arrangements[viewArrangeIndex].departAirport" id="departAirport"
-                    name="departAirport" #departAirport="ngModel">
-
-            <label class="control-label primary-label space-top-sm" for="departDate">Date</label>
-            <input type="date" class="form-control"
-                    [(ngModel)]="model.arrangements[viewArrangeIndex].departDate" id="departDate"
-                    name="departDate" #departDate="ngModel">
-
-            <label class="control-label primary-label space-top-sm" for="departAirline">Airline</label>
-            <input type="text" class="form-control"
-                    [(ngModel)]="model.arrangements[viewArrangeIndex].departAirline" id="departAirline"
-                    name="departAirline" #departAirline="ngModel">
-
-            <label class="control-label primary-label space-top-sm" for="departFlightNum">Flight #</label>
-            <input type="text" class="form-control"
-                    [(ngModel)]="model.arrangements[viewArrangeIndex].departFlightNum" id="departFlightNum"
-                    name="departFlightNum" #departFlightNum="ngModel">
-          </div>
-
         </div>
 
         <h3>Public Fields</h3>

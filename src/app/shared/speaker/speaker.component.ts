@@ -6,6 +6,7 @@ import * as moment from 'moment';
 
 import { AdminService } from '../admin.service';
 import { AuthService } from '../auth.service';
+import { DatePipe } from '../date.pipe';
 import { SpeakerService } from '../speaker.service';
 import { TransitionService } from '../transition.service';
 import { ToastComponent } from '../toast.component';
