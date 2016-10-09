@@ -143,9 +143,10 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       // Must user model here rather than form, not all fields are
       // 2-way data bound and are only updated via model (costsCovered)
           .updateSpeaker(this.model)
-          // .then(res => this.toast.success('Speaker updated!'));
           .then(res => {
-            this.router.navigate(['/dashboard', { msg: 'Profile form saved!' }])
+            // Only navigate for speakers, admins have too many partial fields bound to this function
+            if (!this.authService.user.getValue().admin) this.router.navigate(['/dashboard', { msg: 'Profile form saved!' }]);
+            else this.toast.success('Speaker updated!');
           });
     }
   }
