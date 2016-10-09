@@ -34,7 +34,7 @@ export class SpeakerService {
   profileCompleted: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
   profileNotDone: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
-  // Speakers with proposals for the current year (aka active speakers)
+  // Speakers with pending or approved proposals for the current year (aka active speakers)
   speakersActive: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
   // Active speakers filtered by profile completion
@@ -115,7 +115,7 @@ export class SpeakerService {
         let defaultConf = this.adminService.defaultConference.getValue().title;
         for (let i = 0; i < speaker.sessions.length; i++) {
           let session = this.sessionService.getSession(speaker.sessions[i]);
-          if (session.associatedConf === defaultConf) return true;
+          if (session.associatedConf === defaultConf && session.approval !== 'denied') return true;
         }
         return false;
       } else return false;
