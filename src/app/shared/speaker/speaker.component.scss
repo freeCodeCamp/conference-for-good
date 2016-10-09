@@ -4,9 +4,6 @@ h2 {
   margin-bottom: 30px;
 }
 
-form {
-  margin-bottom: 80px;
-}
 
 .section {
   margin-bottom: 30px;
@@ -87,5 +84,9 @@ h5 {
 
 .formLabelRequired::before {
   content: "*";
+  color: red;
+}
+
+.formLabelRequiredMissing {
   color: red;
 }

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -21,12 +20,12 @@ import { ToastComponent } from '../toast.component';
 export class ResponseComponent implements OnInit, OnDestroy {
 
   @ViewChild('toast') toast: ToastComponent;
-  
+
   private paramsub: any;
 
   model: Speaker;
 
-  dietaryNeeds = [ 
+  dietaryNeeds = [
     {
       need: 'Vegetarian',
       checked: false
@@ -70,7 +69,7 @@ export class ResponseComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
+
   ngOnDestroy() {
     this.paramsub.unsubscribe();
   }
