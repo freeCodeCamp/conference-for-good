@@ -44,7 +44,7 @@
       <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired" for="salutation">Salutation</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.salutation ? 'formLabelRequiredMissing' : '' " for="salutation">Salutation</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.salutation"
                    id="salutation"
@@ -53,7 +53,7 @@
         </div>
         <div class="row">
           <div class="col-md-4 col-xs-6">
-            <label class="control-label primary-label formLabelRequired" for="nameFirst">First Name</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.nameFirst ? 'formLabelRequiredMissing' : '' " for="nameFirst">First Name</label>
             <input type="text" class="form-control"
                    required
                   [(ngModel)]="model.nameFirst"
@@ -61,7 +61,7 @@
                   name="nameFirst" #nameFirst="ngModel">
           </div>
           <div class="col-md-4 col-xs-6">
-            <label class="control-label primary-label formLabelRequired" for="nameLast">Last Name</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.nameLast ? 'formLabelRequiredMissing' : '' " for="nameLast">Last Name</label>
             <input type="text" class="form-control"
                    required
                   [(ngModel)]="model.nameLast"
@@ -71,7 +71,7 @@
         </div>
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired" for="title">Job Title</label><br/>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.title ? 'formLabelRequiredMissing' : '' " for="title">Job Title</label><br/>
             <label class="control-label sub-label" for="title">If you have multiple titles, please choose the most relevant. This title will be included in CCAW materials.</label>
             <input type="text" class="form-control"
                     [(ngModel)]="model.title"
@@ -81,7 +81,7 @@
         </div>
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired" for="organization">Organization</label><br/>
+            <label class="control-label primary-label formLabelRequired"  [ngClass]="!model.organization ? 'formLabelRequiredMissing' : '' "for="organization">Organization</label><br/>
             <label class="control-label sub-label" for="organization">If you are associated with multiple organizations, please choose the most relevant. This organization will be included in CCAW materials.</label>
             <input type="text" class="form-control"
                     [(ngModel)]="model.organization"
@@ -94,7 +94,7 @@
       <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired" for="address1">Address Line 1</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.address1 ? 'formLabelRequiredMissing' : '' " for="address1">Address Line 1</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.address1"
                    id="address1"
@@ -112,21 +112,21 @@
         </div>
         <div class="row">
           <div class="col-md-4 col-xs-6">
-            <label class="control-label primary-label formLabelRequired" for="city">City</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.city ? 'formLabelRequiredMissing' : '' " for="city">City</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.city"
                    id="city"
                   name="city" #city="ngModel">
           </div>
           <div class="col-md-4 col-xs-6">
-            <label class="control-label primary-label formLabelRequired" for="state">State</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.state ? 'formLabelRequiredMissing' : '' " for="state">State</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.state"
                    id="state"
                   name="state" #state="ngModel">
           </div>
           <div class="col-md-4 col-xs-6">
-            <label class="control-label primary-label formLabelRequired" for="zip">Zip Code</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.zip ? 'formLabelRequiredMissing' : '' " for="zip">Zip Code</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.zip"
                    id="zip"
@@ -135,14 +135,14 @@
         </div>
         <div class="row" id="phones">
           <div class="col-md-4 col-xs-6">
-            <label class="control-label primary-label formLabelRequired" for="phoneWork">Work Phone</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.phoneWork ? 'formLabelRequiredMissing' : '' " for="phoneWork">Work Phone</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.phoneWork"
                    id="phoneWork"
                   name="phoneWork" #phoneWork="ngModel">
           </div>
           <div class="col-md-7 col-xs-6">
-            <label class="control-label primary-label formLabelRequired" for="phoneCell">Cell Phone</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.phoneCell ? 'formLabelRequiredMissing' : '' " for="phoneCell">Cell Phone</label>
             <label class="control-label sub-label" for="phoneCell">This is only for use by conference staff and will not be shared.</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.phoneCell"
@@ -152,7 +152,7 @@
         </div>
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired" for="email">Email</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.email ? 'formLabelRequiredMissing' : '' " for="email">Email</label>
             <input type="text" class="form-control"
                    required
                   [(ngModel)]="model.email"
@@ -174,7 +174,7 @@
       <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired" for="bioWebsite">Website Bio</label><br/>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.bioWebsite ? 'formLabelRequiredMissing' : '' " for="bioWebsite">Website Bio</label><br/>
             <label class="control-label sub-label"><b>125 word limit.</b> This bio will appear on CCAW's website and on the conference app. Please use third person.</label>
             <textarea class="form-control" rows="3"
                   [(ngModel)]="model.bioWebsite" maxWords="125"
@@ -188,7 +188,7 @@
         </div>
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired" for="bioProgram">Program Bio </label><br/>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.bioProgram ? 'formLabelRequiredMissing' : '' " for="bioProgram">Program Bio </label><br/>
             <label class="control-label sub-label"><b>60 word limit.</b> In order to cut down on printing costs and reduce paper waste, please shorten your bio to be included in the printed program.</label>
             <textarea class="form-control" rows="3"
                   [(ngModel)]="model.bioProgram" maxWords="60"
@@ -204,7 +204,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label formLabelRequired" for="headshot">***Headshot Url?</label><br/>
+          <label class="control-label primary-label formLabelRequired" [ngClass]="!model.headshot ? 'formLabelRequiredMissing' : '' " for="headshot">Headshot Url?</label><br/>
           <label class="control-label sub-label" for="headshot">This photo will be displayed on CCAW's website and on the conference app.</label><br/>
           <label class="control-label sub-label" for="headshot">If you prefer not to display a headshot, please upload your organization's logo instead.</label>
           <input type="text" class="form-control"
@@ -216,7 +216,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label formLabelRequired">Are you willing to be interviewed by the media, if requested?</label>
+          <label class="control-label primary-label formLabelRequired" [ngClass]="model.mediaWilling === false ? '' : (model.mediaWilling === true ? '' : 'formLabelRequiredMissing') ">Are you willing to be interviewed by the media, if requested?</label>
           <div class="radio">
             <label>
               <input type="radio" name="mediaWilling" [(ngModel)]="model.mediaWilling"
@@ -236,7 +236,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label formLabelRequired">Please select which of the following costs your organization is able to cover (check all that apply or none):</label>
+          <label class="control-label primary-label formLabelRequired" [ngClass]="!model.costsCoveredByOrg ? 'formLabelRequiredMissing' : '' ">Please select which of the following costs your organization is able to cover (check all that apply or none):</label>
           <div class="checkbox-group">
             <label *ngFor="let cost of model.costsCoveredByOrg">
               <input type="checkbox" [checked]="cost.covered"
@@ -249,7 +249,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label formLabelRequired" for="speakingFees"><b>Please list any required speaking fees.</b> As a non-profit, we appreciate your consideration of providing your services at a discounted rate.</label><br/>
+          <label class="control-label primary-label formLabelRequired" [ngClass]="!model.speakingFees ? 'formLabelRequiredMissing' : '' " for="speakingFees"><b>Please list any required speaking fees.</b> As a non-profit, we appreciate your consideration of providing your services at a discounted rate.</label><br/>
           <label class="control-label sub-label" for="speakingFees"><b>Please note that CCAW does not pay per diems to any speakers.</b> All breakfasts and lunches will be provided free of charge.</label>
           <input type="text" class="form-control"
                  [(ngModel)]="model.speakingFees"
@@ -261,7 +261,7 @@
       <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired">Have you presented at CCAW in the past two years?</label>
+            <label class="control-label primary-label formLabelRequired" [ngClass]="model.hasPresentedAtCCAWInPast2years === false ? '' : (model.hasPresentedAtCCAWInPast2years === true ? '' : 'formLabelRequiredMissing') ">Have you presented at CCAW in the past two years?</label>
             <div class="radio">
               <label>
                 <input type="radio" name="hasPresentedAtCCAWInPast2years" [(ngModel)]="model.hasPresentedAtCCAWInPast2years"
@@ -281,7 +281,7 @@
         <div *ngIf="checkRecentExp()">
           <div class="row">
             <div class="col-md-8 col-xs-12">
-              <label class="control-label primary-label formLabelRequired" for="recentSpeakingExp">Recent Speaking Experience</label><br/>
+              <label class="control-label primary-label formLabelRequired" [ngClass]="!model.recentSpeakingExp ? 'formLabelRequiredMissing' : '' " for="recentSpeakingExp">Recent Speaking Experience</label><br/>
               <label class="control-label sub-label" for="recentSpeakingExp">Note date, event name, presentation topic, and number of people in attendance.</label>
               <textarea class="form-control" rows="3"
                     [(ngModel)]="model.recentSpeakingExp"
@@ -291,7 +291,7 @@
           </div>
           <div class="row">
             <div class="col-md-8 col-xs-12">
-              <label class="control-label primary-label formLabelRequired" for="speakingReferences">Speaking References</label><br/>
+              <label class="control-label primary-label formLabelRequired" [ngClass]="!model.speakingReferences ? 'formLabelRequiredMissing' : '' " for="speakingReferences">Speaking References</label><br/>
               <label class="control-label sub-label" for="speakingReferences">Please list at least two references. Include name of contact, city, state, phone number and/or email.</label>
               <textarea class="form-control" rows="3"
                     [(ngModel)]="model.speakingReferences"
