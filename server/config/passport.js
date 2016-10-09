@@ -41,7 +41,7 @@ module.exports = function(passport) {
                             status: 'pending',
                             adminNotes: '',
                             statusNotification: false,
-                            mediaWilling: false,
+                            // mediaWilling: false,
                             costsCoveredByOrg: [
                                 {
                                 name: 'travel',
@@ -51,8 +51,8 @@ module.exports = function(passport) {
                                 name: 'lodging',
                                 covered: false
                                 }
-                            ],
-                            hasPresentedAtCCAWInPast2years: false
+                            ]
+                            // hasPresentedAtCCAWInPast2years: false
                         });
                         newSpeaker.password  = newSpeaker.generateHash(password);
                         newSpeaker.save(function(err) {

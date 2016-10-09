@@ -8,7 +8,7 @@
       <h4>Lodging Information</h4>
 
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label" for="securedLodging">Have you already secured lodging for the conference?</label>
+        <label class="control-label primary-label">Have you already secured lodging for the conference?</label>
         <div class="radio">
           <label>
             <input type="radio" name="securedLodging" [(ngModel)]="model.responseForm.securedLodging"
@@ -21,12 +21,12 @@
             <input type="radio" name="securedLodging" [(ngModel)]="model.responseForm.securedLodging"
                     id="securedLodgingNo" [value]="'no'" #securedLodging="ngModel">
             No
-          </label>
+          </label>`
         </div>
         <div class="radio">
           <label>
             <input type="radio" name="securedLodging" [(ngModel)]="model.responseForm.securedLodging"
-                    id="securedLodgingNo" [value]="'na'" #securedLodging="ngModel">
+                    id="securedLodgingNA" [value]="'na'" #securedLodging="ngModel">
             N/A - I do not need lodging
           </label>
         </div>
@@ -45,7 +45,7 @@
         </div>
 
         <div class="col-md-8 col-xs-12 space-top">
-          <label class="control-label primary-label" for="ccawCoveringHotel">Is CCAW covering the cost of your hotel (as listed on your Speaker Agreement)?</label>
+          <label class="control-label primary-label">Is CCAW covering the cost of your hotel (as listed on your Speaker Agreement)?</label>
           <div class="radio">
             <label>
               <input type="radio" name="ccawCoveringHotel" [(ngModel)]="model.responseForm.ccawCoveringHotel"
@@ -63,8 +63,8 @@
         </div>
 
         <div *ngIf="model.responseForm.ccawCoveringHotel === 'yes'" class="col-xs-12">
-          <label class="control-label primary-label" for="agreedHotel">CCAW will secure your lodging. Confirmation numbers will be sent no later than **March 1, 2016**</label>
-          <label class="control-label sub-label" for="agreedHotel">Please indicate that you agree to these terms.</label>
+          <label class="control-label primary-label">CCAW will secure your lodging. Confirmation numbers will be sent no later than **March 1, 2016**</label>
+          <label class="control-label sub-label">Please indicate that you agree to these terms.</label>
           <div class="radio">
             <label>
               <input type="radio" name="agreedHotel" [(ngModel)]="model.responseForm.agreedHotel"
@@ -84,8 +84,8 @@
           </div>
         </div>
         <div *ngIf="model.responseForm.ccawCoveringHotel === 'no'" class="col-xs-12">
-          <label class="control-label primary-label" for="secureOwnLodging">CCAW will secure your lodging <u>unless you indicate otherwise below.</u> Confirmation numbers will be sent no later than **March 1, 2016**.</label>
-          <label class="control-label primary-label" for="secureOwnLodging"><u>Please note that payment may be required upon arrival. Consult your speaking agreement for additional details.</u></label>
+          <label class="control-label primary-label">CCAW will secure your lodging <u>unless you indicate otherwise below.</u> Confirmation numbers will be sent no later than **March 1, 2016**.</label>
+          <label class="control-label primary-label"><u>Please note that payment may be required upon arrival. Consult your speaking agreement for additional details.</u></label>
           <div class="radio">
             <label>
               <input type="radio" name="secureOwnLodging" [(ngModel)]="model.responseForm.secureOwnLodging"
@@ -110,7 +110,7 @@
     <div class="row section">
       <h4>Transportation Information</h4>
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label" for="agreedTransport">Please note that if you will be taking advantage of CCAW's complimentary transportation to/from the airport, you must send your complete & official flight itinerary to bmeyer@genesisshelter.org <u>no later than **March 4, 2016.**</u></label>
+        <label class="control-label primary-label">Please note that if you will be taking advantage of CCAW's complimentary transportation to/from the airport, you must send your complete & official flight itinerary to bmeyer@genesisshelter.org <u>no later than **March 4, 2016.**</u></label>
         <div class="radio">
           <label>
             <input type="radio" name="agreedTransport" [(ngModel)]="model.responseForm.agreedTransport"
@@ -134,7 +134,7 @@
     <div class="row section">
       <h4>Workshop Agenda</h4>
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label" for="agreedDates">Do you agree to ALL dates and times listed on the preliminary agenda included on your Speaker Agreement?</label>
+        <label class="control-label primary-label">Do you agree to ALL dates and times listed on the preliminary agenda included on your Speaker Agreement?</label>
         <div class="radio">
           <label>
             <input type="radio" name="agreedDates" [(ngModel)]="model.responseForm.agreedDates"
@@ -152,9 +152,10 @@
       </div>
       <div *ngIf="model.responseForm.agreedDates === 'no'" class="col-md-8 col-xs-12">
         <label class="control-label primary-label" for="whyConflict">Please specify which workshop(s) conflict with your schedule and why:</label><br/>
-        <label class="control-label sub-label" for="whyConflict">We will be in touch to let you know if it is possible to schedule during a different time slot.</label>
+        <label class="control-label sub-label">We will be in touch to let you know if it is possible to schedule during a different time slot.</label>
         <textarea class="form-control" rows="3"
               [(ngModel)]="model.responseForm.whyConflict"
+              id="whyConflict"
               name="whyConflict" #whyConflict="ngModel" required></textarea>
       </div>
     </div>
@@ -162,11 +163,11 @@
     <div class="row section">
       <h4>Speaker Meals</h4>
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label" for="mealDates">Please select which speaker meals you'll be attending.</label><br/>
-        <label class="control-label sub-label" for="mealDates">Choose as many as you like or none</label>
+        <label class="control-label primary-label">Please select which speaker meals you'll be attending.</label><br/>
+        <label class="control-label sub-label">Choose as many as you like or none</label>
         <div class="checkbox-group">
           <label *ngFor="let date of model.responseForm.mealDates">
-            <input type="checkbox" [checked]="date.attending" 
+            <input type="checkbox" [checked]="date.attending"
                     (change)="changeDate($event.target.checked, date)"
                     name="date"> {{ date.label }}
           </label>
@@ -174,11 +175,11 @@
       </div>
 
       <div class="col-md-8 col-xs-12 space-top">
-        <label class="control-label primary-label" for="dietaryNeeds">Please note any dietary needs.</label><br/>
-        <label class="control-label sub-label" for="dietaryNeeds">Choose as many as you like or none</label>
+        <label class="control-label primary-label">Please note any dietary needs.</label><br/>
+        <label class="control-label sub-label">Choose as many as you like or none</label>
         <div class="checkbox-group">
           <label *ngFor="let need of model.responseForm.dietaryNeeds">
-            <input type="checkbox" [checked]="need.checked" 
+            <input type="checkbox" [checked]="need.checked"
                     (change)="changeNeed($event.target.checked, need)"
                     name="need"> {{ need.need }}
           </label>
@@ -186,7 +187,7 @@
       </div>
       <div *ngIf="otherDietaryChecked()" class="col-md-8 col-xs-12 space-top">
         <label class="control-label primary-label" for="otherDietary">Other Dietary need(s):</label>
-        <input type="text" class="form-control" 
+        <input type="text" class="form-control"
                 [(ngModel)]="model.responseForm.otherDietary" id="otherDietary"
                 name="otherDietary" #otherDietary="ngModel">
       </div>
@@ -196,8 +197,8 @@
     <div class="row section">
       <h4>Book Sales</h4>
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label" for="bookAvailable">Is there a book that you would like our bookseller to have available at CCAW?</label><br/>
-        <label class="control-label sub-label" for="bookAvailable">This book can be self-authored or used as a reference in your presentation.</label>
+        <label class="control-label primary-label">Is there a book that you would like our bookseller to have available at CCAW?</label><br/>
+        <label class="control-label sub-label">This book can be self-authored or used as a reference in your presentation.</label>
         <div class="radio">
           <label>
             <input type="radio" name="bookAvailable" [(ngModel)]="model.responseForm.bookAvailable"
@@ -215,13 +216,13 @@
       </div>
       <div *ngIf="model.responseForm.bookAvailable === 'yes'" class="col-md-8 col-xs-12 space-top">
         <label class="control-label primary-label" for="bookTitle">Full Title of Book:</label>
-        <input type="text" class="form-control" 
+        <input type="text" class="form-control"
                 [(ngModel)]="model.responseForm.bookTitle" id="bookTitle"
                 name="bookTitle" #bookTitle="ngModel" required>
       </div>
       <div *ngIf="model.responseForm.bookAvailable === 'yes'" class="col-md-8 col-xs-12 space-top">
         <label class="control-label primary-label" for="bookAuthor">Author:</label>
-        <input type="text" class="form-control" 
+        <input type="text" class="form-control"
                 [(ngModel)]="model.responseForm.bookAuthor" id="bookAuthor"
                 name="bookAuthor" #bookAuthor="ngModel" required>
       </div>
@@ -236,5 +237,4 @@
   <toast #toast></toast>
   </form>
 
-<!--  <div class="debug">{{diagnostic}}</div>-->
 </div>

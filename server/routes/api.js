@@ -60,7 +60,6 @@ router.get('/getallsessions', (req, res) => {
 
 router.post('/createconference', (req, res) => {
     let conf = req.body;
-    console.log('conf:', conf);
     updateActiveConfs(null)
         .then(saveSuccess => {
             if (!saveSuccess) return res.status(500).json({message: 'Conference save error'});
@@ -77,7 +76,6 @@ router.post('/createconference', (req, res) => {
             };
             newConf.save(err => {
                 if (err) {
-                    console.log(err);
                     res.status(500).json({message: 'Conference save error'});
                 }
                 else res.status(200).json({message: 'Conference created'});
@@ -237,11 +235,8 @@ router.post('/updatespeaker', (req, res) => {
     Speaker
         .findOneAndUpdate({email: speaker.email}, speaker, {upsert:true, new: true}, (err, user) => {
             if (err) {
-                console.log('speaker save error', err);
                 return res.status(500).json({ alert: 'failed' });
             }
-            console.log('user updated');
-            console.log(user);
             return res.status(200).json(user);
         });
 });
@@ -255,13 +250,11 @@ router.post('/updatesession', (req, res) => {
             .exec()
             .then(serverSession => {
                 if (serverSession === null) {
-                    console.log('Session not found');
                     res.status(500).json({message: 'Session not found'});
                 } else {
                     _.merge(serverSession, session);
                     serverSession.save(err => {
                         if (err) {
-                            console.log(err);
                             res.status(500).json({message: 'Session save error'});
                         } else res.status(200).json(serverSession);
                     });
@@ -272,7 +265,6 @@ router.post('/updatesession', (req, res) => {
         _.merge(newSession, session);
         newSession.save(err => {
             if (err) {
-                console.log(err);
                 res.status(500).json({message: 'Session save error'});
             } else res.status(200).json(newSession);
         });
@@ -287,14 +279,11 @@ router.post('/updatesessionspeakers', (req, res) => {
         .exec()
         .then(serverSession => {
             if (serverSession === null) {
-                console.log('Session not found');
                 res.status(500).json({message: 'Session not found'});
             } else {
-                console.log('found existing session');
                 serverSession.speakers = session.speakers;
                 serverSession.save(err => {
                     if (err) {
-                        console.log(err);
                         res.status(500).json({message: 'Session save error'});
                     } else res.status(200).json(serverSession);
                 });
@@ -310,14 +299,11 @@ router.post('/updatesessionslots', (req, res) => {
         .exec()
         .then(serverSession => {
             if (serverSession === null) {
-                console.log('Session not found');
                 res.status(500).json({message: 'Session not found'});
             } else {
-                console.log('found existing session');
                 serverSession.statusTimeLocation = session.statusTimeLocation;
                 serverSession.save(err => {
                     if (err) {
-                        console.log(err);
                         res.status(500).json({message: 'Session save error'});
                     } else res.status(200).json(serverSession);
                 });
@@ -354,11 +340,9 @@ router.post('/exportsessions', (req, res) => {
                             let filename = `sessions${filerand}.csv`;
                             fs.writeFile(filename, csv, (err) => {
                                 if (err) {
-                                    console.log(err);
                                     res.status(500).end();
                                 }
                                 else {
-                                    console.log('file saved');
                                     res.download(filename, 'sessionsFinal.csv', (err) => {
                                         if (!err) fs.unlink(filename);
                                     });
@@ -387,11 +371,9 @@ router.post('/exportspeakers', (req, res) => {
             let filename = `speakers${filerand}.csv`;
             fs.writeFile(filename, csv, (err) => {
                 if (err) {
-                    console.log(err);
                     res.status(500).end();
                 }
                 else {
-                    console.log('file saved');
                     res.download(filename, 'speakersFinal.csv', (err) => {
                         if (!err) fs.unlink(filename);
                     });
@@ -495,7 +477,7 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
                     let tag = sessions[i].tags[j].toObject();
                     if (tag.checked) {
                         if (tagString === '') tagString += tag.name
-                        else tagString += `, ${tag.name}`; 
+                        else tagString += `, ${tag.name}`;
                     }
                 }
             }
@@ -518,7 +500,7 @@ function parseSpeakerData(desiredFields, speakers) {
     // Don't need these in speaker exports
     _.remove(desiredFields, field => field === 'sessions');
 
-    
+
     // Flattened into main object
     if (wantResponse) {
         _.remove(desiredFields, field => field === 'responseForm');
@@ -588,7 +570,6 @@ function updateActiveConfs(activeConf) {
                     serverConf.lastActive = serverConf.title === activeConf.title;
                     serverConf.save(err => {
                         if (err) {
-                            console.log(err);
                             allSavesSuccessful = false;
                         }
                     });
@@ -613,7 +594,6 @@ function updateDefaultConfs(defaultConf) {
                     serverConf.defaultConf = serverConf.title === defaultConf.title;
                     serverConf.save(err => {
                         if (err) {
-                            console.log(err);
                             allSavesSuccessful = false;
                         }
                     });
