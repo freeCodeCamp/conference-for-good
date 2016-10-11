@@ -8,12 +8,15 @@ let conferenceSchema = new mongoose.Schema({
   defaultConf: Boolean,
   title: String,
   dateRange: {
+    _id: false,
     start: String, // 2016-12-30
     end: String
   },
   days: [{
+    _id: false,
     date: String,
     timeSlots: [{
+      _id: false,
       start: String,
       end: String,
     }]
