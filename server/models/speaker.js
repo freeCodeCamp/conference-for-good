@@ -53,14 +53,15 @@ let speakerSchema = new mongoose.Schema({
   phoneWork: String,
   phoneCell: String,
   assistantOrCC: String, // Not sure what this is, not required
-  
+
   bioWebsite: String, // For website/app, 125 word limit
   bioProgram: String, // For pamphlet/printed program, 60 word limit
   headshot: String, // file handling ourselves (typeform has drag/drop file selection) sanitize extensions after MVP, min/max size
   mediaWilling: Boolean,
   costsCoveredByOrg: [{ // In form: Travel/Lodging/None check all that apply
     name: String,
-    covered: Boolean
+    covered: Boolean,
+    _id: false
   }],
   speakingFees: String, // Not sure if we need a number? Selectable from dropdown?
   hasPresentedAtCCAWInPast2years: Boolean,
@@ -93,12 +94,14 @@ let speakerSchema = new mongoose.Schema({
     whyConflict: String,
 
     mealDates: [{
+      _id: false,
       date: String, // Based on conf dates
       meal: String, // Breakfast or lunch
       label: String,
       attending: Boolean
     }],
     dietaryNeeds: [{
+      _id: false,
       need: String,
       checked: Boolean
     }],
