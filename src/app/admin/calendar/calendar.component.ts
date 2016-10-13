@@ -122,7 +122,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     
     if (sessionId === 'None') {
       this.sessionService.clearSlot(slot, room)
-          .then(res => {
+          .then((res: any) => {
             if (res !== 'No scheduled session') {
               this.toast.success('Session removed');
             }
@@ -137,6 +137,9 @@ export class CalendarComponent implements OnInit, AfterViewInit {
           else if (res.alreadyScheduled) {
             this.toast.error('This session is already scheduled in a room for this time slot.')
           }
+          else if (res.errMsg) {
+            this.toast.error(res.errMsg);
+          }
           else this.toast.success('Session assigned to slot');
         });
   }
@@ -144,7 +147,11 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   removeSession(slot: TimeSlot, room: string) {
     this.sessionService.clearSlot(slot, room)
         .then(res => {
-          this.toast.success('Session removed');
+          if (res.errMsg) {
+            this.toast.error(res.errMsg);
+          } else {
+            this.toast.success('Session removed');
+          }
         })
   }
 

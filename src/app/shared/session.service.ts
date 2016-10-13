@@ -127,7 +127,7 @@ export class SessionService {
     let defaultConf = this.adminService.defaultConference.getValue();
 
     // Can't change a conference schedule from an old year
-    if (activeConf.title !== defaultConf.title) return Promise.resolve({msg: "Can't change a historic conference."});
+    if (activeConf.title !== defaultConf.title) return Promise.resolve({errMsg: "Can't change a historic conference."});
     
     // Check for sessions already in requested slot before adding new
     let slotOccupied = this.isSlotOccupied(slot, room);
@@ -164,6 +164,15 @@ export class SessionService {
    */
   clearSlot(slot: TimeSlot, room: string) {
     let session = this.findSession(slot, room).session;
+
+    // Active conf is the conference schedule being viewed in calendar.
+    let activeConf = this.adminService.activeConference.getValue();
+    // Default conf is the current year conference that can be modified.
+    let defaultConf = this.adminService.defaultConference.getValue();
+
+        // Can't change a conference schedule from an old year
+    if (activeConf.title !== defaultConf.title) return Promise.resolve({errMsg: "Can't change a historic conference."});
+
     if (typeof session !== 'undefined' && session) {
       let occurenceToRemoveIndex;
       session.statusTimeLocation.forEach((sessionOccurence, index, arr) => {
