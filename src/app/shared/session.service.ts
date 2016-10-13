@@ -120,7 +120,14 @@ export class SessionService {
   /** Assign a session to a slot and room and remove overlap if needed */
   setSession(slot: TimeSlot, room: string, sessionId: string, part: string) {
     let session = this.getSession(sessionId);
+
+    // Active conf is the conference schedule being viewed in calendar.
     let activeConf = this.adminService.activeConference.getValue();
+    // Default conf is the current year conference that can be modified.
+    let defaultConf = this.adminService.defaultConference.getValue();
+
+    // Can't change a conference schedule from an old year
+    if (activeConf.title !== defaultConf.title) return Promise.resolve({errMsg: "Can't change a historic conference."});
     
     // Check for sessions already in requested slot before adding new
     let slotOccupied = this.isSlotOccupied(slot, room);
@@ -129,7 +136,7 @@ export class SessionService {
       if (!session.statusTimeLocation) session.statusTimeLocation = [];
       if (this.isSessionInTimeslot(slot, session)) return Promise.resolve({alreadyScheduled: true});
       let newOccurence = {
-        conferenceTitle: activeConf.title,
+        conferenceTitle: defaultConf.title,
         timeSlot: slot._id,
         part: part,
         room: room
@@ -157,6 +164,34 @@ export class SessionService {
    */
   clearSlot(slot: TimeSlot, room: string) {
     let session = this.findSession(slot, room).session;
+
+    // Active conf is the conference schedule being viewed in calendar.
+    let activeConf = this.adminService.activeConference.getValue();
+    // Default conf is the current year conference that can be modified.
+    let defaultConf = this.adminService.defaultConference.getValue();
+
+        // Can't change a conference schedule from an old year
+    if (activeConf.title !== defaultConf.title) return Promise.resolve({errMsg: "Can't change a historic conference."});
+
+    if (typeof session !== 'undefined' && session) {
+      let occurenceToRemoveIndex;
+      session.statusTimeLocation.forEach((sessionOccurence, index, arr) => {
+        if (sessionOccurence.timeSlot === slot._id && sessionOccurence.room === room) {
+          occurenceToRemoveIndex = index;
+        }
+      });
+      session.statusTimeLocation.splice(occurenceToRemoveIndex, 1);
+      return this.updateSession(session, 'slots');
+    } else {
+      return Promise.resolve('No scheduled session');
+    }
+  }
+
+  /** Unschedule a session from a time/room slot
+   */
+  clearSlotSession(slot: TimeSlot, room: string) {
+    let session = this.findSession(slot, room).session;
+
     if (typeof session !== 'undefined' && session) {
       let occurenceToRemoveIndex;
       session.statusTimeLocation.forEach((sessionOccurence, index, arr) => {

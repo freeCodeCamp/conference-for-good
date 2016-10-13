@@ -105,13 +105,13 @@
           <div class="row schedule">
             <span>Currently Scheduled for: </span>
             <div id="slot-list">
-              <div *ngIf="model.statusTimeLocation?.length > 0">
-                <div *ngFor="let occurrence of model.statusTimeLocation">
+              <div *ngIf="currentOccurrences?.length > 0">
+                <div *ngFor="let occurrence of currentOccurrences">
                       <i class="fa fa-ban delete" (click)="clearSlot(occurrence)"></i>
                       <span class="slot-display">{{ getPart(occurrence) }}{{ getDate(occurrence) | dateCustom }} from {{ slot(occurrence)?.start | time }} to {{ slot(occurrence)?.end | time }} in {{ occurrence.room }}</span>
                 </div>
               </div>
-              <div class="slot-display" *ngIf="model.statusTimeLocation?.length === 0">None</div>
+              <div class="slot-display" *ngIf="currentOccurrences?.length === 0">None</div>
             </div>
           </div>
 
@@ -120,7 +120,7 @@
               <label class="control-label primary-label" for="dates">Session date:</label>
               <select #dates class="form-control" id="dates" (input)="updateSelectedDate(dates.value)">
                 <option value="">None</option>
-                <option *ngFor="let day of (adminService.activeConference | async).days">
+                <option *ngFor="let day of (adminService.defaultConference | async).days">
                   {{ day.date | dateCustom }}
                 </option>
               </select>
@@ -139,7 +139,7 @@
               <label class="control-label primary-label" for="rooms">Room:</label>
               <select #rooms class="form-control" id="rooms">
                 <option value="">None</option>
-                <option *ngFor="let room of (adminService.activeConference | async).rooms">
+                <option *ngFor="let room of (adminService.defaultConference | async).rooms">
                   {{ room }}
                 </option>
               </select>

@@ -33,6 +33,7 @@ export class SessionComponent implements OnInit, OnDestroy {
   @ViewChild('partSelect') partSelect: ElementRef;
 
   selectedDaySlots: BehaviorSubject<TimeSlot[]> = new BehaviorSubject([]);
+  currentOccurrences = [];
 
   private paramsub: any;
 
@@ -83,6 +84,7 @@ export class SessionComponent implements OnInit, OnDestroy {
         this.model = this.sessionService.getSession(params['id']);
         this.sessionService.sessionsUnfiltered.subscribe(sessions => {
           this.getSessionSpeakers();
+          this.getCurrentOccurrences();
         });
       }
       // If a speaker is submitting, set him as lead presenter
@@ -106,6 +108,19 @@ export class SessionComponent implements OnInit, OnDestroy {
     return this.sessionSpeakers.getValue().mainPresenter;
   }
 
+  /** Only current conference year occurrences should be displayed */
+  getCurrentOccurrences() {
+    let defaultConf = this.adminService.defaultConference.getValue().title;
+    this.currentOccurrences = [];
+    if (this.model.statusTimeLocation && this.model.statusTimeLocation.length > 0) {
+      this.model.statusTimeLocation.forEach(occurrence => {
+        if (occurrence.conferenceTitle === defaultConf) {
+          this.currentOccurrences.push(occurrence);
+        }
+      });
+    }
+  }
+
   getPart(occurrence) {
     if (this.model.length === '90') return '';
     else return `Part ${occurrence.part}: `
@@ -125,7 +140,7 @@ export class SessionComponent implements OnInit, OnDestroy {
 
   updateSelectedDate(selectedDate: string, slotId?: string) {
     let dbDate = this.dateService.formatDateForDatabase(selectedDate);
-    let day = _.find(this.adminService.activeConference.getValue().days, day => day.date === dbDate);
+    let day = _.find(this.adminService.defaultConference.getValue().days, day => day.date === dbDate);
 
     // Check if we have any timeslots yet
     if (!(typeof day === 'undefined') && !(typeof day.timeSlots === 'undefined')) {
@@ -169,10 +184,15 @@ export class SessionComponent implements OnInit, OnDestroy {
 
   clearSlot(occurrence) {
     let slot = this.adminService.findSlotById(occurrence.timeSlot);
-    this.sessionService.clearSlot(slot, occurrence.room)
-        .then(res => {
+    this.sessionService.clearSlotSession(slot, occurrence.room)
+        .then((res: any) => {
           if (res != 'No scheduled session') {
-            this.toast.success('Removed session from slot');
+            if (res.errMsg) {
+              this.toast.error(res.errMsg);
+            } else {
+              this.toast.success('Removed session from slot');
+              this.getCurrentOccurrences();
+            }
           }
         });
   }
@@ -213,7 +233,7 @@ export class SessionComponent implements OnInit, OnDestroy {
     this.sessionService
         .updateSession(this.model)
         .then(res => {
-          this.router.navigate(['/dashboard', { msg: 'Presentation proposal saved!' }])
+          if (!this.authService.user.getValue().admin) this.router.navigate(['/dashboard', { msg: 'Presentation proposal saved!' }]);
         });
         // .then(res => this.toast.success('Session updated!'));
   }
