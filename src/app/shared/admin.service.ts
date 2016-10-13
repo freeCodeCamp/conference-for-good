@@ -169,7 +169,7 @@ export class AdminService {
   /** Find slot within active conference by its id */
   findSlotById(slotId): TimeSlot {
     let slot: TimeSlot;
-    this.activeConference.getValue().days.forEach(day => {
+    this.defaultConference.getValue().days.forEach(day => {
       let reqSlot = _.find(day.timeSlots, slot => slot._id === slotId);
       if (typeof reqSlot !== 'undefined') slot = reqSlot;
     });
@@ -178,7 +178,7 @@ export class AdminService {
 
   findDateBySlot(slotId: string) {
     let date: string;
-    this.activeConference.getValue().days.forEach(day => {
+    this.defaultConference.getValue().days.forEach(day => {
       let reqSlot = _.find(day.timeSlots, daySlot => daySlot._id === slotId);
       if (typeof reqSlot !== 'undefined') date = day.date;
     });

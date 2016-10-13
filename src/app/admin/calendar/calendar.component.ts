@@ -124,7 +124,11 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       this.sessionService.clearSlot(slot, room)
           .then((res: any) => {
             if (res !== 'No scheduled session') {
-              this.toast.success('Session removed');
+                if (res.errMsg) {
+                  this.toast.error(res.errMsg);
+                } else {
+                  this.toast.success('Session removed');
+                }
             }
           });
       return;

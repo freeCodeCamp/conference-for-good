@@ -187,6 +187,25 @@ export class SessionService {
     }
   }
 
+  /** Unschedule a session from a time/room slot
+   */
+  clearSlotSession(slot: TimeSlot, room: string) {
+    let session = this.findSession(slot, room).session;
+
+    if (typeof session !== 'undefined' && session) {
+      let occurenceToRemoveIndex;
+      session.statusTimeLocation.forEach((sessionOccurence, index, arr) => {
+        if (sessionOccurence.timeSlot === slot._id && sessionOccurence.room === room) {
+          occurenceToRemoveIndex = index;
+        }
+      });
+      session.statusTimeLocation.splice(occurenceToRemoveIndex, 1);
+      return this.updateSession(session, 'slots');
+    } else {
+      return Promise.resolve('No scheduled session');
+    }
+  }
+
   assignSpeaker(speakerId: string, isLead: boolean, sessionId) {
     let session = this.getSession(sessionId);
     if (session.speakers) {
