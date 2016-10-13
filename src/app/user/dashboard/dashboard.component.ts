@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 
 import { AdminService } from '../../shared/admin.service';
 import { AuthService } from '../../shared/auth.service';
+import { Conference } from '../../shared/conference.model';
+import { DatePipe } from '../../shared/date.pipe';
 import { TransitionService } from '../../shared/transition.service';
 import { SessionService } from '../../shared/session.service';
 import { Session } from '../../shared/session.model';
@@ -30,6 +32,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   leadOnlySessions: Session[] = [];
 
+  activeConfIndex: number;
+
   private paramsub: any;
 
   constructor(private transitionService: TransitionService,
@@ -42,6 +46,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.authService.user.subscribe(user => {
       this.speaker = this.speakerService.getSpeaker(user._id);
+      let defConf = this.adminService.defaultConference.getValue().title;
+      this.activeConfIndex = _.findIndex(this.speaker.arrangements,
+                                    arrange => arrange.associatedConf === defConf);
     });
 
     this.sessionService.sessionsUnfiltered.subscribe(sessions => {

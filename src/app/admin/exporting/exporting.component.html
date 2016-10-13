@@ -35,6 +35,12 @@
                  (change)="field.checked = $event.target.checked"> {{ field.name }}
         </label>
       </div>
+      <div *ngIf="exportArrange()" class="checkbox-group">
+        <label *ngFor="let field of arrangeFields" class="fieldBox">
+          <input type="checkbox" name="arrangeFields" 
+                 (change)="field.checked = $event.target.checked"> {{ field.name }}
+        </label>
+      </div>
     </div>
   </div>
   <button class="btn btn-primary" (click)="exportSpeakers()">Export Speakers</button>

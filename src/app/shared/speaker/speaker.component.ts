@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
+import { AdminService } from '../admin.service';
 import { AuthService } from '../auth.service';
+import { DatePipe } from '../date.pipe';
 import { SpeakerService } from '../speaker.service';
 import { TransitionService } from '../transition.service';
 import { ToastComponent } from '../toast.component';
@@ -26,6 +29,8 @@ export class SpeakerComponent implements OnInit, OnDestroy {
 
   incompleteFields: string[] = [];
 
+  viewArrangeIndex: number;
+
   costsCovered = [
     {
       name: 'travel',
@@ -38,6 +43,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   ];
 
   constructor(private transitionService: TransitionService,
+              private adminService: AdminService,
               private authService: AuthService,
               private speakerService: SpeakerService,
               private route: ActivatedRoute,
@@ -65,6 +71,22 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       if (params['leadPresId']) {
         this.leadPresId = params['leadPresId'];
       }
+      if (this.authService.user.getValue().admin) {
+        // To enable historic viewing, display data based on viewing conf (not default)
+        let viewingConf = this.adminService.activeConference.getValue().title;
+        if (this.model.arrangements && this.model.arrangements.length > 0) {
+          this.viewArrangeIndex = _.findIndex(this.model.arrangements, 
+                                              arrange => arrange.associatedConf === viewingConf);
+          if (this.viewArrangeIndex < 0) {
+            this.model.arrangements.push(<any>{associatedConf: viewingConf});
+            this.viewArrangeIndex = this.model.arrangements.length-1;
+          }
+        } else {
+          if(!this.model.arrangements) this.model.arrangements = [];
+          this.model.arrangements.push(<any>{associatedConf: viewingConf});
+          this.viewArrangeIndex = 0;
+        }
+      }
     });
   }
 
@@ -83,6 +105,12 @@ export class SpeakerComponent implements OnInit, OnDestroy {
 
   checkRecentExp() {
     return typeof this.model.hasPresentedAtCCAWInPast2years === 'boolean' && !this.model.hasPresentedAtCCAWInPast2years;
+  }
+
+  getNights(dateArrival: string, dateDeparture: string): number {
+    let arrivalMom = moment(dateArrival);
+    let departureMom = moment(dateDeparture);
+    return departureMom.diff(arrivalMom, 'days');
   }
 
   updateSpeaker(form: any) {
@@ -118,9 +146,10 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       // Must user model here rather than form, not all fields are
       // 2-way data bound and are only updated via model (costsCovered)
           .updateSpeaker(this.model)
-          // .then(res => this.toast.success('Speaker updated!'));
           .then(res => {
-            this.router.navigate(['/dashboard', { msg: 'Profile form saved!' }])
+            // Only navigate for speakers, admins have too many partial fields bound to this function
+            if (!this.authService.user.getValue().admin) this.router.navigate(['/dashboard', { msg: 'Profile form saved!' }]);
+            else this.toast.success('Speaker updated!');
           });
     }
   }
@@ -130,33 +159,45 @@ export class SpeakerComponent implements OnInit, OnDestroy {
 
     let expReq = !form['hasPresentedAtCCAWInPast2years'];
 
-    for (let field in form) {
+    let refSpeaker = this.genRefSpeaker();
+
+    for (let field in refSpeaker) {
       if (form.hasOwnProperty(field)) {
         if (!expReq) {
           // Experience fields not required if has presented at ccaw
-          if (field !== 'assistantOrCC' && field !== 'address2' &&
-              field !== 'recentSpeakingExp' && field !== 'speakingReferences') {
-            if (typeof form[field] !== undefined) {
-              // If type is boolean, form item is completed
-              if (typeof form[field] !== 'boolean') {
-                if (!form[field]) flag = false;
-              }
-            } else flag = false;
+          if (field !== 'recentSpeakingExp' && field !== 'speakingReferences') {
+                if (typeof form[field] !== undefined) {
+                  // If type is boolean, form item is completed
+                  if (typeof form[field] !== 'boolean') {
+                    if (!form[field]) flag = false;
+                  }
+                } else flag = false;
           }
         } else {
-          if (field !== 'assistantOrCC' && field !== 'address2') {
-            if (typeof form[field] !== undefined) {
-              // If type is boolean, form item is completed
-              if (typeof form[field] !== 'boolean') {
-                if (!form[field]) flag = false;
-              }
-            } else flag = false;
-          }
+          if (typeof form[field] !== undefined) {
+            // If type is boolean, form item is completed
+            if (typeof form[field] !== 'boolean') {
+              if (!form[field]) flag = false;
+            }
+          } else flag = false;
         }
       }
     }
 
     return flag;
+  }
+
+  genRefSpeaker() {
+    let refSpeaker = {
+      salutation: '', nameFirst: '', nameLast: '', email: '',
+      title: '', organization: '', address1: '',
+      city: '', state: '', zip: '', phoneWork: '', phoneCell: '',
+      bioWebsite: '', bioProgram: '', headshot: '',
+      mediaWilling: false, speakingFees: '',
+      hasPresentedAtCCAWInPast2years: false, recentSpeakingExp: '',
+      speakingReferences: ''
+    }
+    return refSpeaker;
   }
 
 }

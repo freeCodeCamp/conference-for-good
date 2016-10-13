@@ -34,7 +34,12 @@ export class SessionService {
   sessionsDenied: BehaviorSubject<Session[]> = new BehaviorSubject([]);
 
   constructor(private http: Http,
-              private adminService: AdminService) { }
+              private adminService: AdminService) {
+    // Trigger session update when requested
+    this.adminService.triggerSessionUpdate.subscribe(e => {
+      this.getAllSessions();
+    });
+  }
 
   getAllSessions() {
     return this.http

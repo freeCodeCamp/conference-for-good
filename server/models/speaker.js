@@ -79,7 +79,7 @@ let speakerSchema = new mongoose.Schema({
       default: false
     },
 
-    securedLodging: String, // yes, no, name
+    ccawLodging: String, // yes, no, name
     // If not securedLodging fields
     dateArrival: String,
     dateDeparture: String,
@@ -114,7 +114,29 @@ let speakerSchema = new mongoose.Schema({
     bookAuthor: String,
 
     w9: String, // whether uploaded to dropbox?
-  }
+  },
+
+  //**** Arrangements
+  arrangements: [{
+    associatedConf: String, //Title of associated conf
+
+    travel: String, // yes no
+    travelAmount: String,
+    lodging: String, // yes no
+    lodgingAmount: String,
+    honorarium: String,
+    lodgingConfirmNum: String,
+
+    receivedFlightItin: String, // yes no
+    arrivalAirport: String,
+    arrivalDate: String,
+    arrivalAirline: String,
+    arrivalFlightNum: String,
+    departAirport: String,
+    departDate: String,
+    departAirline: String,
+    departFlightNum: String,
+  }]
 });
 
 speakerSchema.methods.generateHash = password => {

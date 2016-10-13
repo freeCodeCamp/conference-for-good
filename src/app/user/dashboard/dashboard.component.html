@@ -54,6 +54,38 @@
             <!-- TODO: we can make this a link to a page with speaker agreement info, check with brooke -->
             <p class="text-danger">Speaker Agreement</p>
           </div>
+
+          <div><u><b>Speaking Terms</b></u></div>
+          <div>
+            <ul>
+              <li><b>Conference Registration:</b> Complimentary</li>
+              <li><b>Travel:</b> {{ speaker.arrangements[activeConfIndex]?.travel }}</li>
+              <li><b>Lodging:</b> {{ speaker.arrangements[activeConfIndex]?.lodging }}</li>
+              <li><b>Honorarium:</b> ${{ speaker.arrangements[activeConfIndex]?.honorarium }}</li>
+            </ul>
+          </div>
+
+          <div><u><b>Lodging:</b></u></div>
+          <div>
+            <ul>
+              <li><b>Hotel:</b> Sheraton Dallas, 400 North Olive Street, Dallas, TX 75201, 214-822-8000</li>
+              <li><b>Arrival Date:</b> {{ speaker.responseForm?.dateArrival | dateCustom }}</li>
+              <li><b>Departure Date:</b> {{ speaker.responseForm?.dateDeparture | dateCustom }}</li>
+              <li><b>Confirmation #:</b> {{ speaker.arrangements[activeConfIndex]?.lodgingConfirmNum }}</li>
+            </ul>
+          </div>
+
+          <div><u><b>Travel Arrangements:</b></u></div>
+          <div>
+            <p>
+              If you have submitted your official flight itinerary and
+              are taking advantage of CCAW’s complimentary airport transportation,
+              please review your <span class="text-danger">Speaker Agreement</span> for transportation details. 
+              <i>If your travel arrangements change and you do not need airport transportation,
+              please notify Brooke as soon as possible.</i>
+            </p>
+          </div>
+
         </div>
       </div>
 
