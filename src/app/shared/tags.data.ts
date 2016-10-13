@@ -7,7 +7,7 @@ export const tags = [
     name: 'campusSafety',
     label: 'Campus Safety',
     checked: false
-  }, 
+  },
   {
     name: 'ccr',
     label: 'Coordinated Community Response (CCR)',
@@ -44,7 +44,7 @@ export const tags = [
   {
     name: 'military',
     checked: false
-  }, 
+  },
   {
     name: 'probation',
     label: 'Probation/Parole',
