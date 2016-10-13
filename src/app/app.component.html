@@ -24,6 +24,9 @@
           <li *ngIf="user && user.admin"><a [routerLink]="['/speaker-list']">Speakers</a></li>
           <li *ngIf="user && user.admin"><a [routerLink]="['/exporting']">Exporting</a></li>
           <li *ngIf="user && !user.admin"><a [routerLink]="['/dashboard']">Dashboard</a></li>
+          <li *ngIf="user && !user.admin"><a [routerLink]="['/speaker', { id: user?._id }]">Modify Profile</a></li>
+          <li *ngIf="user && !user.admin"><a [routerLink]="['/session', { leadPresId: user?._id }]">Create Proposal</a></li>
+          <li *ngIf="user && !user.admin"><a [routerLink]="['/speaker', { leadPresId: user?._id }]">Add Co-Presenters</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
