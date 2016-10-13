@@ -107,8 +107,11 @@ export class SpeakerComponent implements OnInit, OnDestroy {
             this.speakerService
                 .updateSpeaker(this.model)
                 .then(res => {
-                  this.toast.success('Copresenter account created and emailed!')
+                  this.router.navigate(['/dashboard', { msg: 'Copresenter account created and emailed!' }])
                 });
+                // .then(res => {
+                //   this.toast.success('Copresenter account created and emailed!')
+                // });
           });
     } else {
       this.speakerService

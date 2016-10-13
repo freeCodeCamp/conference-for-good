@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 
 import { tags } from '../tags.data';
@@ -40,11 +40,11 @@ export class SessionComponent implements OnInit, OnDestroy {
 
   model: Session;
   requiredSessionFields = ['type', 'length', 'title', 'descriptionWebsite',
-                           'descriptionProgram', 'level', 'willingToBeRecorded', 
+                           'descriptionProgram', 'level', 'willingToBeRecorded',
                            'isMediaOrPressFriendly', 'willingToRepeat', 'hasAVneeds', 'avNeeds'];
 
   tags = tags;
-  
+
   presentationTypeLabel = `
     *Please note that case studies MUST be presented by at least two parties involved in the case, one of which must be the investigator and/or prosecutor. Additional co-presenters are welcome.
 
@@ -65,7 +65,8 @@ export class SessionComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private authService: AuthService,
               private adminService: AdminService,
-              private dateService: DateService) { }
+              private dateService: DateService,
+              private router: Router) { }
 
   ngOnInit() {
     this.transitionService.transition();
@@ -100,7 +101,7 @@ export class SessionComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.paramsub.unsubscribe();
   }
-  
+
   mainPresenter() {
     return this.sessionSpeakers.getValue().mainPresenter;
   }
@@ -211,7 +212,10 @@ export class SessionComponent implements OnInit, OnDestroy {
 
     this.sessionService
         .updateSession(this.model)
-        .then(res => this.toast.success('Session updated!'));
+        .then(res => {
+          this.router.navigate(['/dashboard', { msg: 'Presentation proposal saved!' }])
+        });
+        // .then(res => this.toast.success('Session updated!'));
   }
 
   checkSession(form: any) {
