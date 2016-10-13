@@ -388,7 +388,8 @@ router.post('/exportsessions', (req, res) => {
 });
 
 router.post('/exportspeakers', (req, res) => {
-    let exportFields = req.body;
+    let exportFields = req.body.fields;
+    let conf = req.body.conf;
     let desiredFields = [];
     for (let i = 0; i < exportFields.length; i++) {
         if (exportFields[i].checked) desiredFields.push(exportFields[i].name);
@@ -398,7 +399,7 @@ router.post('/exportspeakers', (req, res) => {
         .find({})
         .exec()
         .then(speakers => {
-            let csv = parseSpeakerData(desiredFields, speakers);
+            let csv = parseSpeakerData(desiredFields, speakers, conf);
 
             // In case we get sequential requests
             let filerand = _.random(0, 10000);
@@ -526,11 +527,13 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
 }
 
 /** Flatten and format nested data for export  */
-function parseSpeakerData(desiredFields, speakers) {
+function parseSpeakerData(desiredFields, speakers, conf) {
     let exportJson = speakers.slice();
     let wantCostsCovered = _.findIndex(desiredFields, field => field === 'costsCoveredByOrg') >= 0;
     let wantResponse = _.findIndex(desiredFields, field => field === 'responseForm') >= 0;
-
+    let wantArrange = _.findIndex(desiredFields, field => field === 'arrangements') >= 0;
+    let wantMealDates;
+    let wantDietary;
     // Don't need these in speaker exports
     _.remove(desiredFields, field => field === 'sessions');
 
@@ -538,11 +541,12 @@ function parseSpeakerData(desiredFields, speakers) {
     // Flattened into main object
     if (wantResponse) {
         _.remove(desiredFields, field => field === 'responseForm');
-        //let wantMealDates = _.findIndex(desiredFields, field => field === 'mealDates') >= 0;
-        //let wantDietary = _.findIndex(desiredFields, field => field === 'dietaryNeeds') >= 0;
+        wantMealDates = _.findIndex(desiredFields, field => field === 'mealDates') >= 0;
+        wantDietary = _.findIndex(desiredFields, field => field === 'dietaryNeeds') >= 0;
         _.remove(desiredFields, field => field === 'mealDates');
         _.remove(desiredFields, field => field === 'dietaryNeeds');
     }
+    if (wantArrange) _.remove(desiredFields, field => field === 'arrangements');
     if (wantCostsCovered) desiredFields.push('costsCoveredByOrgn');
 
     for (let i = 0; i < speakers.length; i++) {
@@ -568,20 +572,36 @@ function parseSpeakerData(desiredFields, speakers) {
                 }
             }
 
-            // Flatten meal dates and dietary needs into main export as individual fields
-            for (let j = 0; j < speakers[i].responseForm.mealDates.length; j++) {
-                let meal = speakers[i].responseForm.mealDates[j].toObject();
-                if (meal.attending) {
-                    exportJson[i][meal.label] = 1;
+            if (wantMealDates) {
+                // Flatten meal dates and dietary needs into main export as individual fields
+                for (let j = 0; j < speakers[i].responseForm.mealDates.length; j++) {
+                    let meal = speakers[i].responseForm.mealDates[j].toObject();
+                    if (meal.attending) {
+                        exportJson[i][meal.label] = 1;
+                    }
+                    if (!_.find(desiredFields, field => field === meal.label)) desiredFields.push(meal.label);
                 }
-                if (!_.find(desiredFields, field => field === meal.label)) desiredFields.push(meal.label);
             }
-            for (let j = 0; j < speakers[i].responseForm.dietaryNeeds.length; j++) {
-                let need = speakers[i].responseForm.dietaryNeeds[j].toObject();
-                if (need.checked) {
-                    exportJson[i][need.need] = 1;
+            if (wantDietary) {
+                for (let j = 0; j < speakers[i].responseForm.dietaryNeeds.length; j++) {
+                    let need = speakers[i].responseForm.dietaryNeeds[j].toObject();
+                    if (need.checked) {
+                        exportJson[i][need.need] = 1;
+                    }
+                    if (!_.find(desiredFields, field => field === need.need)) desiredFields.push(need.need);
                 }
-                if (!_.find(desiredFields, field => field === need.need)) desiredFields.push(need.need);
+            }
+        }
+        
+        if (wantArrange) {
+            // Flatten arrangments form into main export
+            let arranges = speakers[i].arrangements.toObject();
+            // Select the current set of arrangements from list of historic arrangements
+            let arrange = _.find(arranges, arrange => arrange.associatedConf === conf);
+            for (let field in arrange) {
+                if (arrange.hasOwnProperty(field)) {
+                    exportJson[i][field] = arrange[field];
+                }
             }
         }
     }

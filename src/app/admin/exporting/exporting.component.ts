@@ -5,7 +5,7 @@ let fileSaver = require('file-saver');
 import { ExportingService } from './exporting.service';
 import { Session } from '../../shared/session.model';
 import { SessionService } from '../../shared/session.service';
-import { Speaker, ResponseForm } from '../../shared/speaker.model';
+import { Speaker, ResponseForm, Arrangements } from '../../shared/speaker.model';
 import { SpeakerService } from '../../shared/speaker.service';
 import { TransitionService } from '../../shared/transition.service';
 import { ToastComponent } from '../../shared/toast.component';
@@ -24,6 +24,7 @@ export class ExportingComponent implements OnInit {
   
   speakerFields: {name: string, checked: boolean}[] = [];
   responseFields: {name: string, checked: boolean}[] = []; 
+  arrangeFields: {name: string, checked: boolean}[] = [];
 
   constructor(private transitionService: TransitionService,
               private exportingService: ExportingService,
@@ -56,10 +57,21 @@ export class ExportingComponent implements OnInit {
         this.responseFields.push({name: field, checked: false});
       }
     }
+
+    let refArrange: Arrangements = this.genRefArrangements();
+    for (let field in refArrange) {
+      if (refArrange.hasOwnProperty(field)) {
+        this.arrangeFields.push({name: field, checked: false});
+      }
+    }
   }
 
   exportResponse(): boolean {
     return _.find(this.speakerFields, field => field.name === 'responseForm').checked;
+  }
+
+  exportArrange(): boolean {
+    return _.find(this.speakerFields, field => field.name === 'arrangements').checked;
   }
 
   /** Empty session with all fields to loop through */
@@ -102,6 +114,17 @@ export class ExportingComponent implements OnInit {
     return refResponse;
   }
 
+  genRefArrangements() {
+    let refArrangements: Arrangements = {
+      associatedConf: '', travel: '', travelAmount: '', lodging: '',
+      lodgingAmount: '', honorarium: '', lodgingConfirmNum: '',
+      receivedFlightItin: '', arrivalAirport: '', arrivalDate: '',
+      arrivalAirline: '', arrivalFlightNum: '', departAirport: '', 
+      departDate: '', departAirline: '', departFlightNum: ''
+    }
+    return refArrangements;
+  }
+
   exportSessions() {
     this.exportingService
         .exportSessions(this.sessionFields)
@@ -114,6 +137,7 @@ export class ExportingComponent implements OnInit {
   exportSpeakers() {
     let exports = this.exportResponse() ? 
                   _.concat(this.speakerFields, this.responseFields) : this.speakerFields;
+    if (this.exportArrange) exports = _.concat(this.arrangeFields, exports);
     this.exportingService
         .exportSpeakers(exports)
         .then((data: Blob) => {
