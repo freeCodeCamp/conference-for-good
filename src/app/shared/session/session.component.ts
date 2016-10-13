@@ -33,6 +33,7 @@ export class SessionComponent implements OnInit, OnDestroy {
   @ViewChild('partSelect') partSelect: ElementRef;
 
   selectedDaySlots: BehaviorSubject<TimeSlot[]> = new BehaviorSubject([]);
+  currentOccurrences = [];
 
   private paramsub: any;
 
@@ -81,8 +82,10 @@ export class SessionComponent implements OnInit, OnDestroy {
         }
       } else {
         this.model = this.sessionService.getSession(params['id']);
+        
         this.sessionService.sessionsUnfiltered.subscribe(sessions => {
           this.getSessionSpeakers();
+          this.getCurrentOccurrences();
         });
       }
       // If a speaker is submitting, set him as lead presenter
@@ -106,6 +109,18 @@ export class SessionComponent implements OnInit, OnDestroy {
     return this.sessionSpeakers.getValue().mainPresenter;
   }
 
+  /** Only current conference year occurrences should be displayed */
+  getCurrentOccurrences() {
+    let defaultConf = this.adminService.defaultConference.getValue().title;
+    if (this.model.statusTimeLocation && this.model.statusTimeLocation.length > 0) {
+      this.model.statusTimeLocation.forEach(occurrence => {
+        if (occurrence.conferenceTitle === defaultConf) {
+          this.currentOccurrences.push(occurrence);
+        }
+      });
+    }
+  }
+
   getPart(occurrence) {
     if (this.model.length === '90') return '';
     else return `Part ${occurrence.part}: `
@@ -125,7 +140,7 @@ export class SessionComponent implements OnInit, OnDestroy {
 
   updateSelectedDate(selectedDate: string, slotId?: string) {
     let dbDate = this.dateService.formatDateForDatabase(selectedDate);
-    let day = _.find(this.adminService.activeConference.getValue().days, day => day.date === dbDate);
+    let day = _.find(this.adminService.defaultConference.getValue().days, day => day.date === dbDate);
 
     // Check if we have any timeslots yet
     if (!(typeof day === 'undefined') && !(typeof day.timeSlots === 'undefined')) {
