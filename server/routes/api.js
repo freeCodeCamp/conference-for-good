@@ -9,6 +9,30 @@ const multer = require('multer');
 const path = require('path');
 const json2csv = require('json2csv');
 const fs = require('fs');
+var Dropbox = require('dropbox');
+
+
+router.get('/dropbox/:filename', (req, res) => {
+    var filename = req.params.filename;
+    var dbx = new Dropbox({ accessToken: 'BP8VZuQir3MAAAAAAAC4FnD-3DaGIiz59MQBUrslFhR7VSEs8nlEz_S-ggewnabO' });
+
+    fs.readFile(path.join(__dirname, '../uploads/' + filename), (err, contents) => {
+        if (err) {
+            console.log('Error: ', err);
+        }
+
+        console.log('contents', contents);
+        dbx.filesUpload({ path: '/' + filename, contents: contents })
+            .then(response => {
+                res.send(response);
+                // console.log(response);
+            })
+            .catch(error => {
+                res.send(error);
+                // console.log(error);
+            });
+    });
+});
 
 const upload = multer({
       storage: multer.diskStorage({
@@ -592,7 +616,7 @@ function parseSpeakerData(desiredFields, speakers, conf) {
                 }
             }
         }
-        
+
         if (wantArrange) {
             // Flatten arrangments form into main export
             let arranges = speakers[i].arrangements.toObject();
