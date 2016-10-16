@@ -12,8 +12,10 @@ const fs = require('fs');
 var Dropbox = require('dropbox');
 
 
-router.get('/dropbox/:filename', (req, res) => {
+router.get('/dropbox/:filename/:directory', (req, res) => {
     var filename = req.params.filename;
+    var directory = req.params.directory;
+
     var dbx = new Dropbox({ accessToken: 'BP8VZuQir3MAAAAAAAC4FnD-3DaGIiz59MQBUrslFhR7VSEs8nlEz_S-ggewnabO' });
 
     fs.readFile(path.join(__dirname, '../uploads/' + filename), (err, contents) => {
@@ -22,14 +24,13 @@ router.get('/dropbox/:filename', (req, res) => {
         }
 
         console.log('contents', contents);
-        dbx.filesUpload({ path: '/' + filename, contents: contents })
+        dbx.filesUpload({ path: '/' + directory + '/' + filename, contents: contents })
             .then(response => {
-                res.send(response);
-                // console.log(response);
+                res.status(200).json(response);
             })
             .catch(error => {
-                res.send(error);
-                // console.log(error);
+                fs.unlink(path.join(__dirname, '../uploads/' + filename)); // delete file if cannot upload to dropbox
+                res.status(401).json(error);
             });
     });
 });
@@ -45,7 +46,7 @@ const upload = multer({
       })
   });
 
-router.post('/upload', upload.any(), (req, res) => { //todo maybe single
+router.post('/upload', upload.any(), (req, res) => {
     res.json(req.files.map(file => {
         let ext = path.extname(file.originalname);
         return {
