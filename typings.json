@@ -6,6 +6,7 @@
     "express": "registry:dt/express#4.0.0+20160317120654",
     "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160322035842",
     "jasmine": "registry:dt/jasmine#2.2.0+20160505161446",
+    "jspdf": "registry:dt/jspdf#1.1.135+20160826213743",
     "mongoose": "registry:dt/mongoose#3.8.5+20160517033907",
     "morgan": "registry:dt/morgan#1.7.0+20160524142355",
     "node": "registry:dt/node#6.0.0+20160514165920",
