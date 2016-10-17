@@ -280,5 +280,9 @@ export class SessionComponent implements OnInit, OnDestroy {
     window.open("mailto:bmeyer@genesisshelter.org");
   }
 
+  willingToRepeatComplete(): boolean {
+    if (typeof this.model.willingToRepeat === 'boolean') return true;
+    else return false;
+  }
 
 }
