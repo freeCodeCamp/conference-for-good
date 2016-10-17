@@ -2,6 +2,9 @@
      [class.page-transition]="transitionService.isTransitioning()">
   <h2>Speaker Response</h2>
 
+  <button *ngIf="(authService.user | async)?.admin" type="submit"
+            class="btn btn-primary" (click)="clearResponse()">Clear Response Form</button>
+
   <form #responseForm="ngForm">
 
     <div class="row section">
@@ -97,7 +100,7 @@
     <div class="row section">
       <h4>Transportation Information</h4>
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label">Please note that if you will be taking advantage of CCAW's complimentary transportation to/from the airport, you must send your complete & official flight itinerary to bmeyer@genesisshelter.org <u>no later than **March 4, 2016.**</u></label>
+        <label class="control-label primary-label">Please note that if you will be taking advantage of CCAW's complimentary transportation to/from the airport, you must send your complete & official flight itinerary to bmeyer@genesisshelter.org <u>no later than {{ monthsBefore(1) }}</u></label>
         <div class="radio">
           <label>
             <input type="radio" name="agreedTransport" [(ngModel)]="model.responseForm.agreedTransport"

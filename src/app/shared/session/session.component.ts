@@ -273,4 +273,9 @@ export class SessionComponent implements OnInit, OnDestroy {
         });
   }
 
+  email() {
+    window.open("mailto:bmeyer@genesisshelter.org");
+  }
+
+
 }

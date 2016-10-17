@@ -3,7 +3,7 @@
   <h1>Session Details</h1>
 
   <div *ngIf="model.approval === 'approved' && !(authService.user | async).admin" class="alert alert-warning top-alert">
-    <p>This session has already been approved. Please contact Brooke Meyer if you wish to make changes.</p>
+    <p>This session has already been approved. Please contact <a (click)="email()" class="contact">Brooke Meyer</a> if you wish to make changes.</p>
   </div>
 
   <form #sessionForm="ngForm">

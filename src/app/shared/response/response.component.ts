@@ -144,6 +144,18 @@ export class ResponseComponent implements OnInit, OnDestroy {
         });
   }
 
+  clearResponse() {
+    this.model.responseForm = <any>{};
+    this.model.responseForm.completed = false;
+    this.model.responseForm.dietaryNeeds = this.dietaryNeeds;
+    this.generateMealDates();
+    this.speakerService
+        .updateSpeaker(this.model)
+        .then(res => {
+          this.router.navigate(['/speaker', {id: this.model._id, msg: 'Speaker response form cleared.'}]);
+        });
+  }
+
   email() {
     window.open("mailto:bmeyer@genesisshelter.org");
   }

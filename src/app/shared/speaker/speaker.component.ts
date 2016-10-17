@@ -71,6 +71,9 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       if (params['leadPresId']) {
         this.leadPresId = params['leadPresId'];
       }
+      if (params['msg']) {
+        this.toast.success(params['msg']);
+      }
       if (this.authService.user.getValue().admin) {
         // To enable historic viewing, display data based on viewing conf (not default)
         let viewingConf = this.adminService.activeConference.getValue().title;
