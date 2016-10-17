@@ -37,9 +37,10 @@ export class SpeakerService {
   // Speakers with pending or approved proposals for the current year (aka active speakers)
   speakersActive: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
-  // Active speakers filtered by profile completion
+  // Active speakers filters
   activeProfileCompleted: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
   activeProfileNotDone: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+  activeNoResponseForm: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
   constructor(private http: Http,
               private adminService: AdminService,
@@ -123,6 +124,7 @@ export class SpeakerService {
 
     this.activeProfileCompleted.next(_.filter(this.speakersActive.getValue(), speaker => speaker.profileComplete));
     this.activeProfileNotDone.next(_.filter(this.speakersActive.getValue(), speaker => !speaker.profileComplete));
+    this.activeNoResponseForm.next(_.filter(this.speakersActive.getValue(), speaker => !speaker.responseForm.completed));
 
     this.speakersUnfiltered.next(sortedUnfiltered);
   }
