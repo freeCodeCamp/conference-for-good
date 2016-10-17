@@ -78,7 +78,7 @@ export class SessionComponent implements OnInit, OnDestroy {
         // Initialize default values for fields that need it
         this.model = <Session>{
           approval: 'pending',
-          tags: this.tags,
+          tags: this.tags.slice(),
         }
       } else {
         this.model = this.sessionService.getSession(params['id']);
