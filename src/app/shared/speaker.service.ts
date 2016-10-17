@@ -100,7 +100,7 @@ export class SpeakerService {
     let unfilteredCopy = this.speakersUnfiltered.getValue();
     let sortedUnfiltered: Speaker[];
     sortedUnfiltered = _.sortBy(unfilteredCopy, speaker => speaker.nameLast.toLowerCase());
-    
+
     let speakersOnly = _.filter(sortedUnfiltered, speaker => !speaker.admin);
     speakersOnly = this.setSpeakerSessions(speakersOnly);
     this.speakers.next(speakersOnly);
@@ -166,6 +166,21 @@ export class SpeakerService {
                 return serverSpeaker;
               })
               .catch(handleError);
+  }
+
+  sendToDropbox(filename: String, directory: String) {
+    return this.http
+        .get(this.baseUrl + '/api/dropbox/' + filename + '/' + directory)
+        .toPromise()
+        .then(parseJson)
+        .then(data => {
+          console.log('data from sendToDropbox', data);
+          return data;
+        })
+        .catch(error => {
+          console.log('error from sendToDropbox', error);
+          return error;
+        });
   }
 
 }

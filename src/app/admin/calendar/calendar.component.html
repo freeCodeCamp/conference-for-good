@@ -1,5 +1,6 @@
 <div id="calender-wrapper" class="container-fluid" [class.page-transition]="transitionService.isTransitioning()">
   <h1>Calendar View</h1>
+  <button class="btn btn-danger text-center" (click)="createPDF()">Create PDF</button>
   <div class="divider"></div>
 
   <div class="row day-table" *ngFor="let day of activeConf.days">
@@ -81,7 +82,7 @@
 
           <div class="row scheduled"><b>Scheduled Session</b></div>
           <div class="row">
-            <i *ngIf="getSession(selectedSlot, selectedRoom)" class="fa fa-ban delete" 
+            <i *ngIf="getSession(selectedSlot, selectedRoom)" class="fa fa-ban delete"
                (click)="removeSession(selectedSlot, selectedRoom)"></i>
             <a (click)="gotoSession(selectedSlot, selectedRoom)">{{ getSession(selectedSlot, selectedRoom)?.title }}</a>
           </div>
@@ -103,7 +104,7 @@
               </select>
             </div>
             <div class="col-xs-6 col-xs-offset-3 modal-select">
-              <button type="button" class="btn btn-default change-btn" 
+              <button type="button" class="btn btn-default change-btn"
                       (click)="saveSlot(selectedSlot, selectedRoom, sessionSelect.value)">Change</button>
             </div>
           </div>
@@ -116,4 +117,5 @@
   </div>
 
   <toast #toast></toast>
+
 </div>

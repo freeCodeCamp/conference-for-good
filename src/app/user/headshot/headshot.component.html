@@ -10,14 +10,12 @@
         <label class="upload-button">
             <input class="hidden"
             type="file"
+            multiple="false"
             ngFileSelect
             [options]="options"
             (onUpload)="handleUpload($event)">
             Select File
         </label>
-
-        <button class="button" (click)="startUpload()">Start Upload</button>
-
     </div>
 
     <toast #toast></toast>

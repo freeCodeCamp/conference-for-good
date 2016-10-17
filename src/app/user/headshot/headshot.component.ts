@@ -1,4 +1,4 @@
-import { EventEmitter, Component, ViewChild, OnInit, NgZone } from '@angular/core';
+import { Component, ViewChild, OnInit, NgZone } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { Speaker } from '../../shared/speaker.model';
@@ -40,23 +40,36 @@ export class HeadshotComponent implements OnInit {
     };
     private progress: number = 0;
     private response: any = {};
-
-    private uploadEvents: EventEmitter<any> = new EventEmitter();
-
+    private filename: String = '';
 
     ngOnInit() {
         this.transitionService.transition();
         this.zone = new NgZone({ enableLongStackTrace: false });
     }
 
-    handleUpload(data: any): void {
+    uploadFile(data: any)  {
+        console.log('data', data);
+
         this.zone.run(() => {
             this.response = data;
-            this.progress = Math.floor(data.progress.percent / 100);
+            this.progress = Math.floor(data.progress.percent);
         });
     }
 
-    startUpload() {
-        this.uploadEvents.emit('startUpload');
+    handleUpload(data: any): void {
+        this.filename = data.originalName;
+        this.uploadFile(data);
+        this.speakerService
+            .sendToDropbox(this.filename, 'headshot')
+            .then(res => {
+                console.log('statusCode', res.statusCode);
+                console.log('res', res);
+                if (res.status ) {
+                    this.toast.error('Headshot not uploaded successfully. Please try again!');
+                } else {
+                    this.toast.success('Headshot uploaded successfully!');
+                }
+            });
     }
+
 }

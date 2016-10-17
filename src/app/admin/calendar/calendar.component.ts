@@ -13,6 +13,7 @@ import { TimePipe } from '../../shared/time.pipe';
 import { ToastComponent } from '../../shared/toast.component';
 
 declare var $: any;
+declare let jsPDF;
 
 @Component({
   selector: 'calendar',
@@ -68,7 +69,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   fullName(speaker: Speaker) {
     if (!speaker) return '';
-    let fullName = `${speaker.nameFirst} ${speaker.nameLast}`; 
+    let fullName = `${speaker.nameFirst} ${speaker.nameLast}`;
     if (fullName.length > 23) {
       return fullName.slice(0, 22) + '...';
     } else return fullName;
@@ -98,6 +99,22 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   }
 
+  getSessionTitleFull(slot: TimeSlot, room: string): string {
+    let sessionPart = this.sessionService.findSession(slot, room);
+    let session = sessionPart.session;
+    let part = sessionPart.part;
+    if (!session) return '';
+
+    if (session.length === '90') {
+      return session.title;
+    }
+
+    else if (session.length === '180') {
+      let partStr = `(Part ${part})`;
+      return session.title + partStr;
+    }
+  }
+
   getDaySlots(dayId) {
     let slots = _.find(this.activeConf.days, day => day._id === dayId).timeSlots;
     return slots;
@@ -119,7 +136,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   saveSlot(slot: TimeSlot, room: string, sessionId: string) {
     let part = '0';
     if (this.twoParter) part = this.sessionPart.nativeElement.value;
-    
+
     if (sessionId === 'None') {
       this.sessionService.clearSlot(slot, room)
           .then((res: any) => {
@@ -162,6 +179,93 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   gotoSession(slot, room) {
     let session = this.getSession(slot, room);
     this.router.navigate(['/session', {id: session._id}]);
+  }
+
+  createPDF() {
+    var ctr = 60;
+    var doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'letter'
+    });
+    doc.setFont("helvetica");
+
+    doc.setFontSize(18);
+    doc.setFontType("bold");
+    ctr += 10;
+    doc.text(300, ctr, this.activeConf.title, null, null, 'center');
+    console.log('activeConf', this.activeConf);
+    doc.setFontSize(14);
+
+    this.activeConf.days.forEach(day => {
+      doc.setFontType("bold");
+      doc.setFontSize(12);
+      ctr += 40;
+      if (ctr >= 720) {
+        doc.addPage({
+                      orientation: 'portrait',
+                      unit: 'pt',
+                      format: 'letter'
+                    });
+        ctr = 60;
+      }
+      doc.text(40, ctr, day.date);
+
+      var slots = this.getDaySlots(day._id);
+      slots.forEach(slot => {
+          doc.setFontType("normal");
+          ctr += 20;
+          if (ctr >= 720) {
+            doc.addPage({
+                          orientation: 'portrait',
+                          unit: 'pt',
+                          format: 'letter'
+                        });
+            ctr = 60;
+          }
+        doc.text(60, ctr, slot.start + " - " + slot.end);
+
+          this.activeConf.rooms.forEach(function(room) {
+            if (this.getSession(slot, room)) {
+              ctr += 20;
+              if (ctr >= 720) {
+                doc.addPage({
+                              orientation: 'portrait',
+                              unit: 'pt',
+                              format: 'letter'
+                            });
+                ctr = 60;
+              }
+              doc.setFontType("bold");
+              // doc.text(120, ctr, room);
+              doc.text(70, ctr, room);
+              ctr += 20;
+              doc.setFontType("normal");
+              if (ctr >= 720) {
+                doc.addPage({
+                              orientation: 'portrait',
+                              unit: 'pt',
+                              format: 'letter'
+                            });
+                ctr = 60;
+              }
+              doc.text(90, ctr, this.fullName(this.getSpeakers(slot, room).mainPresenter));
+              ctr += 20;
+              if (ctr >= 720) {
+                doc.addPage({
+                              orientation: 'portrait',
+                              unit: 'pt',
+                              format: 'letter'
+                            });
+                ctr = 60;
+              }
+              doc.text(90, ctr, this.getSessionTitleFull(slot, room));
+            }
+          }, this);
+      });
+    }, this);
+
+    doc.save('calendar.pdf');
   }
 
   // DEBUG
