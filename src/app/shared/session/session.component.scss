@@ -4,8 +4,8 @@ h2 {
   margin-bottom: 30px;
 }
 
-form {
-  margin-bottom: 80px;
+.top-alert {
+  margin-bottom: 30px !important;
 }
 
 .section {
@@ -121,4 +121,8 @@ input.ng-invalid.ng-dirty.ng-touched {
   right: 10px;
   top: 80px;
   word-break: break-word;
+}
+
+.formLabelRequiredMissing {
+  color: red;
 }

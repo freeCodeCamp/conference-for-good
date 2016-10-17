@@ -1,11 +1,13 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { AdminService } from '../../shared/admin.service';
 import { AuthService } from '../../shared/auth.service';
 import { Conference } from '../../shared/conference.model';
 import { DatePipe } from '../../shared/date.pipe';
+import { DateService } from '../../shared/date.service';
 import { TransitionService } from '../../shared/transition.service';
 import { SessionService } from '../../shared/session.service';
 import { Session } from '../../shared/session.model';
@@ -39,6 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private transitionService: TransitionService,
               private adminService: AdminService,
               private authService: AuthService,
+              private dateService: DateService,
               private route: ActivatedRoute,
               private router: Router,
               private sessionService: SessionService,
@@ -160,6 +163,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   call() {
     window.open("tel:2143997733");
+  }
+
+  isResponseFormNeeded(): boolean {
+    if (this.scheduledSessions.length > 0) {
+      if (this.speaker.responseForm && !this.speaker.responseForm.completed) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  monthsBefore(months: number): string {
+    let conf = this.adminService.defaultConference.getValue();
+    let confStart = moment(conf.dateRange.start);
+    let due = confStart.subtract({months: months});
+    return due.format(this.dateService.userFormatDate);
   }
 
 }

@@ -33,6 +33,9 @@ export class SessionService {
   sessionsApproved: BehaviorSubject<Session[]> = new BehaviorSubject([]);
   sessionsDenied: BehaviorSubject<Session[]> = new BehaviorSubject([]);
 
+  // Approved session filters
+  sessionsApprovedUnscheduled: BehaviorSubject<Session[]> = new BehaviorSubject([]);
+
   constructor(private http: Http,
               private adminService: AdminService) {
     // Trigger session update when requested
@@ -83,6 +86,8 @@ export class SessionService {
     this.sessionsPending.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'pending'));
     this.sessionsApproved.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'approved'));
     this.sessionsDenied.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'denied'));
+
+    this.sessionsApprovedUnscheduled.next(_.filter(this.sessionsApproved.getValue(), session => session.statusTimeLocation.length < 1));
 
     this.sessionsUnfiltered.next(sortedUnfiltered);
   }

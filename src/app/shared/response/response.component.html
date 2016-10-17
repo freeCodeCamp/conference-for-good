@@ -2,6 +2,9 @@
      [class.page-transition]="transitionService.isTransitioning()">
   <h2>Speaker Response</h2>
 
+  <button *ngIf="(authService.user | async)?.admin" type="submit"
+            class="btn btn-primary" (click)="clearResponse()">Clear Response Form</button>
+
   <form #responseForm="ngForm">
 
     <div class="row section">
@@ -9,6 +12,7 @@
 
       <div class="col-md-8 col-xs-12">
         <label class="control-label primary-label">Would you like CCAW to reserve a room at the Sheraton for you?</label>
+        <label class="control-label sub-label"><u>Only select “No” if you are NOT staying at the Sheraton or if you have already booked a hotel room.</u></label>
         <div class="radio">
           <label>
             <input type="radio" name="ccawLodging" [(ngModel)]="model.responseForm.ccawLodging"
@@ -21,13 +25,6 @@
             <input type="radio" name="ccawLodging" [(ngModel)]="model.responseForm.ccawLodging"
                     id="ccawLodgingNo" [value]="'no'" #ccawLodging="ngModel">
             No
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="ccawLodging" [(ngModel)]="model.responseForm.ccawLodging"
-                    id="ccawLodgingNo" [value]="'N/A'" #ccawLodging="ngModel">
-            N/A - I do not need lodging
           </label>
         </div>
       </div>
@@ -45,7 +42,7 @@
         </div>
 
         <div class="col-md-8 col-xs-12 space-top">
-          <label class="control-label primary-label">Is CCAW covering the cost of your hotel (as listed on your Speaker Agreement)?</label>
+          <label class="control-label primary-label">Is CCAW covering the cost of your hotel (as listed under Speaking Terms)?</label>
           <div class="radio">
             <label>
               <input type="radio" name="ccawCoveringHotel" [(ngModel)]="model.responseForm.ccawCoveringHotel"
@@ -62,9 +59,20 @@
           </div>
         </div>
 
+        <div *ngIf="model.responseForm.ccawCoveringHotel === 'yes'" class="col-xs-12 alert alert-info">
+          Please note that you are responsible for any additional
+          nights not included in your Speaking Terms, along with any
+          incidentals. Confirmation numbers will be sent no later than
+          {{ monthsBefore(1) }}.
+        </div>
+        <div *ngIf="model.responseForm.ccawCoveringHotel === 'no'" class="col-xs-12 alert alert-info">
+          Please note that payment will be required upon arrival.
+          Please review Speaker Details for more information on hotel
+          fees. Confirmation numbers will be sent no later than {{ monthsBefore(1) }}.
+        </div>
+
         <div *ngIf="model.responseForm.ccawCoveringHotel === 'yes'" class="col-xs-12">
-          <label class="control-label primary-label">CCAW will secure your lodging. Confirmation numbers will be sent no later than **March 1, 2016**</label>
-          <label class="control-label sub-label">Please indicate that you agree to these terms.</label>
+          <label class="control-label primary-label">I have reviewed my <span class="text-danger">Speaker Details</span> and <a [routerLink]="['/dashboard']">Terms</a> and accept all terms.</label>
           <div class="radio">
             <label>
               <input type="radio" name="agreedHotel" [(ngModel)]="model.responseForm.agreedHotel"
@@ -80,25 +88,7 @@
             </label>
           </div>
           <div *ngIf="model.responseForm.agreedHotel === 'no'" class="alert alert-warning">
-            <p>You must agree to the Terms & Conditions</p>
-          </div>
-        </div>
-        <div *ngIf="model.responseForm.ccawCoveringHotel === 'no'" class="col-xs-12">
-          <label class="control-label primary-label">CCAW will secure your lodging <u>unless you indicate otherwise below.</u> Confirmation numbers will be sent no later than **March 1, 2016**.</label>
-          <label class="control-label primary-label"><u>Please note that payment may be required upon arrival. Consult your speaking agreement for additional details.</u></label>
-          <div class="radio">
-            <label>
-              <input type="radio" name="secureOwnLodging" [(ngModel)]="model.responseForm.secureOwnLodging"
-                      id="secureOwnLodgingYes" [value]="'ccawSecure'" #secureOwnLodging="ngModel" required checked="">
-              I would like CCAW to secure my lodging.
-            </label>
-          </div>
-          <div class="radio">
-            <label>
-              <input type="radio" name="secureOwnLodging" [(ngModel)]="model.responseForm.secureOwnLodging"
-                      id="secureOwnLodgingNo" [value]="'selfSecure'" #secureOwnLodging="ngModel">
-              I would like to secure my own lodging.
-            </label>
+            <p>You must agree to the Terms & Conditions. Email <a (click)="email()" class="contact">Brooke Meyer</a> if you have questions or concerns.</p>
           </div>
         </div>
 
@@ -110,7 +100,7 @@
     <div class="row section">
       <h4>Transportation Information</h4>
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label">Please note that if you will be taking advantage of CCAW's complimentary transportation to/from the airport, you must send your complete & official flight itinerary to bmeyer@genesisshelter.org <u>no later than **March 4, 2016.**</u></label>
+        <label class="control-label primary-label">Please note that if you will be taking advantage of CCAW's complimentary transportation to/from the airport, you must send your complete & official flight itinerary to bmeyer@genesisshelter.org <u>no later than {{ monthsBefore(1) }}</u></label>
         <div class="radio">
           <label>
             <input type="radio" name="agreedTransport" [(ngModel)]="model.responseForm.agreedTransport"

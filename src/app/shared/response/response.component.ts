@@ -144,7 +144,27 @@ export class ResponseComponent implements OnInit, OnDestroy {
         });
   }
 
-  // DEBUG
-  get diagnostic() { return JSON.stringify(this.model); }
+  clearResponse() {
+    this.model.responseForm = <any>{};
+    this.model.responseForm.completed = false;
+    this.model.responseForm.dietaryNeeds = this.dietaryNeeds;
+    this.generateMealDates();
+    this.speakerService
+        .updateSpeaker(this.model)
+        .then(res => {
+          this.router.navigate(['/speaker', {id: this.model._id, msg: 'Speaker response form cleared.'}]);
+        });
+  }
+
+  email() {
+    window.open("mailto:bmeyer@genesisshelter.org");
+  }
+
+  monthsBefore(months: number): string {
+    let conf = this.adminService.defaultConference.getValue();
+    let confStart = moment(conf.dateRange.start);
+    let due = confStart.subtract({months: months});
+    return due.format(this.dateService.userFormatDate);
+  }
 
 }
