@@ -99,6 +99,22 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   }
 
+  getSessionTitleFull(slot: TimeSlot, room: string): string {
+    let sessionPart = this.sessionService.findSession(slot, room);
+    let session = sessionPart.session;
+    let part = sessionPart.part;
+    if (!session) return '';
+
+    if (session.length === '90') {
+      return session.title;
+    }
+
+    else if (session.length === '180') {
+      let partStr = `(Part ${part})`;
+      return session.title + partStr;
+    }
+  }
+
   getDaySlots(dayId) {
     let slots = _.find(this.activeConf.days, day => day._id === dayId).timeSlots;
     return slots;
@@ -181,7 +197,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     console.log('activeConf', this.activeConf);
     doc.setFontSize(14);
 
-    this.activeConf.days.forEach(function(item) {
+    this.activeConf.days.forEach(day => {
       doc.setFontType("bold");
       doc.setFontSize(12);
       ctr += 40;
@@ -193,22 +209,61 @@ export class CalendarComponent implements OnInit, AfterViewInit {
                     });
         ctr = 60;
       }
-      doc.text(70, ctr, item.date);
+      doc.text(40, ctr, day.date);
 
-      item.timeSlots.forEach(function(slot) {
-        doc.setFontType("normal");
-        ctr += 20;
-        if (ctr >= 720) {
-          doc.addPage({
-                        orientation: 'portrait',
-                        unit: 'pt',
-                        format: 'letter'
-                      });
-          ctr = 60;
-        }
-        doc.text(100, ctr, slot.start + " - " + slot.end);
+      var slots = this.getDaySlots(day._id);
+      slots.forEach(slot => {
+          doc.setFontType("normal");
+          ctr += 20;
+          if (ctr >= 720) {
+            doc.addPage({
+                          orientation: 'portrait',
+                          unit: 'pt',
+                          format: 'letter'
+                        });
+            ctr = 60;
+          }
+        doc.text(60, ctr, slot.start + " - " + slot.end);
+
+          this.activeConf.rooms.forEach(function(room) {
+            if (this.getSession(slot, room)) {
+              ctr += 20;
+              if (ctr >= 720) {
+                doc.addPage({
+                              orientation: 'portrait',
+                              unit: 'pt',
+                              format: 'letter'
+                            });
+                ctr = 60;
+              }
+              doc.setFontType("bold");
+              // doc.text(120, ctr, room);
+              doc.text(70, ctr, room);
+              ctr += 20;
+              doc.setFontType("normal");
+              if (ctr >= 720) {
+                doc.addPage({
+                              orientation: 'portrait',
+                              unit: 'pt',
+                              format: 'letter'
+                            });
+                ctr = 60;
+              }
+              doc.text(90, ctr, this.fullName(this.getSpeakers(slot, room).mainPresenter));
+              ctr += 20;
+              if (ctr >= 720) {
+                doc.addPage({
+                              orientation: 'portrait',
+                              unit: 'pt',
+                              format: 'letter'
+                            });
+                ctr = 60;
+              }
+              doc.text(90, ctr, this.getSessionTitleFull(slot, room));
+            }
+          }, this);
       });
-    });
+    }, this);
 
     doc.save('calendar.pdf');
   }
