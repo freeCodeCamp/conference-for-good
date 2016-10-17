@@ -1,10 +1,7 @@
 <div id="calender-wrapper" class="container-fluid" [class.page-transition]="transitionService.isTransitioning()">
   <h1>Calendar View</h1>
+  <button class="btn btn-danger text-center" (click)="createPDF()">Create PDF</button>
   <div class="divider"></div>
-
-  <div>
-    <button class="btn btn-danger" (click)="createPDF()">Create PDF</button>
-  </div>
 
   <div class="row day-table" *ngFor="let day of activeConf.days">
     <div class="date">{{ day.date | dateCustom:'long' }}</div>
