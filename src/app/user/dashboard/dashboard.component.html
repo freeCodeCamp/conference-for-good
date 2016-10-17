@@ -39,9 +39,9 @@
                   {{ coPres.nameFirst }} {{ coPres.nameLast }}
                 </div>
               </div>
-              <div><i>Currently Scheduled for: </i></div>
+              <div><b>Currently Scheduled for: </b></div>
               <div *ngFor="let occurrence of session.statusTimeLocation">
-                {{ getPart(session, occurrence) }}{{ getDate(occurrence) | dateCustom }} from {{ slot(occurrence)?.start | time }} to {{ slot(occurrence)?.end | time }} in {{ occurrence.room }}
+                {{ getPart(session, occurrence) }}{{ getDate(occurrence) | dateCustom }}, {{ slot(occurrence)?.start | time }}-{{ slot(occurrence)?.end | time }} in {{ occurrence.room }}
               </div>
               <div class="divider-s"></div>
             </div>
@@ -52,10 +52,10 @@
 
           <div>
             <!-- TODO: we can make this a link to a page with speaker agreement info, check with brooke -->
-            <p class="text-danger">Speaker Agreement</p>
+            <p>PLEASE REVIEW: <span class="text-danger">Speaker Details</span></p>
           </div>
 
-          <div><u><b>Speaking Terms</b></u></div>
+          <div><u><b>Speaking Terms</b></u><br/><i>The following items will be paid for by CCAW:</i></div>
           <div>
             <ul>
               <li><b>Conference Registration:</b> Complimentary</li>
@@ -65,7 +65,7 @@
             </ul>
           </div>
 
-          <div><u><b>Lodging:</b></u></div>
+          <div><u><b>Lodging:</b></u><br/><i>Please review Speaker Details for additional lodging information.</i></div>
           <div>
             <ul>
               <li><b>Hotel:</b> Sheraton Dallas, 400 North Olive Street, Dallas, TX 75201, 214-822-8000</li>
@@ -78,11 +78,10 @@
           <div><u><b>Travel Arrangements:</b></u></div>
           <div>
             <p>
-              If you have submitted your official flight itinerary and
-              are taking advantage of CCAW’s complimentary airport transportation,
-              please review your <span class="text-danger">Speaker Agreement</span> for transportation details. 
-              <i>If your travel arrangements change and you do not need airport transportation,
-              please notify Brooke as soon as possible.</i>
+              If you are taking advantage of CCAW’s complimentary airport
+              transportation, <b>you must <a (click)="email()" class="contact">email</a> your OFFICIAL flight
+              itinerary no later than {{ monthsBefore(1) }}.</b> <i>Please review
+              Speaker Details for additional transportation information.</i>
             </p>
           </div>
 
@@ -94,15 +93,15 @@
           <b>Action Required</b>
 
           <div>
-            <div *ngIf="speaker.profileComplete && incompleteSessions.length === 0 && speaker.responseForm.completed">None</div>
+            <div *ngIf="speaker.profileComplete && incompleteSessions.length === 0 && !isResponseFormNeeded()">None</div>
             <div *ngIf="!speaker.profileComplete"><a [routerLink]="['/speaker', {id: speaker._id}]">Profile Incomplete</a></div>
             <div *ngIf="incompleteSessions.length > 0">
               <div class="small-pad" *ngFor="let session of incompleteSessions">
                 <a [routerLink]="['/session', {id: session._id}]">Incomplete Session: {{ session.title }}</a>
               </div>
             </div>
-            <div *ngIf="!speaker.responseForm.completed">
-              <a [routerLink]="['/response', {id: speaker._id}]">Speaker Response Form</a>
+            <div *ngIf="isResponseFormNeeded()">
+              <a [routerLink]="['/response', {id: speaker._id}]">Speaker Response Form - <b>DUE BY {{ monthsBefore(2) }}</b></a>
             </div>
 
           </div>
@@ -166,13 +165,13 @@
           <button class="btn btn-primary" (click)="addCopres(sessions.value, speakers.value)">Add Co-presenter</button>
         </div>
         <div class="col-md-6 col-md-offset-1 col-xs-12 new-copres box">
-          <button class="btn btn-primary" (click)="goto('copres')">Create New Co-Presenter</button>
           <div class="copres-text">
             <b>Once you create a new co-presenter, <u>you must return to this page to add them to the appropriate
             presentation.</u></b> They will receive an email asking them to finish creating their
             account.
           </div>
           <div>You only need to fill out their name and email if you don't know more right now.</div>
+          <button class="btn btn-primary space-top" (click)="goto('copres')">Create New Co-Presenter</button>          
         </div>
       </div>
     </div>
