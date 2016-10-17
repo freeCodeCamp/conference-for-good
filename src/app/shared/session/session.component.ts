@@ -76,9 +76,12 @@ export class SessionComponent implements OnInit, OnDestroy {
     this.paramsub = this.route.params.subscribe(params => {
       if (!params['id']) {
         // Initialize default values for fields that need it
+        this.tags.forEach(tag => {
+          if (tag.checked) tag.checked = false;
+        });
         this.model = <Session>{
           approval: 'pending',
-          tags: this.tags,
+          tags: _.clone(this.tags),
         }
       } else {
         this.model = this.sessionService.getSession(params['id']);
@@ -277,5 +280,9 @@ export class SessionComponent implements OnInit, OnDestroy {
     window.open("mailto:bmeyer@genesisshelter.org");
   }
 
+  willingToRepeatComplete(): boolean {
+    if (typeof this.model.willingToRepeat === 'boolean') return true;
+    else return false;
+  }
 
 }
