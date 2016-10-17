@@ -144,7 +144,15 @@ export class ResponseComponent implements OnInit, OnDestroy {
         });
   }
 
-  // DEBUG
-  get diagnostic() { return JSON.stringify(this.model); }
+  email() {
+    window.open("mailto:bmeyer@genesisshelter.org");
+  }
+
+  monthsBefore(months: number): string {
+    let conf = this.adminService.defaultConference.getValue();
+    let confStart = moment(conf.dateRange.start);
+    let due = confStart.subtract({months: months});
+    return due.format(this.dateService.userFormatDate);
+  }
 
 }
