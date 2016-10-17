@@ -2,6 +2,10 @@
      [class.page-transition]="transitionService.isTransitioning()">
   <h1>Session Details</h1>
 
+  <div *ngIf="model.approval === 'approved' && !(authService.user | async).admin" class="alert alert-warning top-alert">
+    <p>This session has already been approved. Please contact Brooke Meyer if you wish to make changes.</p>
+  </div>
+
   <form #sessionForm="ngForm">
     <div class="form-group">
 
@@ -397,7 +401,7 @@
 
     </div>
     <button type="submit"
-            class="btn btn-primary"
+            class="btn btn-primary" [disabled]="model.approval === 'approved' && !(authService.user | async).admin"
             (click)="updateSession(sessionForm.value)">Submit</button>
     <toast #toast></toast>
   </form>
