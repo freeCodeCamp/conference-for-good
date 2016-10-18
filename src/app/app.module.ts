@@ -3,7 +3,6 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
-import { UPLOAD_DIRECTIVES } from 'ng2-uploader';
 
 import { routing } from './app.routing';
 
@@ -40,6 +39,7 @@ import { ExportingComponent } from './admin/exporting/exporting.component';
 import { AdminService } from './shared/admin.service';
 import { AuthService } from './shared/auth.service';
 import { DateService } from './shared/date.service';
+import { FileService } from './shared/file.service';
 import { SessionService } from './shared/session.service';
 import { SpeakerService } from './shared/speaker.service';
 import { TransitionService } from './shared/transition.service';
@@ -75,16 +75,13 @@ import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
     // Directives
     MaxWordsValidatorDirective,
 
-    // Uploads
-    UPLOAD_DIRECTIVES,
-
     ExportingComponent
   ],
   providers: [
     // Route guards
     AdminGuard, SpeakerGuard,
     // Services
-    AdminService, AuthService, DateService,
+    AdminService, AuthService, DateService, FileService,
     SessionService, SpeakerService, TransitionService
   ],
   entryComponents: [AppComponent],

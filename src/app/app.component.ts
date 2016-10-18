@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
               private sessionService: SessionService,
               private speakerService: SpeakerService,
               private authService: AuthService,
+              private transitionService: TransitionService,
               private router: Router) {
     this.authService.user.subscribe(user => {
       this.user = user;

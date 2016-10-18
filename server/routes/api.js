@@ -16,20 +16,31 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
     var filename = req.params.filename;
     var directory = req.params.directory;
 
-    var dbx = new Dropbox({ accessToken: 'BP8VZuQir3MAAAAAAAC4FnD-3DaGIiz59MQBUrslFhR7VSEs8nlEz_S-ggewnabO' });
+    var dbx = new Dropbox({ accessToken: process.env.DROPBOX_TOKEN });
+    let fileDir = path.join(__dirname, '../uploads/' + filename);
 
-    fs.readFile(path.join(__dirname, '../uploads/' + filename), (err, contents) => {
+    fs.readFile(fileDir, (err, contents) => {
         if (err) {
             console.log('Error: ', err);
         }
-
-        console.log('contents', contents);
         dbx.filesUpload({ path: '/' + directory + '/' + filename, contents: contents })
             .then(response => {
-                res.status(200).json(response);
+                // File is only needed on the server to upload to dbx, delete it when done
+                fs.unlink(fileDir, err => {
+                    if (err) console.log('File clear error: ', err);
+                });
+                console.log('path response:', response.path_display);
+                let dbxUrl = '';
+                dbx.sharingCreateSharedLink({path: response.path_display, short_url: false}).then(dbxRes => {
+                    dbxUrl = dbxRes.url + '&raw=1';
+                    res.status(200).json(dbxUrl);
+                });
             })
             .catch(error => {
-                fs.unlink(path.join(__dirname, '../uploads/' + filename)); // delete file if cannot upload to dropbox
+                // Delete file if cannot upload to dropbox
+                fs.unlink(fileDir, err => {
+                    if (err) console.log('File clear error: ', err);
+                }); 
                 res.status(401).json(error);
             });
     });
@@ -54,6 +65,10 @@ router.post('/upload', upload.any(), (req, res) => {
             filename: file.filename
         }
     }));
+});
+
+router.post('/uploadFile', upload.any(), (req, res) => {
+    res.status(200).json({msg: 'file uploaded'});
 });
 
 router.get('/getallconferences', (req, res) => {
