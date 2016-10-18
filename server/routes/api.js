@@ -17,20 +17,25 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
     var directory = req.params.directory;
 
     var dbx = new Dropbox({ accessToken: process.env.DROPBOX_TOKEN });
+    let fileDir = path.join(__dirname, '../uploads/' + filename);
 
-    fs.readFile(path.join(__dirname, '../uploads/' + filename), (err, contents) => {
+    fs.readFile(fileDir, (err, contents) => {
         if (err) {
             console.log('Error: ', err);
         }
-
         dbx.filesUpload({ path: '/' + directory + '/' + filename, contents: contents })
             .then(response => {
                 // File is only needed on the server to upload to dbx, delete it when done
-                fs.unlink(path.join(__dirname, '../uploads/' + filename));
+                fs.unlink(fileDir, err => {
+                    if (err) console.log('File clear error: ', err);
+                });
                 res.status(200).json(response);
             })
             .catch(error => {
-                fs.unlink(path.join(__dirname, '../uploads/' + filename)); // delete file if cannot upload to dropbox
+                // Delete file if cannot upload to dropbox
+                fs.unlink(fileDir, err => {
+                    if (err) console.log('File clear error: ', err);
+                }); 
                 res.status(401).json(error);
             });
     });

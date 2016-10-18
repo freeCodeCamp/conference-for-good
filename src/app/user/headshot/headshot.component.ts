@@ -41,8 +41,10 @@ export class HeadshotComponent implements OnInit {
     private progress: number = 0;
     private response: any = {};
     private filename: String = '';
+    private calls: number;
 
     ngOnInit() {
+        this.calls = 0;
         this.transitionService.transition();
         this.zone = new NgZone({ enableLongStackTrace: false });
     }
@@ -57,6 +59,11 @@ export class HeadshotComponent implements OnInit {
     }
 
     handleUpload(data: any): void {
+        // Upload callback is happening twice for some reason causing all sorts of problems
+        // Library bug? Quash anything after first call
+        this.calls++;
+        if (this.calls > 1) return;
+        
         this.filename = data.originalName;
         this.uploadFile(data);
         this.speakerService
