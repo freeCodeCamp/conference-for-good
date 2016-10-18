@@ -7,7 +7,13 @@
 
     <div class="row block">
         <h3 class="text-center title">Upload Headshot</h3>
-        <label class="upload-button">
+        
+        <label class="btn btn-default" for="file"><i class="fa fa-upload fa-lg"></i>{{ fileString }}</label>
+        <input id="file" type="file" #file (change)="fileSelected(file.files)">
+        
+        <button class="btn btn-primary" (click)="doUpload()">Upload</button>
+
+<!--        <label class="upload-button">
             <input class="hidden"
             type="file"
             multiple="false"
@@ -15,7 +21,7 @@
             [options]="options"
             (onUpload)="handleUpload($event)">
             Select File
-        </label>
+        </label>-->
     </div>
 
     <toast #toast></toast>

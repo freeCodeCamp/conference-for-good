@@ -1,6 +1,7 @@
 import { Component, ViewChild, OnInit, NgZone } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
+import { FileService } from '../../shared/file.service';
 import { Speaker } from '../../shared/speaker.model';
 import { SpeakerService } from '../../shared/speaker.service';
 import { AuthService } from '../../shared/auth.service';
@@ -21,8 +22,13 @@ export class HeadshotComponent implements OnInit {
 
     speaker: Speaker;
 
+    fileString = '';
+    defaultFileString = 'Choose a file...';
+    selectedFile: File;
+
     constructor(private transitionService: TransitionService,
                 private authService: AuthService,
+                private fileService: FileService,
                 private speakerService: SpeakerService) {
 
         this.authService.user.subscribe(user => {
@@ -31,52 +37,54 @@ export class HeadshotComponent implements OnInit {
 
     };
 
-    private zone: NgZone;
-    private options: Object = {
-        url: this.baseUrl + '/api/upload',
-        filterExtensions: true,
-        allowedExtensions: ['image/png', 'image/jpg'],
-        calculateSpeed: true
-    };
-    private progress: number = 0;
-    private response: any = {};
-    private filename: String = '';
-    private calls: number;
-
     ngOnInit() {
-        this.calls = 0;
+        this.fileString = this.defaultFileString;
         this.transitionService.transition();
-        this.zone = new NgZone({ enableLongStackTrace: false });
     }
 
-    uploadFile(data: any)  {
-        console.log('data', data);
-
-        this.zone.run(() => {
-            this.response = data;
-            this.progress = Math.floor(data.progress.percent);
-        });
+    fileSelected(files: FileList) {
+        if (!files[0]) return;
+        this.selectedFile = files[0];
+        this.fileString = this.selectedFile.name;
     }
 
-    handleUpload(data: any): void {
-        // Upload callback is happening twice for some reason causing all sorts of problems
-        // Library bug? Quash anything after first call
-        this.calls++;
-        if (this.calls > 1) return;
-        
-        this.filename = data.originalName;
-        this.uploadFile(data);
-        this.speakerService
-            .sendToDropbox(this.filename, 'headshot')
+    validateFile(): string {
+        let typeError = 'Please only upload .jpg and .png files.';
+        let sizeError = 'Image too large, size limit is 10mb.';
+        if (this.selectedFile.type !== 'image/jpeg' && this.selectedFile.type !== 'image/png') {
+            return typeError;
+        }
+        if (this.selectedFile.size > 10000000) return sizeError;
+        return '';
+    }
+
+    doUpload() {
+        if (!this.selectedFile) {
+            this.toast.error('Please select a file to upload.');
+            return;
+        }
+        let invalid = this.validateFile();
+        if (invalid) {
+            this.toast.error(invalid);
+            return;
+        }
+        let data = new FormData();
+        data.append('file', this.selectedFile);
+        this.fileService
+            .uploadToServer(data)
             .then(res => {
-                console.log('statusCode', res.statusCode);
-                console.log('res', res);
-                if (res.status ) {
-                    this.toast.error('Headshot not uploaded successfully. Please try again!');
-                } else {
-                    this.toast.success('Headshot uploaded successfully!');
-                }
-            });
+                this.speakerService
+                    .sendToDropbox(this.selectedFile.name, 'headshot')
+                    .then(res => {
+                        //console.log('statusCode', res.statusCode);
+                        console.log('dbx res: ', res);
+                        if (res.status ) {
+                            this.toast.error('Headshot not uploaded successfully. Please try again!');
+                        } else {
+                            this.toast.success('Headshot uploaded successfully!');
+                        }
+                    });
+            })
     }
 
 }

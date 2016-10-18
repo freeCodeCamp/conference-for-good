@@ -29,7 +29,10 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
                 fs.unlink(fileDir, err => {
                     if (err) console.log('File clear error: ', err);
                 });
-                res.status(200).json(response);
+                console.log('path response:', response.path_display);
+                let dbxUrl = dbx.sharingCreateSharedLink(response.path_display);
+                console.log('dbx url', dbxUrl);
+                res.status(200).json(dbxUrl);
             })
             .catch(error => {
                 // Delete file if cannot upload to dropbox
@@ -60,6 +63,11 @@ router.post('/upload', upload.any(), (req, res) => {
             filename: file.filename
         }
     }));
+});
+
+router.post('/uploadFile', upload.any(), (req, res) => {
+    console.log(req.files);
+    res.status(200).json({msg: 'file uploaded'});
 });
 
 router.get('/getallconferences', (req, res) => {
