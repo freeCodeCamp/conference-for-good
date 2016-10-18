@@ -16,7 +16,7 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
     var filename = req.params.filename;
     var directory = req.params.directory;
 
-    var dbx = new Dropbox({ accessToken: 'BP8VZuQir3MAAAAAAAC4FnD-3DaGIiz59MQBUrslFhR7VSEs8nlEz_S-ggewnabO' });
+    var dbx = new Dropbox({ accessToken: process.env.DROPBOX_TOKEN });
 
     fs.readFile(path.join(__dirname, '../uploads/' + filename), (err, contents) => {
         if (err) {
