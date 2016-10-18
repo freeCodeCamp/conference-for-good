@@ -30,9 +30,11 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
                     if (err) console.log('File clear error: ', err);
                 });
                 console.log('path response:', response.path_display);
-                let dbxUrl = dbx.sharingCreateSharedLink(response.path_display);
-                console.log('dbx url', dbxUrl);
-                res.status(200).json(dbxUrl);
+                let dbxUrl = '';
+                dbx.sharingCreateSharedLink({path: response.path_display, short_url: false}).then(dbxRes => {
+                    dbxUrl = dbxRes.url + '&raw=1';
+                    res.status(200).json(dbxUrl);
+                });
             })
             .catch(error => {
                 // Delete file if cannot upload to dropbox
@@ -66,7 +68,6 @@ router.post('/upload', upload.any(), (req, res) => {
 });
 
 router.post('/uploadFile', upload.any(), (req, res) => {
-    console.log(req.files);
     res.status(200).json({msg: 'file uploaded'});
 });
 

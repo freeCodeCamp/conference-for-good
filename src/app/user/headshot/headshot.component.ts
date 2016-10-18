@@ -76,12 +76,16 @@ export class HeadshotComponent implements OnInit {
                 this.speakerService
                     .sendToDropbox(this.selectedFile.name, 'headshot')
                     .then(res => {
-                        //console.log('statusCode', res.statusCode);
                         console.log('dbx res: ', res);
                         if (res.status ) {
                             this.toast.error('Headshot not uploaded successfully. Please try again!');
                         } else {
-                            this.toast.success('Headshot uploaded successfully!');
+                            this.speaker.headshot = res;
+                            this.speakerService
+                                .updateSpeaker(this.speaker)
+                                .then(res => {
+                                    this.toast.success('Headshot uploaded successfully!');
+                                });
                         }
                     });
             })
