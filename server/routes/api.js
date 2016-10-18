@@ -23,9 +23,10 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
             console.log('Error: ', err);
         }
 
-        console.log('contents', contents);
         dbx.filesUpload({ path: '/' + directory + '/' + filename, contents: contents })
             .then(response => {
+                // File is only needed on the server to upload to dbx, delete it when done
+                fs.unlink(path.join(__dirname, '../uploads/' + filename));
                 res.status(200).json(response);
             })
             .catch(error => {
