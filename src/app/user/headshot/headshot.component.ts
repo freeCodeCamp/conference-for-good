@@ -68,6 +68,7 @@ export class HeadshotComponent implements OnInit {
             this.toast.error(invalid);
             return;
         }
+        this.transitionService.setLoading(true);
         let data = new FormData();
         data.append('file', this.selectedFile);
         this.fileService
@@ -85,6 +86,7 @@ export class HeadshotComponent implements OnInit {
                                 .updateSpeaker(this.speaker)
                                 .then(res => {
                                     this.toast.success('Headshot uploaded successfully!');
+                                    this.transitionService.setLoading(false);
                                 });
                         }
                     });
