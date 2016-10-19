@@ -5,7 +5,9 @@ import { NG_VALIDATORS, Validator, Validators, AbstractControl } from '@angular/
 function maxWordsValidator(maxWords: number) {
   return (control: AbstractControl): {[key: string]: any} => {
     const words: string = control.value;
-    if (!words) return null;
+    if (!words) {
+      return null;
+    }
     const exceeds = words.split(' ').length > maxWords;
     return exceeds ? {'maxWords': {name}} : null;
   };

@@ -14,7 +14,7 @@ export class DateService {
 
   constructor() { }
 
-  /** 
+  /**
    * Format date string to the format the database uses
    * @param userDate MM/DD/YYYY
    * @returns YYYY-MM-DD
@@ -23,7 +23,7 @@ export class DateService {
     return moment(userDate, this.userFormatDate, true).format(this.dbFormatDate);
   }
 
-  /** 
+  /**
    * Format date string to human readable
    * @param dbDate YYYY-MM-DD
    * @returns MM/DD/YYYY

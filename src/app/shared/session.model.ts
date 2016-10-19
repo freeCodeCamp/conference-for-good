@@ -1,7 +1,7 @@
 export interface Session {
     _id?: string,
     associatedConf: string, // title of conf this session was submitted for
-    approval: string, // pending, approved, denied (by brooke) 
+    approval: string, // pending, approved, denied (by brooke)
     type: string, // casestudy, workshop or computerlab
     length: string, // 90 minutes('90''), 3 hours('180') (parts 1 and 2)
     title: string,
@@ -11,7 +11,7 @@ export interface Session {
       name: string,
       label?: string,
       checked: boolean
-    }[], 
+    }[],
     level: string, // beginner, intermediate or advanced - dropdown on frontend
     willingToBeRecorded: string, // audio, audioVisual, no
     isMediaOrPressFriendly: string, // yes, yesNoPhotos, yesNoAudioRecOrPhotos, no
@@ -24,8 +24,8 @@ export interface Session {
     },
     statusTimeLocation?: {
       conferenceTitle: string,
-      timeSlot: string, // _id of timeslot
-      part: string, 
+      timeSlot: string,
+      part: string,
       room: string
     }[],
     miscRequirements?: String,
@@ -36,5 +36,5 @@ interface StatusTimeLocation {
   conferenceTitle: string,
   timeSlot: string, // _id of timeslot
   part: string, // 1 or 2 - for two parters, which part is being scheduled else 0
-  room: string 
+  room: string
 }

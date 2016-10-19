@@ -3,7 +3,6 @@
     "node_modules/codelyzer"
   ],
   "rules": {
-    "class-name": true,
     "comment-format": [
       true,
       "check-space"
@@ -17,10 +16,6 @@
     ],
     "label-position": true,
     "label-undefined": true,
-    "max-line-length": [
-      true,
-      140
-    ],
     "member-access": false,
     "member-ordering": [
       true,
@@ -44,7 +39,6 @@
     "no-empty": false,
     "no-eval": true,
     "no-inferrable-types": true,
-    "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
@@ -66,9 +60,7 @@
       "single"
     ],
     "radix": true,
-    "semicolon": [
-      "always"
-    ],
+
     "triple-equals": [
       true,
       "allow-null-check"
@@ -92,11 +84,7 @@
       "check-separator",
       "check-type"
     ],
-
-    "directive-selector-prefix": [true, "app"],
-    "component-selector-prefix": [true, "app"],
     "directive-selector-name": [true, "camelCase"],
-    "component-selector-name": [true, "kebab-case"],
     "directive-selector-type": [true, "attribute"],
     "component-selector-type": [true, "element"],
     "use-input-property-decorator": true,
@@ -104,7 +92,6 @@
     "use-host-property-decorator": true,
     "no-input-rename": true,
     "no-output-rename": true,
-    "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
     "directive-class-suffix": true

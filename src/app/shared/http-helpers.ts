@@ -8,7 +8,7 @@ export function parseJson(res: Response) {
   } catch (e) {
     // Parsing didn't work
     body = res;
-  } 
+  }
   return body;
 }
 
@@ -26,7 +26,6 @@ export function handleError(error: Response) {
     statusText: error.statusText,
     errorBody
   };
-  console.log(errorParsed);
 }
 
 /** Prepare data for posting to server via http */
@@ -35,7 +34,6 @@ export function packageForPost(data): httpPackage {
   try {
     body = JSON.stringify(data);
   } catch (err) {
-    console.log(err, 'data failed to string: ', data);
   }
   let headers = new Headers({ 'Content-Type': 'application/json' });
   let options = new RequestOptions({ headers: headers });

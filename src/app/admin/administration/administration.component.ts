@@ -45,8 +45,7 @@ export class AdministrationComponent implements OnInit {
             .catch( err => {
                 if (err.status === 404) {
                     this.toast.error('User not found!');
-                }
-                else {
+                } else {
                     this.toast.error('Unable to make speaker an admin, please try again later');
                 }
             });
@@ -63,8 +62,7 @@ export class AdministrationComponent implements OnInit {
             .catch( err => {
                 if (err.status === 404) {
                     this.toast.error('User not found!');
-                }
-                else {
+                } else {
                     this.toast.error('Unable to remove admin, please try again later');
                 }
             });

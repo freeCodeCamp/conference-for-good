@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -81,7 +81,6 @@ export class ResponseComponent implements OnInit, OnDestroy {
     let endMoment = moment(conf.dateRange.end);
     let mealDates = [];
     for (let i = startMoment; i.isSameOrBefore(endMoment); i.add(1, 'd')) {
-      
       let breakfast = {
         date: i.format(this.dateService.dbFormatDate),
         meal: 'Breakfast',
@@ -121,13 +120,19 @@ export class ResponseComponent implements OnInit, OnDestroy {
   }
 
   isFormValid(validFields: boolean) {
-    if (!validFields) return false;
+    if (!validFields) {
+      return false;
+    }
     let formValid = true;
     let form = this.model.responseForm;
     if (form.ccawCoveringHotel === 'yes') {
-      if (form.agreedHotel === 'no') formValid = false;
+      if (form.agreedHotel === 'no') {
+        formValid = false;
+      }
     }
-    if (form.agreedTransport === 'no') formValid = false;
+    if (form.agreedTransport === 'no') {
+      formValid = false;
+    }
     return formValid;
   }
 
@@ -157,7 +162,7 @@ export class ResponseComponent implements OnInit, OnDestroy {
   }
 
   email() {
-    window.open("mailto:bmeyer@genesisshelter.org");
+    window.open('mailto:bmeyer@genesisshelter.org');
   }
 
   monthsBefore(months: number): string {

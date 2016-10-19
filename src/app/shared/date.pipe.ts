@@ -12,10 +12,15 @@ export class DatePipe implements PipeTransform {
 
   transform(value: string, format: string): string {
     let returnFormat;
-    if (format === 'long') returnFormat = this.dateService.userFormatDateLong;
-    else returnFormat = this.dateService.userFormatDate;
+    if (format === 'long') {
+      returnFormat = this.dateService.userFormatDateLong;
+    } else {
+      returnFormat = this.dateService.userFormatDate;
+    }
     let valMoment = moment(`${value}`, this.dateService.dbFormatDate);
-    if (valMoment.format(returnFormat) === 'Invalid date') return '';
+    if (valMoment.format(returnFormat) === 'Invalid date') {
+      return '';
+    }
     return valMoment.format(returnFormat);
   }
 }

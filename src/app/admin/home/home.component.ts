@@ -30,12 +30,14 @@ export class HomeComponent {
     });
 
     this.sessionService.sessionsPending.subscribe(sessions => {
-      // If a session form is complete and the lead pres profile is complete
-      // it is ready for review to approve or deny by Brooke
       this.fullyCompletePendingSessions = _.filter(sessions, session => {
-        if (!session.speakers.mainPresenter) return false;
+        if (!session.speakers.mainPresenter) {
+          return false;
+        }
         let leadPres = this.speakerService.getSpeaker(session.speakers.mainPresenter);
-        if (leadPres.profileComplete) return true;
+        if (leadPres.profileComplete) {
+          return true;
+        }
       });
     });
   }

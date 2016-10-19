@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -38,7 +38,7 @@ export class CreateConfComponent implements OnInit {
     let endValid = endMoment.isValid();
     if (startValid && endValid) {
       if (endMoment.isSameOrBefore(startMoment)) {
-        this.toast.error("The end date must be after start date");
+        this.toast.error('The end date must be after start date');
       } else {
         this.adminService
             .getAllConferences()
@@ -48,8 +48,8 @@ export class CreateConfComponent implements OnInit {
                     .then(res => {
                       this.toast.success('Conference created!');
                       title.value = '';
-                      start.value = "";
-                      end.value = "";
+                      start.value = '';
+                      end.value = '';
                     });
               } else {
                 this.toast.error('Conference title already exists, please choose another');
