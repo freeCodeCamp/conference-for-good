@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import "rxjs/add/operator/toPromise";
+import 'rxjs/add/operator/toPromise';
 
 import { environment } from '../../../environments/environment';
-import { handleError, parseJson, packageForPost } from '../../shared/http-helpers';
+import { handleError, packageForPost } from '../../shared/http-helpers';
 import { AdminService } from '../../shared/admin.service';
 
 @Injectable()
@@ -20,7 +20,7 @@ export class ExportingService {
               .post(this.baseUrl + '/api/exportsessions', pkg.body, pkg.opts)
               .toPromise()
               .then((res: any) => {
-                let blob = new Blob([res._body], {type: "text/csv;charset=utf8;"});
+                let blob = new Blob([res._body], {type: 'text/csv;charset=utf8;'});
                 return blob;
               })
               .catch(handleError);
@@ -33,7 +33,7 @@ export class ExportingService {
               .post(this.baseUrl + '/api/exportspeakers', pkg.body, pkg.opts)
               .toPromise()
               .then((res: any) => {
-                let blob = new Blob([res._body], {type: "text/csv;charset=utf8;"});
+                let blob = new Blob([res._body], {type: 'text/csv;charset=utf8;'});
                 return blob;
               })
               .catch(handleError);

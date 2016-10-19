@@ -3,13 +3,10 @@ import { Router } from '@angular/router';
 
 import { AdminService } from '../../shared/admin.service';
 import { Conference, TimeSlot } from '../../shared/conference.model';
-import { DatePipe } from '../../shared/date.pipe';
-import { Session } from '../../shared/session.model';
 import { SessionService } from '../../shared/session.service';
 import { Speaker } from '../../shared/speaker.model';
 import { SpeakerService, SpeakerList } from '../../shared/speaker.service';
 import { TransitionService } from '../../shared/transition.service';
-import { TimePipe } from '../../shared/time.pipe';
 import { ToastComponent } from '../../shared/toast.component';
 
 declare var $: any;
@@ -63,16 +60,22 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   getSpeakers(slot: TimeSlot, room: string): SpeakerList {
     let session = this.getSession(slot, room);
-    if (!session) return;
+    if (!session) {
+        return;
+    }
     return this.speakerService.getSpeakerList(session.speakers);
   }
 
   fullName(speaker: Speaker) {
-    if (!speaker) return '';
+    if (!speaker) {
+        return '';
+    }
     let fullName = `${speaker.nameFirst} ${speaker.nameLast}`;
     if (fullName.length > 23) {
       return fullName.slice(0, 22) + '...';
-    } else return fullName;
+    } else {
+        return fullName;
+    }
   }
 
   /** Get session title from slot and room
@@ -82,19 +85,23 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     let sessionPart = this.sessionService.findSession(slot, room);
     let session = sessionPart.session;
     let part = sessionPart.part;
-    if (!session) return '';
+    if (!session) {
+        return '';
+    }
 
     if (session.length === '90') {
       if (session.title.length > 23) {
         return session.title.slice(0, 22) + '...';
-      } else return session.title;
-    }
-
-    else if (session.length === '180') {
+      } else {
+          return session.title;
+      }
+    } else if (session.length === '180') {
       let partStr = `(Part ${part})`;
       if (session.title.length + partStr.length > 23) {
         return session.title.slice(0, 14) + '...' + partStr;
-      } else return session.title + partStr;
+      } else {
+          return session.title + partStr;
+      }
     }
 
   }
@@ -103,13 +110,13 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     let sessionPart = this.sessionService.findSession(slot, room);
     let session = sessionPart.session;
     let part = sessionPart.part;
-    if (!session) return '';
+    if (!session) {
+        return '';
+    }
 
     if (session.length === '90') {
       return session.title;
-    }
-
-    else if (session.length === '180') {
+    } else if (session.length === '180') {
       let partStr = `(Part ${part})`;
       return session.title + partStr;
     }
@@ -135,7 +142,9 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   saveSlot(slot: TimeSlot, room: string, sessionId: string) {
     let part = '0';
-    if (this.twoParter) part = this.sessionPart.nativeElement.value;
+    if (this.twoParter) {
+        part = this.sessionPart.nativeElement.value;
+    }
 
     if (sessionId === 'None') {
       this.sessionService.clearSlot(slot, room)
@@ -154,14 +163,13 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         .then((res: any) => {
           if (res.occupied) {
             this.toast.error('Time/room slot is occupied! Clear it first to add new session.')
-          }
-          else if (res.alreadyScheduled) {
+          } else if (res.alreadyScheduled) {
             this.toast.error('This session is already scheduled in a room for this time slot.')
-          }
-          else if (res.errMsg) {
+          } else if (res.errMsg) {
             this.toast.error(res.errMsg);
+          } else {
+              this.toast.success('Session assigned to slot');
           }
-          else this.toast.success('Session assigned to slot');
         });
   }
 
@@ -182,23 +190,22 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   }
 
   createPDF() {
-    var ctr = 60;
-    var doc = new jsPDF({
+    let ctr = 60;
+    let doc = new jsPDF({
       orientation: 'portrait',
       unit: 'pt',
       format: 'letter'
     });
-    doc.setFont("helvetica");
+    doc.setFont('helvetica');
 
     doc.setFontSize(18);
-    doc.setFontType("bold");
+    doc.setFontType('bold');
     ctr += 10;
     doc.text(300, ctr, this.activeConf.title, null, null, 'center');
-    console.log('activeConf', this.activeConf);
     doc.setFontSize(14);
 
     this.activeConf.days.forEach(day => {
-      doc.setFontType("bold");
+      doc.setFontType('bold');
       doc.setFontSize(12);
       ctr += 40;
       if (ctr >= 720) {
@@ -211,19 +218,19 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       }
       doc.text(40, ctr, day.date);
 
-      var slots = this.getDaySlots(day._id);
+      let slots = this.getDaySlots(day._id);
       slots.forEach(slot => {
-          doc.setFontType("normal");
+          doc.setFontType('normal');
           ctr += 20;
           if (ctr >= 720) {
             doc.addPage({
-                          orientation: 'portrait',
-                          unit: 'pt',
-                          format: 'letter'
-                        });
+              orientation: 'portrait',
+              unit: 'pt',
+              format: 'letter'
+            });
             ctr = 60;
           }
-        doc.text(60, ctr, slot.start + " - " + slot.end);
+        doc.text(60, ctr, slot.start + ' - ' + slot.end);
 
           this.activeConf.rooms.forEach(function(room) {
             if (this.getSession(slot, room)) {
@@ -236,11 +243,10 @@ export class CalendarComponent implements OnInit, AfterViewInit {
                             });
                 ctr = 60;
               }
-              doc.setFontType("bold");
-              // doc.text(120, ctr, room);
+              doc.setFontType('bold');
               doc.text(70, ctr, room);
               ctr += 20;
-              doc.setFontType("normal");
+              doc.setFontType('normal');
               if (ctr >= 720) {
                 doc.addPage({
                               orientation: 'portrait',

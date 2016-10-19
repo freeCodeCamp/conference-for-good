@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { CapitalizePipe } from '../../shared/capitalize.pipe';
 import { SpeakerService } from '../../shared/speaker.service';
 import { Speaker } from '../../shared/speaker.model';
 import { TransitionService } from '../../shared/transition.service';
@@ -17,7 +16,7 @@ export class SpeakerListComponent implements OnInit {
   defaultFilter = 'active';
   currentFilter: string;
   displaySpeakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
-  
+
   constructor(private transitionService: TransitionService,
               private speakerService: SpeakerService,
               private router: Router) { }

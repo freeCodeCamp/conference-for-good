@@ -14,5 +14,4 @@ export class ProposalComponent implements OnInit {
   ngOnInit() {
     this.transitionService.transition();
   }
-  
 }
