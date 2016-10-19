@@ -5,8 +5,6 @@ import * as _ from 'lodash';
 
 import { AdminService } from '../../shared/admin.service';
 import { AuthService } from '../../shared/auth.service';
-import { Conference } from '../../shared/conference.model';
-import { DatePipe } from '../../shared/date.pipe';
 import { DateService } from '../../shared/date.service';
 import { TransitionService } from '../../shared/transition.service';
 import { SessionService } from '../../shared/session.service';
@@ -62,12 +60,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.pendingSessions = _.filter(this.allSpeakerSessions, session => {
         // Approved but unscheduled sessions are considered pending for dashboard
         if (session.approval === 'approved') {
-          if (session.statusTimeLocation.length === 0) return true;
-        }
-        if (session.approval === 'pending' || session.approval === 'denied') {
+          if (session.statusTimeLocation.length === 0) {
+            return true;
+          }
+        } else if (session.approval === 'pending' || session.approval === 'denied') {
           return true;
+        } else {
+          return false;
         }
-        return false;
       });
 
       this.scheduledSessions = _.filter(this.allSpeakerSessions, session => {
@@ -97,8 +97,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getPart(session: Session, occurrence) {
-    if (session.length === '90') return '';
-    else return `Part ${occurrence.part}: `
+    if (session.length === '90') {
+      return '';
+    } else {
+      return `Part ${occurrence.part}: `;
+    }
   }
 
   getDate(occurrence) {
@@ -158,11 +161,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   email() {
-    window.open("mailto:bmeyer@genesisshelter.org");
+    window.open('mailto:bmeyer@genesisshelter.org');
   }
 
   call() {
-    window.open("tel:2143997733");
+    window.open('tel:2143997733');
   }
 
   isResponseFormNeeded(): boolean {

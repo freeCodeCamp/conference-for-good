@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, NgZone } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { FileService } from '../../shared/file.service';
@@ -43,7 +43,9 @@ export class HeadshotComponent implements OnInit {
     }
 
     fileSelected(files: FileList) {
-        if (!files[0]) return;
+        if (!files[0]) {
+            return;
+        }
         this.selectedFile = files[0];
         this.fileString = this.selectedFile.name;
     }
@@ -54,7 +56,9 @@ export class HeadshotComponent implements OnInit {
         if (this.selectedFile.type !== 'image/jpeg' && this.selectedFile.type !== 'image/png') {
             return typeError;
         }
-        if (this.selectedFile.size > 10000000) return sizeError;
+        if (this.selectedFile.size > 10000000) {
+            return sizeError;
+        }
         return '';
     }
 
@@ -77,7 +81,6 @@ export class HeadshotComponent implements OnInit {
                 this.speakerService
                     .sendToDropbox(this.selectedFile.name, 'headshot')
                     .then(res => {
-                        console.log('dbx res: ', res);
                         if (res.status ) {
                             this.toast.error('Headshot not uploaded successfully. Please try again!');
                         } else {
@@ -90,7 +93,7 @@ export class HeadshotComponent implements OnInit {
                                 });
                         }
                     });
-            })
+            });
     }
 
 }
