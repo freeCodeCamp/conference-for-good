@@ -176,11 +176,9 @@ export class SpeakerService {
         .toPromise()
         .then(parseJson)
         .then(data => {
-          console.log('data from sendToDropbox', data);
           return data;
         })
         .catch(error => {
-          console.log('error from sendToDropbox', error);
           return error;
         });
   }
