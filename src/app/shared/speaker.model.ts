@@ -91,7 +91,7 @@ export interface ResponseForm {
 }
 
 export interface Arrangements {
-  associatedConf: string; //Title of associated conf
+  associatedConf: string; // Title of associated conf
 
   travel: string, // yes no
   travelAmount: string,

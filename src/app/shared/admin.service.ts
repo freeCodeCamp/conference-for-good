@@ -1,27 +1,20 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import "rxjs/add/operator/toPromise";
+import 'rxjs/add/operator/toPromise';
 import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
 import { handleError, parseJson, packageForPost } from './http-helpers';
 import { Conference, TimeSlot } from './conference.model';
-import { Speaker } from './speaker.model';
 
 @Injectable()
 export class AdminService {
 
   baseUrl = environment.production ? '' : 'http://localhost:3000';
 
-  // All conferences (including archived)
   allConferences: Conference[] = [];
-
-  // Archived only
   archivedConferences: Conference[] = [];
-
-  // Active only
   conferences: Conference[] = [];
 
   activeConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
@@ -130,7 +123,7 @@ export class AdminService {
     let confCopy = _.clone(conference);
 
     let confDateCopy = _.find(confCopy.days, day => day.date === date);
-    
+
 
     // If day has no slots yet, make it and add the new slot
     if (typeof confDateCopy === 'undefined') {
@@ -157,11 +150,13 @@ export class AdminService {
   }
 
   sortConfSlotsAndDays(conf: Conference) {
-    if (!conf.days) return;
+    if (!conf.days) {
+      return;
+    }
     conf.days.forEach(day => {
       day.timeSlots = _.sortBy(day.timeSlots, slot => slot.end);
     });
-    
+
     conf.days = _.sortBy(conf.days, day => day.date);
     return conf;
   }
@@ -171,7 +166,9 @@ export class AdminService {
     let slot: TimeSlot;
     this.defaultConference.getValue().days.forEach(day => {
       let reqSlot = _.find(day.timeSlots, slot => slot._id === slotId);
-      if (typeof reqSlot !== 'undefined') slot = reqSlot;
+      if (typeof reqSlot !== 'undefined') {
+        slot = reqSlot;
+      }
     });
     return slot;
   }
@@ -180,7 +177,9 @@ export class AdminService {
     let date: string;
     this.defaultConference.getValue().days.forEach(day => {
       let reqSlot = _.find(day.timeSlots, daySlot => daySlot._id === slotId);
-      if (typeof reqSlot !== 'undefined') date = day.date;
+      if (typeof reqSlot !== 'undefined') {
+        date = day.date;
+      }
     });
     return date;
   }
@@ -188,10 +187,14 @@ export class AdminService {
   addRoom(conferenceTitle: string, room: string) {
     let conf = _.find(this.allConferences, conf => conf.title === conferenceTitle);
 
-    if (!conf.rooms) conf.rooms = [];
+    if (!conf.rooms) {
+      conf.rooms = [];
+    }
     // Sync front end
     conf.rooms.push(room);
-    if (conf.title === this.activeConference.getValue().title) this.activeConference.next(conf);
+    if (conf.title === this.activeConference.getValue().title) {
+      this.activeConference.next(conf);
+    }
 
     let pkg = packageForPost(conf);
     return this.http
@@ -205,12 +208,13 @@ export class AdminService {
     let conf = _.find(this.allConferences, conf => conf.title === conferenceTitle);
 
     let roomStarti = conf.rooms.indexOf(room);
-    let roomEndi = direction === '+' ? roomStarti+1 : roomStarti-1;
-    if (roomEndi > conf.rooms.length-1 || 
-        roomEndi < 0) return;
+    let roomEndi = direction === '+' ? roomStarti + 1 : roomStarti - 1;
+    if (roomEndi > conf.rooms.length - 1 || roomEndi < 0) {
+      return;
+    }
     let roomsDupe = conf.rooms.slice();
     let displacedRoom = roomsDupe[roomEndi];
-    
+
     conf.rooms[roomStarti] = displacedRoom;
     conf.rooms[roomEndi] = room;
 
@@ -230,7 +234,7 @@ export class AdminService {
               .then(conferences => {
                 this.allConferences = conferences;
                 this.setFilterAndSort();
-                
+
                 let activeConf = _.find(this.allConferences, conf => conf.lastActive === true);
                 this.activeConference.next(activeConf);
                 let defaultConf = _.find(this.allConferences, conf => conf.defaultConf === true);
@@ -251,5 +255,5 @@ export class AdminService {
     this.archivedConferences = _.filter(this.allConferences, conf => conf.archived);
     this.conferences = _.filter(this.allConferences, conf => !conf.archived);
   }
-  
+
 }
