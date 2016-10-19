@@ -23,7 +23,7 @@ export class ForgotPasswordComponent implements OnInit {
                 private authService: AuthService) { }
 
     ngOnInit() {
-        this.email = new FormControl('', Validators.compose([Validators.required, Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")]));
+        this.email = new FormControl('', Validators.compose([Validators.required, Validators.pattern('[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?')]));
 
         this.form = new FormGroup({
             'email': this.email
@@ -34,7 +34,6 @@ export class ForgotPasswordComponent implements OnInit {
 
     doForgotPassword(event) {
         event.preventDefault();
-        let pass = this.emailInput.nativeElement.value;
 
         this.authService.forgotPassword(this.form.value)
             .then((res: any) => {
@@ -42,7 +41,6 @@ export class ForgotPasswordComponent implements OnInit {
                 this.router.navigate(['/login']);
             })
             .catch(err => {
-                console.log(err);
                 if (err.alert === 'not sent') {
                     this.toast.error('Unbale to send new password at this time. Try again later!');
                 } else if (err.alert === 'email not found') {
