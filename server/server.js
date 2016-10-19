@@ -27,7 +27,7 @@ if (process.env.NODE_ENV !== 'production') {
 const mongoose = require('mongoose');
 // TODO we need to change the below to use the mlab database used with heroku
 // let mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/ccaw-app';
-let mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/ccaw-app';
+let mongoURI = 'mongodb://ccaw:fccrocks@ds061676.mlab.com:61676/ccaw-app';
 mongoose.connect(mongoURI);
 
 // if (process.env.SEED_DB && process.env.SEED_DB==='true') {
