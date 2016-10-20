@@ -26,6 +26,7 @@ export function handleError(error: Response) {
     statusText: error.statusText,
     errorBody
   };
+  console.log(errorParsed);
 }
 
 /** Prepare data for posting to server via http */
