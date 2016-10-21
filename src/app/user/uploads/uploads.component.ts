@@ -2,6 +2,8 @@ import { Component, ViewChild, OnInit, NgZone } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { FileService } from '../../shared/file.service';
+import { Session } from '../../shared/session.model';
+import { SessionService } from '../../shared/session.service';
 import { Speaker } from '../../shared/speaker.model';
 import { SpeakerService } from '../../shared/speaker.service';
 import { AuthService } from '../../shared/auth.service';
@@ -21,6 +23,7 @@ export class UploadsComponent implements OnInit {
     @ViewChild('toast') toast: ToastComponent;
 
     speaker: Speaker;
+    speakerSessions: Session[] = [];
     
     defaultFileString = 'Choose a file...';
 
@@ -36,6 +39,7 @@ export class UploadsComponent implements OnInit {
     constructor(private transitionService: TransitionService,
                 private authService: AuthService,
                 private fileService: FileService,
+                private sessionService: SessionService,
                 private speakerService: SpeakerService) {
 
         this.authService.user.subscribe(user => {
@@ -49,6 +53,10 @@ export class UploadsComponent implements OnInit {
         this.w9FileString = this.defaultFileString;
         this.handoutsFileString = this.defaultFileString;
         this.transitionService.transition();
+
+        this.sessionService.sessionsUnfiltered.subscribe(sessions => {
+            this.speakerSessions = this.sessionService.getSpeakerSessions(this.speaker._id);
+        });
     }
 
     fileSelected(files: FileList, whichFile: string) {
