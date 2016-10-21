@@ -58,7 +58,7 @@ export class HeadshotComponent implements OnInit {
         return '';
     }
 
-    doUpload() {
+    doUpload(directory: string) {
         if (!this.selectedFile) {
             this.toast.error('Please select a file to upload.');
             return;
@@ -68,14 +68,17 @@ export class HeadshotComponent implements OnInit {
             this.toast.error(invalid);
             return;
         }
+        let ext = this.selectedFile.name.split('.').pop();
+        let userFilename = `${this.speaker.nameLast}_${this.speaker.email}_${directory}.${ext}`;
         this.transitionService.setLoading(true);
         let data = new FormData();
+        data.append('userFilename', userFilename);
         data.append('file', this.selectedFile);
         this.fileService
             .uploadToServer(data)
             .then(res => {
                 this.speakerService
-                    .sendToDropbox(this.selectedFile.name, 'headshot')
+                    .sendToDropbox(userFilename, directory)
                     .then(res => {
                         console.log('dbx res: ', res);
                         if (res.status ) {

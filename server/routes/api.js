@@ -49,7 +49,7 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
 const upload = multer({
       storage: multer.diskStorage({
           filename: (req, file, cb) => {
-              cb(null , file.originalname);
+              cb(null , req.body.userFilename);
           },
         destination: function(req, file, cb){
             cb(null, __dirname + '/../uploads');
@@ -68,6 +68,7 @@ router.post('/upload', upload.any(), (req, res) => {
 });
 
 router.post('/uploadFile', upload.any(), (req, res) => {
+    console.log(req.body.userFilename);
     res.status(200).json({msg: 'file uploaded'});
 });
 
