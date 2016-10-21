@@ -9,12 +9,12 @@ import { TransitionService } from '../../shared/transition.service';
 import { ToastComponent } from '../../shared/toast.component';
 
 @Component({
-   selector: 'headshot',
-   templateUrl: './headshot.component.html',
-   styleUrls: ['./headshot.component.scss']
+   selector: 'uploads',
+   templateUrl: './uploads.component.html',
+   styleUrls: ['./uploads.component.scss']
 })
 
-export class HeadshotComponent implements OnInit {
+export class UploadsComponent implements OnInit {
 
     baseUrl = environment.production ? '' : 'http://localhost:3000';
 

@@ -26,6 +26,7 @@
           <li *ngIf="user && !user.admin"><a [routerLink]="['/dashboard']">Dashboard</a></li>
           <li *ngIf="user && !user.admin"><a [routerLink]="['/speaker', { id: user?._id }]">Modify Profile</a></li>
           <li *ngIf="user && !user.admin"><a [routerLink]="['/session', { leadPresId: user?._id }]">Create Proposal</a></li>
+          <li *ngIf="user && !user.admin"><a [routerLink]="['/uploads']">Uploads</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
@@ -37,7 +38,7 @@
             </a>
             <ul class="dropdown-menu" role="menu">
               <li><a [routerLink]="['/speaker', { id: user?._id }]">Edit Profile</a></li>
-              <li><a [routerLink]="['/headshot']">Headshot</a></li>
+              <li><a [routerLink]="['/Uploads']">Uploads</a></li>
               <li><a [routerLink]="['/settings']">Change Password</a></li>
               <li *ngIf="user && user.admin"><a [routerLink]="['/administration']">Administration</a></li>
               <li><a id="logout" (click)="logout()">Logout</a></li>
