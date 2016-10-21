@@ -174,6 +174,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  noActionRequired(): boolean {
+    if (!this.speaker.profileComplete) return false;
+    if (this.incompleteSessions.length > 0) return false;
+    if (this.isResponseFormNeeded()) return false;
+    if (!this.speaker.headshot) return false;
+    if (this.speaker.responseForm && !this.speaker.responseForm.w9) return false;
+    return true;
+  }
+
   monthsBefore(months: number): string {
     let conf = this.adminService.defaultConference.getValue();
     let confStart = moment(conf.dateRange.start);

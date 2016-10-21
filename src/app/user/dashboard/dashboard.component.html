@@ -78,7 +78,7 @@
           <b>Action Required</b>
 
           <div>
-            <div *ngIf="speaker.profileComplete && incompleteSessions.length === 0 && !isResponseFormNeeded()">None</div>
+            <div *ngIf="noActionRequired()">None</div>
             <div *ngIf="!speaker.profileComplete"><a [routerLink]="['/speaker', {id: speaker._id}]">Profile Incomplete</a></div>
             <div *ngIf="incompleteSessions.length > 0">
               <div class="small-pad" *ngFor="let session of incompleteSessions">
@@ -88,6 +88,8 @@
             <div *ngIf="isResponseFormNeeded()">
               <a [routerLink]="['/response', {id: speaker._id}]">Speaker Response Form - <b>DUE BY {{ monthsBefore(2) }}</b></a>
             </div>
+            <div *ngIf="!speaker.headshot"><a [routerLink]="['/uploads']">No Headshot Uploaded</a></div>
+            <div *ngIf="!speaker.responseForm?.w9"><a [routerLink]="['/uploads']">No W9 form Uploaded</a></div>
 
           </div>
         </div>

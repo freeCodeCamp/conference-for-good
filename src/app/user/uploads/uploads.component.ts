@@ -58,7 +58,7 @@ export class UploadsComponent implements OnInit {
         return '';
     }
 
-    doUpload(directory: string) {
+    upload(directory: string) {
         if (!this.selectedFile) {
             this.toast.error('Please select a file to upload.');
             return;
