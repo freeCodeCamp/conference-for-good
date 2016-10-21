@@ -6,7 +6,7 @@
     <div class="divider"></div>
 
     <div class="row block">
-        <div class="col-xs-6 col-xs-offset-3">
+        <div class="col-xs-6 col-xs-offset-3 section">
             <h4 class="text-center title">Upload Headshot</h4>
             <div *ngIf="speaker.headshot" class="alert alert-success top-alert">
                 <p>You've already uploaded your headshot.</p>
@@ -14,10 +14,45 @@
             <div *ngIf="!speaker.headshot" class="alert alert-warning top-alert">
                 <p>You haven't uploaded a headshot yet.</p>
             </div>
-            <label class="btn btn-default" for="file"><i class="fa fa-upload fa-lg"></i>{{ fileString }}</label>
-            <input id="file" type="file" #file (change)="fileSelected(file.files)">
+            <label class="btn btn-default" for="headshotFile"><i class="fa fa-upload fa-lg"></i>{{ headshotFileString }}</label>
+            <input id="headshotFile" class="file" type="file" #headshotFile (change)="fileSelected(headshotFile.files, 'headshot')">
             
             <button class="btn btn-primary" (click)="upload('headshot')">Upload</button>
+        </div>
+
+        <div class="col-xs-6 col-xs-offset-3 section">
+            <h4 class="text-center title">Upload W9 Form</h4>
+            <p>
+                <b>If you are being reimbursed and/or paid by CCAW, please upload your W9.</b><br/>
+                You can download a W9 here: <a href="https://www.irs.gov/pub/irs-pdf/fw9.pdf" target="_blank">https://www.irs.gov/pub/irs-pdf/fw9.pdf</a><br/>
+            </p>
+            <div *ngIf="speaker.responseForm?.w9" class="alert alert-success top-alert">
+                <p>You've already uploaded your W9 form.</p>
+            </div>
+            <div *ngIf="!speaker.responseForm?.w9" class="alert alert-warning top-alert">
+                <p>You haven't uploaded a W9 form yet - no payment can be sent without a W9 on file.</p>
+            </div>
+            <label class="btn btn-default" for="w9File"><i class="fa fa-upload fa-lg"></i>{{ w9FileString }}</label>
+            <input id="w9File" class="file" type="file" #w9File (change)="fileSelected(w9File.files, 'w9')">
+            
+            <button class="btn btn-primary" (click)="upload('w9')">Upload</button>
+        </div>
+
+        <div class="col-xs-6 col-xs-offset-3 section">
+            <h4 class="text-center title">Upload Handouts</h4>
+            <p>
+                Please upload any handouts you will use with your presentation.
+            </p>
+            <div *ngIf="speaker.responseForm?.w9" class="alert alert-success top-alert">
+                <p>You've already uploaded your W9 form.</p>
+            </div>
+            <div *ngIf="!speaker.responseForm?.w9" class="alert alert-warning top-alert">
+                <p>You haven't uploaded a W9 form yet - no payment can be sent without a W9 on file.</p>
+            </div>
+            <label class="btn btn-default" for="handoutsFile"><i class="fa fa-upload fa-lg"></i>{{ handoutsFileString }}</label>
+            <input id="handoutsFile" class="file" type="file" #handoutsFile (change)="fileSelected(handoutsFile.files, 'handouts')">
+            
+            <button class="btn btn-primary" (click)="upload('handouts')">Upload</button>
         </div>
 
     </div>

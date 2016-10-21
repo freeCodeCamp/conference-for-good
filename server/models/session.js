@@ -35,6 +35,7 @@ let sessionSchema = new mongoose.Schema({
     room: String
   }],
   miscRequirements: String,
+  handouts: [String],
   sessionComplete: {
     type: Boolean,
     default: false

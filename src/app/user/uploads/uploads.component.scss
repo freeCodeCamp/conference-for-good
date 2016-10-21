@@ -19,7 +19,7 @@
   visibility: hidden;
 }
 
-#file {
+.file {
   width: 0.1px;
   height: 0.1px;
   opacity: 0;
@@ -33,4 +33,9 @@
   right: 15px;
   margin-left: 10px;
   margin-right: -5px;
+}
+
+.section {
+  border-bottom: 2px solid $brand-primary;
+  padding: 30px;
 }
