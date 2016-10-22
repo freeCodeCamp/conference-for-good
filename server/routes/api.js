@@ -386,6 +386,26 @@ router.post('/updatesessionslots', (req, res) => {
         });
 });
 
+router.post('/updatesessionhandout', (req, res) => {
+    let session = req.body;
+
+    Session
+        .findById(session._id)
+        .exec()
+        .then(serverSession => {
+            if (serverSession === null) {
+                res.status(500).json({message: 'Session not found'});
+            } else {
+                serverSession.handouts = session.handouts;
+                serverSession.save(err => {
+                    if (err) {
+                        res.status(500).json({message: 'Session save error'});
+                    } else res.status(200).json(serverSession);
+                });
+            }
+        });
+});
+
 /**** Exporting API ****/
 
 router.post('/exportsessions', (req, res) => {

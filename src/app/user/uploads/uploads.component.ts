@@ -107,9 +107,6 @@ export class UploadsComponent implements OnInit {
             case 'w9':
                 selectedFile = this.selectedW9File;
                 break;
-            case 'handouts':
-                selectedFile = this.selectedHandoutsFile;
-                break;
             default:
                 break;
         }
@@ -136,26 +133,65 @@ export class UploadsComponent implements OnInit {
                     .then(dbxRes => {
                         console.log('dbx res: ', dbxRes);
                         if (dbxRes.status ) {
-                            this.toast.error('Headshot not uploaded successfully. Please try again!');
+                            this.toast.error('Uploaded unsuccessful. Please try again!');
                         } else {
-                            if (directory === 'headshot' || directory === 'w9') {
-                                if (directory === 'headshot') this.speaker.headshot = dbxRes;
-                                else if (directory === 'w9') {
-                                    if (!this.speaker.responseForm) this.speaker.responseForm = <any>{};
-                                    this.speaker.responseForm.w9 = dbxRes;
-                                }
-                                this.speakerService
-                                    .updateSpeaker(this.speaker)
-                                    .then(res => {
-                                        this.toast.success('Headshot uploaded successfully!');
-                                        this.transitionService.setLoading(false);
-                                    });
-                            } else if (directory === 'handouts') {
-                                
+                            if (directory === 'headshot') this.speaker.headshot = dbxRes;
+                            else if (directory === 'w9') {
+                                if (!this.speaker.responseForm) this.speaker.responseForm = <any>{};
+                                this.speaker.responseForm.w9 = dbxRes;
                             }
+                            this.speakerService
+                                .updateSpeaker(this.speaker)
+                                .then(res => {
+                                    this.toast.success('Upload success!');
+                                    this.transitionService.setLoading(false);
+                                });
                         }
                     });
-            })
+            });
+    }
+
+    uploadHandout(sessionId: string) {
+        if (!this.selectedHandoutsFile) return;
+        if (!sessionId) {
+            this.toast.error('Please select the session this handout is for.')
+            return;
+        }
+        let invalid = this.validateFile(this.selectedHandoutsFile, 'handout');
+        if (invalid) {
+            this.toast.error(invalid);
+            return;
+        }
+        let selectedSession = _.find(this.speakerSessions, sess => sess._id === sessionId);
+        let handoutNumber = selectedSession.handouts.length + 1;
+
+        let ext = this.selectedHandoutsFile.name.split('.').pop();
+        let userFilename = `${this.speaker.email}_${selectedSession.title.substring(0, 10)}_${handoutNumber}.${ext}`;
+        this.transitionService.setLoading(true);
+        let data = new FormData();
+        data.append('userFilename', userFilename);
+        data.append('file', this.selectedHandoutsFile);
+        this.fileService
+            .uploadToServer(data)
+            .then(res => {
+                this.speakerService
+                    .sendToDropbox(userFilename, 'handouts')
+                    .then(dbxRes => {
+                        console.log('dbx res: ', dbxRes);
+                        if (dbxRes.status ) {
+                            this.toast.error('Headshot not uploaded successfully. Please try again!');
+                        } else {
+                            if (!selectedSession.handouts) selectedSession.handouts = [];
+                            selectedSession.handouts.push(dbxRes);
+                            this.sessionService
+                                .updateSession(selectedSession, 'handout')
+                                .then(res => {
+                                    this.toast.success('Upload success!');
+                                    this.transitionService.setLoading(false);
+                                });
+                        }
+                    });
+            });
     }
 
 }

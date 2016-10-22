@@ -38,13 +38,15 @@
             <p>
                 Please upload any handouts you will use with your presentation.
             </p>
-            <p>Current handouts:</p>
-            <div *ngFor="let session of speakerSessions">
-                {{ session.title.substring(0, 20) }}: {{ session.handouts?.length }}
+            <p><b>Current handouts:</b></p>
+            <div class="handout-list">
+                <div *ngFor="let session of speakerSessions">
+                    {{ session.title.substring(0, 20) }}: {{ session.handouts?.length }}
+                </div>
             </div>
 
-            <div class="row">
-                <div class="col-xs-6 box">
+            <div class="row space-top">
+                <div class="col-xs-12 box">
                 <p>
                     Select the presentation you’d like to upload handouts for. <br/>
                     <b>If this list is empty, please complete a presentation proposal first.</b>
@@ -61,7 +63,7 @@
             <label class="btn btn-default" for="handoutsFile"><i class="fa fa-upload fa-lg"></i>{{ handoutsFileString }}</label>
             <input id="handoutsFile" class="file" type="file" #handoutsFile (change)="fileSelected(handoutsFile.files, 'handouts')">
             
-            <button class="btn btn-primary" (click)="upload('handouts')">Upload</button>
+            <button class="btn btn-primary" (click)="uploadHandout(sessions.value)">Upload</button>
         </div>
 
     </div>
