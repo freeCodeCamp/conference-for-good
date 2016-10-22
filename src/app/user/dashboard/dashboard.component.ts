@@ -174,11 +174,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  needsHandouts(): boolean {
+    let needsHandouts = false;
+    this.allSpeakerSessions.forEach(session => {
+      if (session.handouts.length === 0) needsHandouts = true;
+    });
+    return needsHandouts;
+  }
+
   noActionRequired(): boolean {
     if (!this.speaker.profileComplete) return false;
     if (this.incompleteSessions.length > 0) return false;
     if (this.isResponseFormNeeded()) return false;
     if (!this.speaker.headshot) return false;
+    if (this.needsHandouts()) return false;
     if (this.speaker.responseForm && !this.speaker.responseForm.w9) return false;
     return true;
   }
