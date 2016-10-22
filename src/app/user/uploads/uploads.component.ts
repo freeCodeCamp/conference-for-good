@@ -179,7 +179,7 @@ export class UploadsComponent implements OnInit {
                     .then(dbxRes => {
                         console.log('dbx res: ', dbxRes);
                         if (dbxRes.status ) {
-                            this.toast.error('Headshot not uploaded successfully. Please try again!');
+                            this.toast.error('Upload unsuccessful. Please try again!');
                         } else {
                             if (!selectedSession.handouts) selectedSession.handouts = [];
                             selectedSession.handouts.push(dbxRes);

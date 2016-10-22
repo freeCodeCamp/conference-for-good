@@ -68,6 +68,10 @@ let speakerSchema = new mongoose.Schema({
   recentSpeakingExp: String,
   speakingReferences: String, // At least 2
   adminNotes: String,
+  adminUploads: [{
+    title: String,
+    url: String
+  }],
 
   // Session ids that the speaker is involved in
   sessions: [String],
