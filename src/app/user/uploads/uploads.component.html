@@ -12,7 +12,8 @@
             <label class="btn btn-default" for="headshotFile"><i class="fa fa-upload fa-lg"></i>{{ headshotFileString }}</label>
             <input id="headshotFile" class="file" type="file" #headshotFile (change)="fileSelected(headshotFile.files, 'headshot')">
             
-            <button class="btn btn-primary" (click)="upload('headshot')" [disabled]="speaker.headshot">Upload</button>
+            <button class="btn btn-primary" (click)="upload('headshot')"
+                    [disabled]="speaker.headshot || transitionService.isLoading()">Upload</button>
         </div>
 
         <div class="col-xs-6 col-xs-offset-3 section">
@@ -30,7 +31,8 @@
             <label class="btn btn-default" for="w9File"><i class="fa fa-upload fa-lg"></i>{{ w9FileString }}</label>
             <input id="w9File" class="file" type="file" #w9File (change)="fileSelected(w9File.files, 'w9')">
             
-            <button class="btn btn-primary" (click)="upload('w9')" [disabled]="speaker.responseForm?.w9">Upload</button>
+            <button class="btn btn-primary" (click)="upload('w9')"
+                    [disabled]="speaker.responseForm?.w9 || transitionService.isLoading()">Upload</button>
         </div>
 
         <div class="col-xs-6 col-xs-offset-3 section">
@@ -63,7 +65,8 @@
             <label class="btn btn-default" for="handoutsFile"><i class="fa fa-upload fa-lg"></i>{{ handoutsFileString }}</label>
             <input id="handoutsFile" class="file" type="file" #handoutsFile (change)="fileSelected(handoutsFile.files, 'handouts')">
             
-            <button class="btn btn-primary" (click)="uploadHandout(sessions.value)">Upload</button>
+            <button class="btn btn-primary" (click)="uploadHandout(sessions.value)"
+                    [disabled]="transitionService.isLoading()">Upload</button>
         </div>
 
     </div>
