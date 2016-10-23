@@ -30,7 +30,8 @@
           <p><b>Current uploads:</b></p>
           <div class="upload-list">
             <div *ngFor="let upload of model.adminUploads">
-              <a [href]="upload.url" target="_blank">{{ upload.title }}</a>
+              <a [href]="upload.url">{{ upload.title }}</a>
+              <!--<a (click)="saveFile(upload.url)" class="contact">{{ upload.title }}</a>-->
             </div>
           </div>
           <div class="col-md-8 col-xs-12 space-top">
@@ -373,7 +374,7 @@
                       id="bioWebsite"
                   name="bioWebsite" #bioWebsite="ngModel"></textarea>
             <div *ngIf="!bioWebsite.valid" class="alert alert-warning">
-              <p>here is a 125 word limit for the website bio, please edit text to below limit.</p>
+              <p>There is a 125 word limit for the website bio, please edit text to below limit.</p>
               <p>Current words: {{ bioWebsite.value.split(' ').length }}</p>
             </div>
           </div>

@@ -9,8 +9,7 @@ const multer = require('multer');
 const path = require('path');
 const json2csv = require('json2csv');
 const fs = require('fs');
-var Dropbox = require('dropbox');
-
+const Dropbox = require('dropbox');
 
 router.get('/dropbox/:filename/:directory', (req, res) => {
     var filename = req.params.filename;
@@ -32,7 +31,9 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
                 console.log('path response:', response.path_display);
                 let dbxUrl = '';
                 dbx.sharingCreateSharedLink({path: response.path_display, short_url: false}).then(dbxRes => {
-                    dbxUrl = dbxRes.url + '&raw=1';
+                    // Set dbx url dl query to 1 to allow direct download
+                    dbxUrl = dbxRes.url.slice(0, dbxRes.url.length-1) + '1';
+                    console.log('dbxUrl', dbxUrl);
                     res.status(200).json(dbxUrl);
                 });
             })
