@@ -96,6 +96,7 @@ router.post('/changePassword', (req, res) => {
             return res.status(400).json({ alert: 'user not found' });
         } else {
             user.password = user.generateHash(formData.password);
+            user.changePassword = false;
             user.save( err => {
                 if (err) {
                     return res.status(400).json({ alert: 'not saved' });
