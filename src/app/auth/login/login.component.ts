@@ -37,7 +37,9 @@ export class LoginComponent implements OnInit {
     doLogin(event) {
         this.authService.login(this.form.value)
             .then((res: any) => {
-                if (this.authService.user.getValue() && this.authService.user.getValue().admin) {
+                if (this.authService.user.getValue() && this.authService.user.getValue().changePassword) {
+                    this.router.navigate(['/settings']);
+                } else if (this.authService.user.getValue() && this.authService.user.getValue().admin) {
                     this.router.navigate(['/home']);
                 } else {
                     this.router.navigate(['/dashboard']);
