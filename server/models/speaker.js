@@ -137,7 +137,10 @@ let speakerSchema = new mongoose.Schema({
     departAirline: String,
     departFlightNum: String,
   }],
-  changePassword: Boolean
+  changePassword: {
+    type: Boolean,
+    default: true
+  }
 });
 
 speakerSchema.methods.generateHash = password => {
