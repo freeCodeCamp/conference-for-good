@@ -1,3 +1,5 @@
+declare var require: any
+
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 let fileSaver = require('file-saver');
@@ -90,7 +92,7 @@ export class ExportingComponent implements OnInit {
 
   genRefSpeaker() {
     let refSpeaker: Speaker = {
-      admin: false, password: '', salutation: '',
+      admin: false, password: '', changePassword: true, salutation: '',
       nameFirst: '', nameLast: '', email: '',
       profileComplete: false, status: '', statusNotification: false,
       title: '', organization: '', address1: '', address2: '',
@@ -99,7 +101,7 @@ export class ExportingComponent implements OnInit {
       mediaWilling: false, costsCoveredByOrg: [], speakingFees: '',
       hasPresentedAtCCAWInPast2years: false, recentSpeakingExp: '',
       speakingReferences: '', adminNotes: '', responseForm: <any>{}, arrangements: <any>{}
-    }
+    };
     return refSpeaker;
   }
 
