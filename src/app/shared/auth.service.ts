@@ -9,7 +9,7 @@ import { handleError, parseJson, packageForPost } from './http-helpers';
 
 @Injectable()
 export class AuthService {
-  baseUrl = environment.production ? '' : 'http://localhost:3000'
+  baseUrl = environment.production ? '' : 'http://localhost:3000';
   user: BehaviorSubject<Speaker> = new BehaviorSubject(null);
 
   constructor(private http: Http) { }
@@ -63,7 +63,7 @@ export class AuthService {
     let data = {
       leadPres: leadPres,
       formData: signupData
-    }
+    };
     let pkg = packageForPost(data);
     return this.http
               .post(this.baseUrl + '/auth/signup', pkg.body, pkg.opts)
