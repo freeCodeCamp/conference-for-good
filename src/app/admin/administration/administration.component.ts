@@ -15,10 +15,15 @@ export class AdministrationComponent implements OnInit {
     @ViewChild('toast') toast: ToastComponent;
     addFlag = false;
     deleteFlag = false;
+    user;
 
     constructor(private transitionService: TransitionService,
                 private authService: AuthService,
-                private speakerService: SpeakerService) { }
+                private speakerService: SpeakerService) {
+        this.authService.user.subscribe(user => {
+            this.user = user;
+        });
+    }
 
     ngOnInit() {
         this.transitionService.transition();
