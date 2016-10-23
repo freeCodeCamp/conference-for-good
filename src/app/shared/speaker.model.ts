@@ -4,7 +4,7 @@ export interface Speaker {
   _id?: string;
 
   // Credentials
-
+  changePassword: boolean,
   admin: boolean,
   password: string,
   salutation: string,
