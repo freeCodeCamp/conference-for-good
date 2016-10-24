@@ -224,7 +224,6 @@ export class SpeakerComponent implements OnInit, OnDestroy {
     return refSpeaker;
   }
 
-<<<<<<< HEAD
     fileSelected(files: FileList, whichFile: string) {
         if (!files[0]) return;
         this.selectedAdminFile = files[0];
@@ -269,8 +268,3 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           });
     }
 }
-||||||| merged common ancestors
-}
-=======
-}
->>>>>>> master

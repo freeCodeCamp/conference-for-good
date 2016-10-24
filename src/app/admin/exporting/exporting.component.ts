@@ -142,16 +142,8 @@ export class ExportingComponent implements OnInit {
   exportSpeakers() {
     let exports = this.exportResponse() ?
                   _.concat(this.speakerFields, this.responseFields) : this.speakerFields;
-<<<<<<< HEAD
     if (this.exportArrange) exports = _.concat(this.arrangeFields, exports);
     this.transitionService.setLoading(true);
-||||||| merged common ancestors
-    if (this.exportArrange) exports = _.concat(this.arrangeFields, exports);
-=======
-    if (this.exportArrange) {
-      exports = _.concat(this.arrangeFields, exports);
-    }
->>>>>>> master
     this.exportingService
         .exportSpeakers(exports)
         .then((data: Blob) => {
