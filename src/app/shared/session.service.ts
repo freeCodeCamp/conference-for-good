@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import "rxjs/add/operator/toPromise";
+import 'rxjs/add/operator/toPromise';
 import * as _ from 'lodash';
-import * as moment from 'moment';
 
 import { environment } from '../../environments/environment';
 import { handleError, parseJson, packageForPost } from './http-helpers';
 import { AdminService } from './admin.service';
 import { Conference, TimeSlot } from './conference.model';
-import { Speaker } from './speaker.model';
 import { Session } from './session.model';
 
 @Injectable()
@@ -58,13 +55,17 @@ export class SessionService {
 
   getSpeakerSessions(speakerId) {
     return _.filter(this.sessionsUnfiltered.getValue(), session => {
-      if (!session.speakers) return false;
+      if (!session.speakers) {
+        return false;
+      }
       if (session.speakers.mainPresenter === speakerId) {
         return true;
       }
       if (session.speakers.coPresenters) {
         for (let i = 0; i < session.speakers.coPresenters.length; i++) {
-          if (session.speakers.coPresenters[i] === speakerId) return true;
+          if (session.speakers.coPresenters[i] === speakerId) {
+            return true;
+          }
         }
       }
       return false;
@@ -97,13 +98,14 @@ export class SessionService {
    */
   findSession(slot: TimeSlot, room: string) {
     if (!slot._id) {
-      console.log('no id on :', slot);
       return;
     }
     let part = '';
     let session = _.find(this.sessionsUnfiltered.getValue(), session => {
       // Skip sessions that haven't been assigned
-      if (!session.statusTimeLocation || session.statusTimeLocation.length < 1) return false;
+      if (!session.statusTimeLocation || session.statusTimeLocation.length < 1) {
+        return false;
+      }
       let sameSlotAndRoom = false;
       session.statusTimeLocation.forEach(sessionOccurence => {
         if (sessionOccurence.timeSlot === slot._id
@@ -132,14 +134,21 @@ export class SessionService {
     let defaultConf = this.adminService.defaultConference.getValue();
 
     // Can't change a conference schedule from an old year
-    if (activeConf.title !== defaultConf.title) return Promise.resolve({errMsg: "Can't change a historic conference."});
-    
+    if (activeConf.title !== defaultConf.title) {
+      return Promise.resolve({ errMsg: 'Can\'t change a historic conference.' });
+    }
+
     // Check for sessions already in requested slot before adding new
     let slotOccupied = this.isSlotOccupied(slot, room);
-    if (slotOccupied) return Promise.resolve({occupied: true});
-    else {
-      if (!session.statusTimeLocation) session.statusTimeLocation = [];
-      if (this.isSessionInTimeslot(slot, session)) return Promise.resolve({alreadyScheduled: true});
+    if (slotOccupied) {
+      return Promise.resolve({occupied: true});
+    } else {
+      if (!session.statusTimeLocation) {
+        session.statusTimeLocation = [];
+      }
+      if (this.isSessionInTimeslot(slot, session)) {
+        return Promise.resolve({alreadyScheduled: true});
+      }
       let newOccurence = {
         conferenceTitle: defaultConf.title,
         timeSlot: slot._id,
@@ -160,7 +169,9 @@ export class SessionService {
   isSessionInTimeslot(slot: TimeSlot, session: Session) {
     let isInSlot = false;
     session.statusTimeLocation.forEach(occurrence => {
-      if (occurrence.timeSlot === slot._id) isInSlot = true;
+      if (occurrence.timeSlot === slot._id) {
+        isInSlot = true;
+      }
     });
     return isInSlot;
   }
@@ -176,7 +187,9 @@ export class SessionService {
     let defaultConf = this.adminService.defaultConference.getValue();
 
         // Can't change a conference schedule from an old year
-    if (activeConf.title !== defaultConf.title) return Promise.resolve({errMsg: "Can't change a historic conference."});
+    if (activeConf.title !== defaultConf.title) {
+      return Promise.resolve({errMsg: 'Can\'t change a historic conference.'});
+    }
 
     if (typeof session !== 'undefined' && session) {
       let occurenceToRemoveIndex;
@@ -219,10 +232,15 @@ export class SessionService {
       } else {
         let duplicate = false;
         session.speakers.coPresenters.forEach(coPresId => {
-          if (coPresId === speakerId) duplicate = true;
+          if (coPresId === speakerId) {
+            duplicate = true;
+          }
         });
-        if (!duplicate) session.speakers.coPresenters.push(speakerId);
-        else return Promise.resolve({message: 'duplicate'});
+        if (!duplicate) {
+          session.speakers.coPresenters.push(speakerId);
+        } else {
+          return Promise.resolve({message: 'duplicate'});
+        }
       }
     } else {
       session.speakers = {
@@ -244,7 +262,7 @@ export class SessionService {
       session.speakers.mainPresenter = '';
     } else {
       let coPresenters = session.speakers.coPresenters;
-      for (let i=0; i < coPresenters.length; i++) {
+      for (let i = 0; i < coPresenters.length; i++) {
         if (coPresenters[i] === speakerId) {
           session.speakers.coPresenters.splice(i, 1);
           break;
@@ -257,7 +275,7 @@ export class SessionService {
   deleteTimeSlot(date: string, confTitle: string, slot: TimeSlot) {
     let conf = _.find(this.adminService.allConferences, conf => conf.title === confTitle);
     let confDate = _.find(conf.days, day => day.date === date);
-    
+
     // Sync front end
     let slotIndex = _.findIndex(confDate.timeSlots, existSlot => existSlot._id === slot._id);
 
@@ -275,7 +293,7 @@ export class SessionService {
               .catch(handleError);
   }
 
-  slotHasScheduledSessions(conf: Conference, 
+  slotHasScheduledSessions(conf: Conference,
                            confDate: {date: string, timeSlots: TimeSlot[]},
                            slotIndex: number): boolean {
     let slot = confDate.timeSlots[slotIndex];
@@ -283,7 +301,9 @@ export class SessionService {
     let hasScheduledSession = false;
     sessions.forEach(session => {
       session.statusTimeLocation.forEach(occurrence => {
-        if (occurrence.timeSlot === slot._id) hasScheduledSession = true;
+        if (occurrence.timeSlot === slot._id) {
+          hasScheduledSession = true;
+        }
       });
     });
     return hasScheduledSession;
@@ -291,8 +311,8 @@ export class SessionService {
 
   deleteRoom(conferenceTitle: string, room: string) {
     let conf = _.find(this.adminService.allConferences, conf => conf.title === conferenceTitle);
-    
-    
+
+
     if (this.roomHasScheduledSessions(conf, room)) {
       return Promise.resolve({message: 'room has sessions'});
     }
@@ -312,16 +332,18 @@ export class SessionService {
     let hasScheduledSession = false;
     sessions.forEach(session => {
       session.statusTimeLocation.forEach(occurrence => {
-        if (occurrence.room === room) hasScheduledSession = true;
+        if (occurrence.room === room) {
+          hasScheduledSession = true;
+        }
       });
     });
     return hasScheduledSession;
   }
 
-  // approval: string, // pending (default), approved, denied (by brooke) 
+  // approval: string, // pending (default), approved, denied (by brooke)
   changeApproval(session: Session, approval: string) {
     session.approval = approval;
-    
+
     return this.updateSession(session);
   }
 
@@ -331,12 +353,14 @@ export class SessionService {
     return this.updateSession(session);
   }
 
-  /** Update new session on server and sync response with front end 
+  /** Update new session on server and sync response with front end
    * @updateType Different server endpoints for speaker and slot updates
   */
   updateSession(session: Session, updateType?: string) {
     let serverUrl = this.baseUrl + '/api/updatesession';
-    if (updateType) serverUrl += updateType;
+    if (updateType) {
+      serverUrl += updateType;
+    }
     let pkg = packageForPost(session);
     return this.http
               .post(serverUrl, pkg.body, pkg.opts)

@@ -4,7 +4,7 @@ export interface Speaker {
   _id?: string;
 
   // Credentials
-
+  changePassword: boolean,
   admin: boolean,
   password: string,
   salutation: string,
@@ -95,7 +95,7 @@ export interface ResponseForm {
 }
 
 export interface Arrangements {
-  associatedConf: string; //Title of associated conf
+  associatedConf: string; // Title of associated conf
 
   travel: string, // yes no
   travelAmount: string,

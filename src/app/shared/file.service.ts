@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import "rxjs/add/operator/toPromise";
+import 'rxjs/add/operator/toPromise';
 
 import { environment } from '../../environments/environment';
-import { handleError, parseJson, packageForPost } from './http-helpers';
+import { handleError, parseJson } from './http-helpers';
 
 @Injectable()
 export class FileService {

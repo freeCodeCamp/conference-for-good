@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { AdminService } from '../../shared/admin.service';
 import { TransitionService } from '../../shared/transition.service';

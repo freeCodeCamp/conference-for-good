@@ -15,10 +15,15 @@ export class AdministrationComponent implements OnInit {
     @ViewChild('toast') toast: ToastComponent;
     addFlag = false;
     deleteFlag = false;
+    user;
 
     constructor(private transitionService: TransitionService,
                 private authService: AuthService,
-                private speakerService: SpeakerService) { }
+                private speakerService: SpeakerService) {
+        this.authService.user.subscribe(user => {
+            this.user = user;
+        });
+    }
 
     ngOnInit() {
         this.transitionService.transition();
@@ -45,8 +50,7 @@ export class AdministrationComponent implements OnInit {
             .catch( err => {
                 if (err.status === 404) {
                     this.toast.error('User not found!');
-                }
-                else {
+                } else {
                     this.toast.error('Unable to make speaker an admin, please try again later');
                 }
             });
@@ -63,8 +67,7 @@ export class AdministrationComponent implements OnInit {
             .catch( err => {
                 if (err.status === 404) {
                     this.toast.error('User not found!');
-                }
-                else {
+                } else {
                     this.toast.error('Unable to remove admin, please try again later');
                 }
             });

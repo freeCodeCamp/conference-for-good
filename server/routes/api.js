@@ -41,7 +41,7 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
                 // Delete file if cannot upload to dropbox
                 fs.unlink(fileDir, err => {
                     if (err) console.log('File clear error: ', err);
-                }); 
+                });
                 res.status(401).json(error);
             });
     });
@@ -166,9 +166,9 @@ router.post('/addtimeslot', (req, res) => {
                 serverConf.days.push(newDay);
             } else {
                 confDate.timeSlots.push({
-                    start: newSlot.start,
-                    end: newSlot.end
-                });
+                                            start: newSlot.start,
+                                            end: newSlot.end
+                                        });
             }
             serverConf.save(err => {
                 if (err) res.status(500).json({message: 'Conference save error'});
@@ -266,9 +266,9 @@ router.post('/updateconference', (req, res) => {
                     serverConf.save(err => {
                         if (err) res.status(500).json({message: 'Conference save error'});
                         else res.status(200).json({message: 'Conference saved'});
-                });
+                    });
 
-            });
+                });
         });
 });
 

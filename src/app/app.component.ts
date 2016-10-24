@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 
 import { AdminService } from './shared/admin.service';
 import { AuthService } from './shared/auth.service';
-import { DateService } from './shared/date.service';
 import { SessionService } from './shared/session.service';
 import { SpeakerService } from './shared/speaker.service';
 import { TransitionService } from './shared/transition.service';
@@ -33,8 +32,11 @@ export class AppComponent implements OnInit {
     // Check session for credentials to skip login splash screen
     this.authService.checkSession()
         .then(user => {
-          if (user && user.admin) this.router.navigate(['/home']);
-          else if (user && !user.admin) this.router.navigate(['/dashboard']);
+          if (user && user.admin) {
+              this.router.navigate(['/home']);
+          } else if (user && !user.admin) {
+              this.router.navigate(['/dashboard']);
+          }
         });
     this.adminService.getAllConferences();
     this.sessionService

@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
                 private authService: AuthService) { }
 
     ngOnInit() {
-        this.email = new FormControl('', Validators.compose([Validators.required, Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")]));
+        this.email = new FormControl('', Validators.compose([Validators.required, Validators.pattern('[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?')]));
         this.password = new FormControl('', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(18)]));
 
         this.form = new FormGroup({
@@ -37,7 +37,9 @@ export class LoginComponent implements OnInit {
     doLogin(event) {
         this.authService.login(this.form.value)
             .then((res: any) => {
-                if (this.authService.user.getValue() && this.authService.user.getValue().admin) {
+                if (this.authService.user.getValue() && this.authService.user.getValue().changePassword) {
+                    this.router.navigate(['/settings']);
+                } else if (this.authService.user.getValue() && this.authService.user.getValue().admin) {
                     this.router.navigate(['/home']);
                 } else {
                     this.router.navigate(['/dashboard']);
@@ -46,8 +48,7 @@ export class LoginComponent implements OnInit {
             .catch(err => {
                 if (err.status === 401) {
                     this.toast.error('Email or password do not match records');
-                }
-                else {
+                } else {
                     this.toast.error('Login error, please try again later');
                 }
             });

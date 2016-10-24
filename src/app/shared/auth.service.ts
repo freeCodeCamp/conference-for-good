@@ -1,9 +1,7 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { Headers, Http, RequestOptions, Response } from '@angular/http';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import "rxjs/add/operator/toPromise";
+import 'rxjs/add/operator/toPromise';
 
 import { environment } from '../../environments/environment';
 import { Speaker } from './speaker.model';
@@ -11,10 +9,7 @@ import { handleError, parseJson, packageForPost } from './http-helpers';
 
 @Injectable()
 export class AuthService {
-  
   baseUrl = environment.production ? '' : 'http://localhost:3000';
-
-  //user: {speaker: Speaker};
   user: BehaviorSubject<Speaker> = new BehaviorSubject(null);
 
   constructor(private http: Http) { }
@@ -25,9 +20,7 @@ export class AuthService {
               .toPromise()
               .then(parseJson)
               .then(res => {
-                console.log('do we have user?', res);
                 if (res.user) {
-                  console.log('still logged in!');
                   this.user.next(res.user);
                 }
                 return res.user;
@@ -70,7 +63,7 @@ export class AuthService {
     let data = {
       leadPres: leadPres,
       formData: signupData
-    }
+    };
     let pkg = packageForPost(data);
     return this.http
               .post(this.baseUrl + '/auth/signup', pkg.body, pkg.opts)

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import "rxjs/add/operator/toPromise";
+import 'rxjs/add/operator/toPromise';
 import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
@@ -66,12 +66,15 @@ export class SpeakerService {
         let speakers = session.speakers;
         if (speakers) {
           if (speakers.mainPresenter === speaker._id) {
-            if (!_.find(speaker.sessions, s => s === session._id)) speaker.sessions.push(session._id);
-          }
-          else if (speakers.coPresenters.length > 0) {
+            if (!_.find(speaker.sessions, s => s === session._id)) {
+              speaker.sessions.push(session._id);
+            }
+          } else if (speakers.coPresenters.length > 0) {
             speakers.coPresenters.forEach(coPres => {
               if (coPres === speaker._id) {
-                if (!_.find(speaker.sessions, s => s === session._id)) speaker.sessions.push(session._id);
+                if (!_.find(speaker.sessions, s => s === session._id)) {
+                  speaker.sessions.push(session._id);
+                }
               }
             });
           }
@@ -116,10 +119,14 @@ export class SpeakerService {
         let defaultConf = this.adminService.defaultConference.getValue().title;
         for (let i = 0; i < speaker.sessions.length; i++) {
           let session = this.sessionService.getSession(speaker.sessions[i]);
-          if (session.associatedConf === defaultConf && session.approval !== 'denied') return true;
+          if (session.associatedConf === defaultConf && session.approval !== 'denied') {
+            return true;
+          }
         }
         return false;
-      } else return false;
+      } else {
+        return false;
+      }
     }));
 
     this.activeProfileCompleted.next(_.filter(this.speakersActive.getValue(), speaker => speaker.profileComplete));
@@ -176,11 +183,9 @@ export class SpeakerService {
         .toPromise()
         .then(parseJson)
         .then(data => {
-          console.log('data from sendToDropbox', data);
           return data;
         })
         .catch(error => {
-          console.log('error from sendToDropbox', error);
           return error;
         });
   }

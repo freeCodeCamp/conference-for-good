@@ -14,7 +14,7 @@ import { Component } from '@angular/core';
       top: 80px;
       right: 20px;
       color: white;
-      font-style: sans-serif;
+      font-style: normal;
       font-size: 18px;
       padding: 18px;
       border-radius: 10px;
@@ -28,7 +28,7 @@ export class ToastComponent {
     default: 'hsla(0, 0%, 0%, 0.6)',
     error: 'hsla(3, 60%, 46%, 0.8)',
     success: 'hsla(120, 34%, 48%, 0.8)'
-  }
+  };
 
   toastText: string = null;
 

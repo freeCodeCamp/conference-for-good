@@ -86,14 +86,16 @@ export class SpeakerComponent implements OnInit, OnDestroy {
         // To enable historic viewing, display data based on viewing conf (not default)
         let viewingConf = this.adminService.activeConference.getValue().title;
         if (this.model.arrangements && this.model.arrangements.length > 0) {
-          this.viewArrangeIndex = _.findIndex(this.model.arrangements, 
+          this.viewArrangeIndex = _.findIndex(this.model.arrangements,
                                               arrange => arrange.associatedConf === viewingConf);
           if (this.viewArrangeIndex < 0) {
             this.model.arrangements.push(<any>{associatedConf: viewingConf});
-            this.viewArrangeIndex = this.model.arrangements.length-1;
+            this.viewArrangeIndex = this.model.arrangements.length - 1;
           }
         } else {
-          if(!this.model.arrangements) this.model.arrangements = [];
+          if (!this.model.arrangements) {
+            this.model.arrangements = [];
+          }
           this.model.arrangements.push(<any>{associatedConf: viewingConf});
           this.viewArrangeIndex = 0;
         }
@@ -146,7 +148,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
             this.speakerService
                 .updateSpeaker(this.model)
                 .then(res => {
-                  this.router.navigate(['/dashboard', { msg: 'Copresenter account created and emailed!' }])
+                  this.router.navigate(['/dashboard', { msg: 'Copresenter account created and emailed!' }]);
                 });
                 // .then(res => {
                 //   this.toast.success('Copresenter account created and emailed!')
@@ -159,14 +161,17 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           .updateSpeaker(this.model)
           .then(res => {
             // Only navigate for speakers, admins have too many partial fields bound to this function
-            if (!this.authService.user.getValue().admin) this.router.navigate(['/dashboard', { msg: 'Profile form saved!' }]);
-            else this.toast.success('Speaker updated!');
+            if (!this.authService.user.getValue().admin) {
+              this.router.navigate(['/dashboard', { msg: 'Profile form saved!' }]);
+            } else {
+              this.toast.success('Speaker updated!');
+            }
           });
     }
   }
 
   checkProfile(form: any) {
-    var flag = true;
+    let flag = true;
 
     let expReq = !form['hasPresentedAtCCAWInPast2years'];
 
@@ -180,17 +185,25 @@ export class SpeakerComponent implements OnInit, OnDestroy {
                 if (typeof form[field] !== undefined) {
                   // If type is boolean, form item is completed
                   if (typeof form[field] !== 'boolean') {
-                    if (!form[field]) flag = false;
+                    if (!form[field]) {
+                      flag = false;
+                    }
                   }
-                } else flag = false;
+                } else {
+                  flag = false;
+                }
           }
         } else {
           if (typeof form[field] !== undefined) {
             // If type is boolean, form item is completed
             if (typeof form[field] !== 'boolean') {
-              if (!form[field]) flag = false;
+              if (!form[field]) {
+                flag = false;
+              }
             }
-          } else flag = false;
+          } else {
+            flag = false;
+          }
         }
       }
     }
@@ -207,10 +220,11 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       mediaWilling: false, speakingFees: '',
       hasPresentedAtCCAWInPast2years: false, recentSpeakingExp: '',
       speakingReferences: ''
-    }
+    };
     return refSpeaker;
   }
 
+<<<<<<< HEAD
     fileSelected(files: FileList, whichFile: string) {
         if (!files[0]) return;
         this.selectedAdminFile = files[0];
@@ -255,3 +269,8 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           });
     }
 }
+||||||| merged common ancestors
+}
+=======
+}
+>>>>>>> master
