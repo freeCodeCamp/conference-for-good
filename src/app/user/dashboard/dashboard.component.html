@@ -35,9 +35,8 @@
         <div class="dashboard-item">
           <b>My Arrangements</b>
 
-          <div>
-            <!-- TODO: we can make this a link to a page with speaker agreement info, check with brooke -->
-            <p>PLEASE REVIEW: <span class="text-danger">Speaker Details</span></p>
+          <div *ngIf="speakerDetails">
+            <p>PLEASE REVIEW: <a [href]="speakerDetails">Speaker Details</a></p>
           </div>
 
           <div><u><b>Speaking Terms</b></u><br/><i>The following items will be paid for by CCAW:</i></div>
@@ -91,6 +90,11 @@
             <div *ngIf="!speaker.headshot"><a [routerLink]="['/uploads']">No Headshot Uploaded</a></div>
             <div *ngIf="!speaker.responseForm?.w9"><a [routerLink]="['/uploads']">No W9 Form Uploaded</a></div>
             <div *ngIf="needsHandouts()"><a [routerLink]="['/uploads']">No Handouts For Presentation</a></div>
+            <div *ngIf="otherAdminUls.length > 0">
+              <div *ngFor="let upload of otherAdminUls">
+                <a [href]="upload.url">{{ upload.title }}</a>
+              </div>
+            </div>
           </div>
         </div>
 

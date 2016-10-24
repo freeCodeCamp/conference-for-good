@@ -36,6 +36,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   activeConfIndex: number;
 
+  speakerDetails = '';
+  otherAdminUls: {url: string, title: string}[] = [];
+
   private paramsub: any;
 
   constructor(private transitionService: TransitionService,
@@ -80,6 +83,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.leadOnlySessions = _.filter(this.allSpeakerSessions, session => session.speakers.mainPresenter === this.speaker._id);
 
+    // Check Brooke has uploaded speaker details document
+    this.speaker.adminUploads.forEach(upload => {
+      if (upload.title.toLowerCase() === 'speaker details') this.speakerDetails = upload.url;
+      else this.otherAdminUls.push({title: upload.title, url: upload.url});
+    });
   }
 
   ngOnInit() {
@@ -189,6 +197,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (!this.speaker.headshot) return false;
     if (this.needsHandouts()) return false;
     if (this.speaker.responseForm && !this.speaker.responseForm.w9) return false;
+    if (this.otherAdminUls.length > 0) return false;
     return true;
   }
 
