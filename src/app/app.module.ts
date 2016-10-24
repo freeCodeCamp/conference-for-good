@@ -32,7 +32,7 @@ import { AdministrationComponent } from './admin/administration/administration.c
 import { ForgotPasswordComponent } from './auth/forgotpassword/forgotpassword.component';
 import { ToastComponent } from './shared/toast.component';
 import { ResponseComponent } from './shared/response/response.component';
-import { HeadshotComponent } from './user/headshot/headshot.component';
+import { UploadsComponent } from './user/uploads/uploads.component';
 import { ExportingComponent } from './admin/exporting/exporting.component';
 
 /** App-wide Services */
@@ -67,7 +67,7 @@ import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
     DashboardComponent, ModifyConfComponent, SelectActiveComponent, SessionComponent,
     SessionListComponent, SpeakerComponent, SpeakerListComponent, LoginComponent,
     SignupComponent, SettingsComponent, LandingComponent, AdministrationComponent,
-    ForgotPasswordComponent, ToastComponent, ResponseComponent, HeadshotComponent,
+    ForgotPasswordComponent, ToastComponent, ResponseComponent, UploadsComponent,
 
     // Pipes
     DatePipe, CapitalizePipe, TimePipe,

@@ -1,0 +1,75 @@
+<div class="container" [class.page-transition]="transitionService.isTransitioning()">
+
+    <div class="row block">
+        <div class="col-xs-6 col-xs-offset-3 section">
+            <h3 class="text-center title">Upload Headshot</h3>
+            <div *ngIf="speaker.headshot" class="alert alert-success top-alert">
+                <p>You've already uploaded your headshot.</p>
+            </div>
+            <div *ngIf="!speaker.headshot" class="alert alert-warning top-alert">
+                <p>You haven't uploaded a headshot yet.</p>
+            </div>
+            <label class="btn btn-default" for="headshotFile"><i class="fa fa-upload fa-lg"></i>{{ headshotFileString }}</label>
+            <input id="headshotFile" class="file" type="file" #headshotFile (change)="fileSelected(headshotFile.files, 'headshot')">
+            
+            <button class="btn btn-primary" (click)="upload('headshot')"
+                    [disabled]="speaker.headshot || transitionService.isLoading()">Upload</button>
+        </div>
+
+        <div class="col-xs-6 col-xs-offset-3 section">
+            <h3 class="text-center title">Upload W9 Form</h3>
+            <p>
+                <b>If you are being reimbursed and/or paid by CCAW, please upload your W9.</b><br/>
+                You can download a W9 here: <a href="https://www.irs.gov/pub/irs-pdf/fw9.pdf" target="_blank">https://www.irs.gov/pub/irs-pdf/fw9.pdf</a><br/>
+            </p>
+            <div *ngIf="speaker.responseForm?.w9" class="alert alert-success top-alert">
+                <p>You've already uploaded your W9 form.</p>
+            </div>
+            <div *ngIf="!speaker.responseForm?.w9" class="alert alert-warning top-alert">
+                <p>You haven't uploaded a W9 form yet - no payment can be sent without a W9 on file.</p>
+            </div>
+            <label class="btn btn-default" for="w9File"><i class="fa fa-upload fa-lg"></i>{{ w9FileString }}</label>
+            <input id="w9File" class="file" type="file" #w9File (change)="fileSelected(w9File.files, 'w9')">
+            
+            <button class="btn btn-primary" (click)="upload('w9')"
+                    [disabled]="speaker.responseForm?.w9 || transitionService.isLoading()">Upload</button>
+        </div>
+
+        <div class="col-xs-6 col-xs-offset-3 section">
+            <h3 class="text-center title">Upload Handouts</h3>
+            <p>
+                Please upload any handouts you will use with your presentation.
+            </p>
+            <p><b>Current handouts:</b></p>
+            <div class="handout-list">
+                <div *ngFor="let session of speakerSessions">
+                    {{ session.title.substring(0, 20) }}: {{ session.handouts?.length }}
+                </div>
+            </div>
+
+            <div class="row space-top">
+                <div class="col-xs-12 box">
+                <p>
+                    Select the presentation you’d like to upload handouts for. <br/>
+                    <b>If this list is empty, please complete a presentation proposal first.</b>
+                </p>
+                <select #sessions class="form-control" id="sessions">
+                    <option *ngFor="let session of speakerSessions"
+                            [value]="session._id">
+                        {{ session.title }}
+                    </option>
+                </select>
+                </div>
+            </div>
+
+            <label class="btn btn-default" for="handoutsFile"><i class="fa fa-upload fa-lg"></i>{{ handoutsFileString }}</label>
+            <input id="handoutsFile" class="file" type="file" #handoutsFile (change)="fileSelected(handoutsFile.files, 'handouts')">
+            
+            <button class="btn btn-primary" (click)="uploadHandout(sessions.value)"
+                    [disabled]="transitionService.isLoading()">Upload</button>
+        </div>
+
+    </div>
+
+    <toast #toast></toast>
+</div>

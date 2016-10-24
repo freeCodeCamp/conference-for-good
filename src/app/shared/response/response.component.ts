@@ -63,7 +63,12 @@ export class ResponseComponent implements OnInit, OnDestroy {
       this.model = this.speakerService.getSpeaker(params['id']);
 
       if (!this.model.responseForm.completed) {
+        let w9 = '';
+        if (this.model.responseForm && this.model.responseForm.w9) {
+          w9 = this.model.responseForm.w9;
+        }
         this.model.responseForm = <any>{};
+        this.model.responseForm.w9 = w9;
         this.model.responseForm.dietaryNeeds = this.dietaryNeeds;
         this.generateMealDates();
       }

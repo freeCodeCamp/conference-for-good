@@ -23,6 +23,29 @@
                     (click)="updateSpeaker(model)">Save Notes</button>
           </div>
         </div>
+
+        <div class="row section">
+          <h4>Uploads</h4>
+
+          <p><b>Current uploads:</b></p>
+          <div class="upload-list">
+            <div *ngFor="let upload of model.adminUploads">
+              <a [href]="upload.url">{{ upload.title }}</a>
+              <!--<a (click)="saveFile(upload.url)" class="contact">{{ upload.title }}</a>-->
+            </div>
+          </div>
+          <div class="col-md-8 col-xs-12 space-top">
+            <label class="control-label primary-label" for="uploadTitle">Name upload:</label>
+            <input type="text" class="form-control" #uploadTitle name="uploadTitle">
+
+            <label class="btn btn-default space-top-sm" for="adminUpload"><i class="fa fa-upload fa-lg"></i>{{ adminUploadString }}</label>
+            <input id="adminUpload" class="file" type="file" #adminUpload (change)="fileSelected(adminUpload.files)">
+            
+            <button class="btn btn-primary" (click)="upload(uploadTitle.value)"
+                    [disabled]="transitionService.isLoading()">Upload</button>
+          </div>
+        </div>
+
         <div class="row section">
           <p>
             <b>Speaker response form: </b>
@@ -351,7 +374,7 @@
                       id="bioWebsite"
                   name="bioWebsite" #bioWebsite="ngModel"></textarea>
             <div *ngIf="!bioWebsite.valid" class="alert alert-warning">
-              <p>here is a 125 word limit for the website bio, please edit text to below limit.</p>
+              <p>There is a 125 word limit for the website bio, please edit text to below limit.</p>
               <p>Current words: {{ bioWebsite.value.split(' ').length }}</p>
             </div>
           </div>

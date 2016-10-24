@@ -22,7 +22,7 @@ import { LandingComponent } from './auth/landing/landing.component';
 import { AdministrationComponent } from './admin/administration/administration.component';
 import { ForgotPasswordComponent } from './auth/forgotpassword/forgotpassword.component';
 import { ResponseComponent } from './shared/response/response.component';
-import { HeadshotComponent } from './user/headshot/headshot.component';
+import { UploadsComponent } from './user/uploads/uploads.component';
 import { ExportingComponent } from './admin/exporting/exporting.component';
 
 const appRoutes: Routes = [
@@ -43,7 +43,7 @@ const appRoutes: Routes = [
   { path: 'administration',   component: AdministrationComponent, canActivate: [AdminGuard] },
   { path: 'forgotpassword',   component: ForgotPasswordComponent },
   { path: 'response',         component: ResponseComponent, canActivate: [SpeakerGuard] },
-  { path: 'headshot',         component: HeadshotComponent, canActivate: [SpeakerGuard] },
+  { path: 'uploads',          component: UploadsComponent, canActivate: [SpeakerGuard] },
   { path: 'exporting',        component: ExportingComponent, canActivate: [AdminGuard] }
 ];
 

@@ -9,8 +9,7 @@ const multer = require('multer');
 const path = require('path');
 const json2csv = require('json2csv');
 const fs = require('fs');
-var Dropbox = require('dropbox');
-
+const Dropbox = require('dropbox');
 
 router.get('/dropbox/:filename/:directory', (req, res) => {
     var filename = req.params.filename;
@@ -23,7 +22,7 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
         if (err) {
             console.log('Error: ', err);
         }
-        dbx.filesUpload({ path: '/' + directory + '/' + filename, contents: contents })
+        dbx.filesUpload({ path: '/ccaw-uploads/' + directory + '/' + filename, contents: contents })
             .then(response => {
                 // File is only needed on the server to upload to dbx, delete it when done
                 fs.unlink(fileDir, err => {
@@ -32,7 +31,9 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
                 console.log('path response:', response.path_display);
                 let dbxUrl = '';
                 dbx.sharingCreateSharedLink({path: response.path_display, short_url: false}).then(dbxRes => {
-                    dbxUrl = dbxRes.url + '&raw=1';
+                    // Set dbx url dl query to 1 to allow direct download
+                    dbxUrl = dbxRes.url.slice(0, dbxRes.url.length-1) + '1';
+                    console.log('dbxUrl', dbxUrl);
                     res.status(200).json(dbxUrl);
                 });
             })
@@ -47,15 +48,15 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
 });
 
 const upload = multer({
-                          storage: multer.diskStorage({
-                                                          filename: (req, file, cb) => {
-                                                              cb(null , file.originalname);
-                                                          },
-                                                          destination: function(req, file, cb){
-                                                              cb(null, __dirname + '/../uploads');
-                                                          },
-                                                      })
-                      });
+      storage: multer.diskStorage({
+          filename: (req, file, cb) => {
+              cb(null , req.body.userFilename);
+          },
+        destination: function(req, file, cb){
+            cb(null, __dirname + '/../uploads');
+        },
+      })
+  });
 
 router.post('/upload', upload.any(), (req, res) => {
     res.json(req.files.map(file => {
@@ -68,6 +69,7 @@ router.post('/upload', upload.any(), (req, res) => {
 });
 
 router.post('/uploadFile', upload.any(), (req, res) => {
+    console.log(req.body.userFilename);
     res.status(200).json({msg: 'file uploaded'});
 });
 
@@ -376,6 +378,26 @@ router.post('/updatesessionslots', (req, res) => {
                 res.status(500).json({message: 'Session not found'});
             } else {
                 serverSession.statusTimeLocation = session.statusTimeLocation;
+                serverSession.save(err => {
+                    if (err) {
+                        res.status(500).json({message: 'Session save error'});
+                    } else res.status(200).json(serverSession);
+                });
+            }
+        });
+});
+
+router.post('/updatesessionhandout', (req, res) => {
+    let session = req.body;
+
+    Session
+        .findById(session._id)
+        .exec()
+        .then(serverSession => {
+            if (serverSession === null) {
+                res.status(500).json({message: 'Session not found'});
+            } else {
+                serverSession.handouts = session.handouts;
                 serverSession.save(err => {
                     if (err) {
                         res.status(500).json({message: 'Session save error'});

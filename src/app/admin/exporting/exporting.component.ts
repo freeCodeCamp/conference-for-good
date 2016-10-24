@@ -100,8 +100,9 @@ export class ExportingComponent implements OnInit {
       assistantOrCC: '', bioWebsite: '', bioProgram: '', headshot: '',
       mediaWilling: false, costsCoveredByOrg: [], speakingFees: '',
       hasPresentedAtCCAWInPast2years: false, recentSpeakingExp: '',
-      speakingReferences: '', adminNotes: '', responseForm: <any>{}, arrangements: <any>{}
-    };
+      speakingReferences: '', adminNotes: '', responseForm: <any>{}, arrangements: <any>{},
+      adminUploads: <any>{}
+    }
     return refSpeaker;
   }
 
@@ -128,25 +129,35 @@ export class ExportingComponent implements OnInit {
   }
 
   exportSessions() {
+    this.transitionService.setLoading(true);
     this.exportingService
         .exportSessions(this.sessionFields)
         .then((data: Blob) => {
           this.toast.success('Downloading session data');
           fileSaver.saveAs(data, 'sessions.csv');
+          this.transitionService.setLoading(false);
         });
   }
 
   exportSpeakers() {
     let exports = this.exportResponse() ?
                   _.concat(this.speakerFields, this.responseFields) : this.speakerFields;
+<<<<<<< HEAD
+    if (this.exportArrange) exports = _.concat(this.arrangeFields, exports);
+    this.transitionService.setLoading(true);
+||||||| merged common ancestors
+    if (this.exportArrange) exports = _.concat(this.arrangeFields, exports);
+=======
     if (this.exportArrange) {
       exports = _.concat(this.arrangeFields, exports);
     }
+>>>>>>> master
     this.exportingService
         .exportSpeakers(exports)
         .then((data: Blob) => {
           this.toast.success('Downloading speaker data');
           fileSaver.saveAs(data, 'speakers.csv');
+          this.transitionService.setLoading(false);
         });
   }
 

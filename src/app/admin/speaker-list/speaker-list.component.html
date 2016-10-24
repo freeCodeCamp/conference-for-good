@@ -40,7 +40,7 @@
                 <div class="name">{{ speaker.title | capitalize }} </div>
                 <div>{{ speaker.organization }}</div>
                 <div>{{ speaker.email }}</div>
-                <div>{{ speaker.sessions.length }} sessions</div>
+                <div>{{ speaker.sessions?.length }} session<span *ngIf="speaker.sessions?.length > 1">s</span></div>
               </div>
             </div>
           </div>

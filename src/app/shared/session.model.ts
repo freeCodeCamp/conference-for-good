@@ -29,6 +29,7 @@ export interface Session {
       room: string
     }[],
     miscRequirements?: String,
+    handouts?: string[],
     sessionComplete: boolean
 }
 

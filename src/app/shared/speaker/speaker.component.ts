@@ -2,9 +2,12 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+let fileSaver = require('file-saver');
 
 import { AdminService } from '../admin.service';
 import { AuthService } from '../auth.service';
+import { DatePipe } from '../date.pipe';
+import { FileService } from '../file.service';
 import { SpeakerService } from '../speaker.service';
 import { TransitionService } from '../transition.service';
 import { ToastComponent } from '../toast.component';
@@ -25,6 +28,10 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   model: Speaker;
   speakerSessions: Session[] = [];
   leadPresId: string = null;
+  
+  defaultFileString = 'Choose a file...';
+  adminUploadString = '';
+  selectedAdminFile: File;
 
   incompleteFields: string[] = [];
 
@@ -44,6 +51,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   constructor(private transitionService: TransitionService,
               private adminService: AdminService,
               private authService: AuthService,
+              private fileService: FileService,
               private speakerService: SpeakerService,
               private route: ActivatedRoute,
               private router: Router) { }
@@ -51,6 +59,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.transitionService.transition();
+    this.adminUploadString = this.defaultFileString;
 
     // Check for params
     this.paramsub = this.route.params.subscribe(params => {
@@ -215,4 +224,53 @@ export class SpeakerComponent implements OnInit, OnDestroy {
     return refSpeaker;
   }
 
+<<<<<<< HEAD
+    fileSelected(files: FileList, whichFile: string) {
+        if (!files[0]) return;
+        this.selectedAdminFile = files[0];
+        this.adminUploadString = this.selectedAdminFile.name;
+    }
+
+    upload(uploadTitle: string) {
+      if (!this.selectedAdminFile) return;
+      if (!uploadTitle) {
+        this.toast.error('Please enter a title for this upload.');
+        return;
+      }
+      let ext = this.selectedAdminFile.name.split('.').pop();
+      let userFilename = `${this.model.nameLast}_${this.model.email}_${uploadTitle}.${ext}`;
+      this.transitionService.setLoading(true);
+      let data = new FormData();
+      data.append('userFilename', userFilename);
+      data.append('file', this.selectedAdminFile);
+      this.fileService
+          .uploadToServer(data)
+          .then(res => {
+            this.speakerService
+                .sendToDropbox(userFilename, 'adminUploads')
+                .then(dbxRes => {
+                  if (dbxRes.status) {
+                    this.toast.error('Upload unsuccessful. Please try again!');
+                  } else {
+                    if (!this.model.adminUploads) this.model.adminUploads = [];
+                    let upload = {
+                      title: uploadTitle,
+                      url: dbxRes
+                  };
+                    this.model.adminUploads.push(upload);
+                    this.speakerService
+                        .updateSpeaker(this.model)
+                        .then(res => {
+                          this.toast.success('Upload successful!');
+                          this.transitionService.setLoading(false);
+                        });
+                  }
+                });
+          });
+    }
 }
+||||||| merged common ancestors
+}
+=======
+}
+>>>>>>> master
