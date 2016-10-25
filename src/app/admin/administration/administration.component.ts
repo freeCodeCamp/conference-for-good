@@ -1,3 +1,5 @@
+declare var require: any;
+
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../shared/auth.service';
 import { SpeakerService } from '../../shared/speaker.service';
@@ -69,6 +71,20 @@ export class AdministrationComponent implements OnInit {
                     this.toast.error('User not found!');
                 } else {
                     this.toast.error('Unable to remove admin, please try again later');
+                }
+            });
+    }
+
+    clearUploads() {
+        this.authService.clearUploads()
+            .then( res => {
+                this.toast.success('Uploads have been cleared');
+            })
+            .catch( err => {
+                if (err.status === 400) {
+                    this.toast.error('Unable to clear uploads, please try again later');
+                } else {
+                    this.toast.success('Uploads have been cleared');
                 }
             });
     }

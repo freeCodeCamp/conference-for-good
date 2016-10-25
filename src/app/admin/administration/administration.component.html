@@ -3,11 +3,14 @@
         <div class="col-xs-12 col-md-6 col-md-offset-3">
             <h1 class="text-center">Administration</h1>
 
-            <div class="col-xs-6 col-md-3 col-md-offset-3 text-center">
-                <button class="btn btn-primary" style="margin-right: 15px;" (click)="showAddAdmin()">Add Admin</button>
+            <div class="col-xs-3 col-xs-offset-1 text-center">
+                <button class="btn btn-primary" (click)="showAddAdmin()">Add Admin</button>
             </div>
-            <div class="col-xs-6 col-md-6">
+            <div class="col-xs-3 text-center">
                 <button class="btn btn-primary" (click)="showDeleteAdmin()">Delete Admin</button>
+            </div>
+            <div class="col-xs-3 text-center">
+                <button class="btn btn-primary" (click)="clearUploads()">Clear Uploads</button>
             </div>
 
         </div>

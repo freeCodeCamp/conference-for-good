@@ -167,5 +167,14 @@ router.get('/deleteadmin/:id', (req, res) => {
     });
 });
 
+router.get('/clearuploads', (req, res) => {
+    Speaker.update({}, { $set: { adminUploads: [], 'responseForm.w9': '' } }, { multi: true }, (err, num) => {
+        if (err) {
+            return res.status(400).json({ alert: err });
+        }
+        return res.status(200).json({ alert: 'uploads cleared' });
+    });
+});
+
 
 module.exports = router;
