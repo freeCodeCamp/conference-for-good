@@ -42,7 +42,7 @@ export class ForgotPasswordComponent implements OnInit {
             })
             .catch(err => {
                 if (err.alert === 'not sent') {
-                    this.toast.error('Unbale to send new password at this time. Try again later!');
+                    this.toast.error('Unable to send new password at this time. Try again later!');
                 } else if (err.alert === 'email not found') {
                     this.toast.error('Could not find a user with that email address. Please try again!');
                 } else {

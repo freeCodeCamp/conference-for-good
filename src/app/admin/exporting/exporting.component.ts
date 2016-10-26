@@ -47,7 +47,8 @@ export class ExportingComponent implements OnInit {
     let refSpeaker: Speaker = this.genRefSpeaker();
     for (let field in refSpeaker) {
       if (refSpeaker.hasOwnProperty(field)) {
-        if (field !== 'password') {
+        if (field !== 'password'
+            && field !== 'adminUploads' && field !== 'statusNotification') {
           this.speakerFields.push({name: field, checked: false});
         }
       }
