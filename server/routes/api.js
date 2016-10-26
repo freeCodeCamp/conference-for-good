@@ -28,12 +28,10 @@ router.get('/dropbox/:filename/:directory', (req, res) => {
                 fs.unlink(fileDir, err => {
                     if (err) console.log('File clear error: ', err);
                 });
-                console.log('path response:', response.path_display);
                 let dbxUrl = '';
                 dbx.sharingCreateSharedLink({path: response.path_display, short_url: false}).then(dbxRes => {
                     // Set dbx url dl query to 1 to allow direct download
                     dbxUrl = dbxRes.url.slice(0, dbxRes.url.length-1) + '1';
-                    console.log('dbxUrl', dbxUrl);
                     res.status(200).json(dbxUrl);
                 });
             })
@@ -69,7 +67,6 @@ router.post('/upload', upload.any(), (req, res) => {
 });
 
 router.post('/uploadFile', upload.any(), (req, res) => {
-    console.log(req.body.userFilename);
     res.status(200).json({msg: 'file uploaded'});
 });
 

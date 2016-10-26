@@ -47,6 +47,27 @@
         </div>
 
         <div class="row section">
+          <h4>Headshot</h4>
+          <p>You can manually enter a URL to an existing headshot here for use in this app.</p>
+          <div class="col-md-6 col-xs-12">
+            <label class="control-label primary-label formLabelRequired" for="headshot">Headshot Url</label><br/>
+            <input type="text" class="form-control"
+                  [(ngModel)]="model.headshot"
+                  id="headshot"
+                  name="headshot" #headshot="ngModel">
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <p><b>Headshot Preview</b></p>
+            <img *ngIf="model.headshot" [src]="model.headshot" class="headshot">
+            <p *ngIf="!model.headshot" class="headshot"><br />No<br/>Image<br />Found</p>
+          </div>
+          <div class="col-xs-12">
+            <button class="btn btn-primary"
+                    (click)="updateSpeaker(model)">Save Headshot</button>
+          </div>
+        </div>
+
+        <div class="row section">
           <p>
             <b>Speaker response form: </b>
             <a [routerLink]="['/response', {id: model._id}]">
@@ -392,18 +413,6 @@
               <p>Current words: {{ bioProgram.value.split(' ').length }}</p>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="row section">
-        <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label formLabelRequired" [ngClass]="!model.headshot ? 'formLabelRequiredMissing' : '' " for="headshot">Headshot Url?</label><br/>
-          <label class="control-label sub-label" for="headshot">This photo will be displayed on CCAW's website and on the conference app.</label><br/>
-          <label class="control-label sub-label" for="headshot">If you prefer not to display a headshot, please upload your organization's logo instead.</label>
-          <input type="text" class="form-control"
-                 [(ngModel)]="model.headshot"
-                 id="headshot"
-                 name="headshot" #headshot="ngModel">
         </div>
       </div>
 

@@ -72,7 +72,7 @@
         </div>
 
         <div *ngIf="model.responseForm.ccawCoveringHotel === 'yes'" class="col-xs-12">
-          <label class="control-label primary-label">I have reviewed my <span class="text-danger">Speaker Details</span> and <a [routerLink]="['/dashboard']">Terms</a> and accept all terms.</label>
+          <label class="control-label primary-label">I have reviewed my <span *ngIf="!speakerDetails" class="text-danger">Speaker Details</span><a *ngIf="speakerDetails" [href]="speakerDetails">Speaker Details</a> and <a [routerLink]="['/dashboard']">Terms</a> and accept all terms.</label>
           <div class="radio">
             <label>
               <input type="radio" name="agreedHotel" [(ngModel)]="model.responseForm.agreedHotel"
@@ -218,10 +218,6 @@
       </div>
     </div>
 
-    <div class="row section">
-      <h4>W9</h4>
-      **W9 form upload here
-    </div>
     <button type="submit" [disabled]="!isFormValid(responseForm.form.valid)"
             class="btn btn-primary" (click)="submitResponse()">Submit</button>
   <toast #toast></toast>

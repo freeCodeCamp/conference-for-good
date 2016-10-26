@@ -211,7 +211,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
                 if (typeof form[field] !== undefined) {
                   // If type is boolean, form item is completed
                   if (typeof form[field] !== 'boolean') {
-                    if (!form[field]) {
+                    if (!form[field] && field !== 'headshot') {
                       flag = false;
                     }
                   }
@@ -223,7 +223,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           if (typeof form[field] !== undefined) {
             // If type is boolean, form item is completed
             if (typeof form[field] !== 'boolean') {
-              if (!form[field]) {
+              if (!form[field] && field !== 'headshot') {
                 flag = false;
               }
             }
