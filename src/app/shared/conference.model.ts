@@ -5,6 +5,8 @@ export interface Conference {
   /** DefaultConf = associated with speaker submissions */
   defaultConf: boolean,
   title: string,
+  venueName: string,
+  venueAddress: string,
   /** Date format: 2016-12-30 */
   dateRange: {
     start: string,

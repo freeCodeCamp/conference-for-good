@@ -9,6 +9,16 @@
     </div>
     <div class="row">
       <div class="col-md-4 col-xs-6">
+        <label class="control-label" for="venueName">Conference Venue</label>
+        <input #venueName type="text" class="form-control" id="venueName">
+      </div>
+      <div class="col-md-4 col-xs-6">
+        <label class="control-label" for="venueAddress">Venue Address</label>
+        <input #venueAddress type="text" class="form-control" id="venueAddress">
+      </div>
+    </div>
+    <div class="row space-top">
+      <div class="col-md-4 col-xs-6">
         <label class="control-label" for="start-date">Start Date</label>
         <input #start type="date" class="form-control" id="start-date">
       </div>
@@ -18,6 +28,7 @@
       </div>
     </div>
   </div>
-  <button type="submit" class="btn btn-primary" (click)="createConf(title, start, end)">Create</button>
+  <button type="submit" class="btn btn-primary" 
+          (click)="createConf(title, venueName, venueAddress, start, end)">Create</button>
   <toast #toast></toast>
 </div>

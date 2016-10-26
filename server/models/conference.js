@@ -7,6 +7,8 @@ let conferenceSchema = new mongoose.Schema({
   lastActive: Boolean,
   defaultConf: Boolean,
   title: String,
+  venueName: String,
+  venueAddress: String,
   dateRange: {
     start: String, // 2016-12-30
     end: String

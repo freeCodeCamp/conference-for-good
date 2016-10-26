@@ -23,10 +23,18 @@ export class CreateConfComponent implements OnInit {
     this.transitionService.transition();
   }
 
-  createConf(title: HTMLInputElement, start: HTMLInputElement, end: HTMLInputElement) {
+  createConf(title: HTMLInputElement,
+             venueName: HTMLInputElement, venueAddress: HTMLInputElement, 
+             start: HTMLInputElement, end: HTMLInputElement) {
     let titleText = title.value;
     if (titleText.length < 1) {
       this.toast.error('Create a title for your conference');
+      return;
+    }
+    let venueNameText = venueName.value;
+    let venueAddressText = venueAddress.value;
+    if (venueNameText.length < 1 || venueAddressText.length < 1) {
+      this.toast.error('Enter a venue name and address for your conference');
       return;
     }
     // Input date value format: 2016-12-30
@@ -44,10 +52,12 @@ export class CreateConfComponent implements OnInit {
             .getAllConferences()
             .then((conferences: Conference[]) => {
               if (!this.isDuplicateTitle(conferences, titleText)) {
-                this.adminService.createConference(titleText, startText, endText)
+                this.adminService.createConference(titleText, venueNameText, venueAddressText, startText, endText)
                     .then(res => {
                       this.toast.success('Conference created!');
                       title.value = '';
+                      venueName.value = '';
+                      venueAddress.value = '';
                       start.value = '';
                       end.value = '';
                     });
