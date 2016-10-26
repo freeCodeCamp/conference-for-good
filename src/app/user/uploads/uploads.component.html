@@ -3,17 +3,23 @@
     <div class="row block">
         <div class="col-xs-6 col-xs-offset-3 section">
             <h3 class="text-center title">Upload Headshot</h3>
-            <div *ngIf="speaker.headshot" class="alert alert-success top-alert">
-                <p>You've already uploaded your headshot.</p>
+            <p>This photo will be displayed on CCAW's website and on the conference app.</p>
+            <p>If you prefer not to display a headshot, please upload your organization's logo instead.</p>
+            <div>
+                <p><b>Your current headshot:</b></p>
+                <img *ngIf="speaker.headshot" [src]="speaker.headshot" class="headshot">
+                <p *ngIf="!speaker.headshot" class="headshot"><br />No<br/>Image<br />Found</p>
             </div>
             <div *ngIf="!speaker.headshot" class="alert alert-warning top-alert">
                 <p>You haven't uploaded a headshot yet.</p>
             </div>
-            <label class="btn btn-default" for="headshotFile"><i class="fa fa-upload fa-lg"></i>{{ headshotFileString }}</label>
-            <input id="headshotFile" class="file" type="file" #headshotFile (change)="fileSelected(headshotFile.files, 'headshot')">
-            
-            <button class="btn btn-primary" (click)="upload('headshot')"
-                    [disabled]="speaker.headshot || transitionService.isLoading()">Upload</button>
+            <div class="space-top">
+                <label class="btn btn-default" for="headshotFile"><i class="fa fa-upload fa-lg"></i>{{ headshotFileString }}</label>
+                <input id="headshotFile" class="file" type="file" #headshotFile (change)="fileSelected(headshotFile.files, 'headshot')">
+                
+                <button class="btn btn-primary" (click)="upload('headshot')"
+                        [disabled]="speaker.headshot || transitionService.isLoading()">Upload</button>
+            </div>
         </div>
 
         <div class="col-xs-6 col-xs-offset-3 section">
