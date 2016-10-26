@@ -111,4 +111,11 @@ export class AuthService {
         .catch(handleError);
   }
 
+  clearUploads() {
+    return this.http
+        .get(this.baseUrl + '/auth/clearuploads')
+        .toPromise()
+        .then(parseJson);
+  }
+
 }

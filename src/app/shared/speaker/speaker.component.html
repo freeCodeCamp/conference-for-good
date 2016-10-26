@@ -38,10 +38,10 @@
             <label class="control-label primary-label" for="uploadTitle">Name upload:</label>
             <input type="text" class="form-control" #uploadTitle name="uploadTitle">
 
-            <label class="btn btn-default space-top-sm" for="adminUpload"><i class="fa fa-upload fa-lg"></i>{{ adminUploadString }}</label>
+            <label class="btn btn-default space-top" for="adminUpload"><i class="fa fa-upload fa-lg"></i>{{ adminUploadString }}</label>
             <input id="adminUpload" class="file" type="file" #adminUpload (change)="fileSelected(adminUpload.files)">
             
-            <button class="btn btn-primary" (click)="upload(uploadTitle.value)"
+            <button class="btn btn-primary space-top" (click)="upload(uploadTitle.value)"
                     [disabled]="transitionService.isLoading()">Upload</button>
           </div>
         </div>
