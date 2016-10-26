@@ -24,6 +24,7 @@ export class ResponseComponent implements OnInit, OnDestroy {
   private paramsub: any;
 
   model: Speaker;
+  speakerDetails = '';
 
   dietaryNeeds = [
     {
@@ -72,6 +73,11 @@ export class ResponseComponent implements OnInit, OnDestroy {
         this.model.responseForm.dietaryNeeds = this.dietaryNeeds;
         this.generateMealDates();
       }
+
+      // Check Brooke has uploaded speaker details document
+      this.model.adminUploads.forEach(upload => {
+        if (upload.title.toLowerCase() === 'speaker details') this.speakerDetails = upload.url;
+      });
     });
   }
 
