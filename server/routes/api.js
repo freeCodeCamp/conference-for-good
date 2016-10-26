@@ -112,6 +112,8 @@ router.post('/createconference', (req, res) => {
             newConf.lastActive = true;
             newConf.defaultConf = true;
             newConf.title = conf.title;
+            newConf.venueName = conf.venueName;
+            newConf.venueAddress = conf.venueAddress;
             newConf.dateRange = {
                 start: conf.dateRange.start,
                 end: conf.dateRange.end
@@ -263,6 +265,8 @@ router.post('/updateconference', (req, res) => {
                     }
 
                     serverConf.title = conf.title;
+                    serverConf.venueName = conf.venueName;
+                    serverConf.venueAddress = conf.venueAddress;
                     serverConf.save(err => {
                         if (err) res.status(500).json({message: 'Conference save error'});
                         else res.status(200).json({message: 'Conference saved'});

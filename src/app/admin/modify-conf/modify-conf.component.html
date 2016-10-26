@@ -16,7 +16,7 @@
 
   <ul class="nav nav-tabs" id="tab-bar">
     <li role="presentation" class="active">
-      <a href="#tabDetails" data-toggle="tab">Change title</a>
+      <a href="#tabDetails" data-toggle="tab">Change Details</a>
     </li>
     <li role="presentation" (click)="updateSelectedDate(dates.value)">
       <a href="#tabTimeslot" data-toggle="tab">Add Timeslots</a>
@@ -35,9 +35,19 @@
             <input #title type="text" class="form-control" id="title">
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label" for="venueName">Conference Venue</label>
+            <input #venueName type="text" class="form-control" id="venueName">
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <label class="control-label" for="venueAddress">Venue Address</label>
+            <input #venueAddress type="text" class="form-control" id="venueAddress">
+          </div>
+        </div>
       </div>
       <button id="update" class="btn btn-primary" 
-              (click)="updateConf(title)">Update</button>
+              (click)="updateConf(title, venueName, venueAddress)">Update</button>
     </div>
 
     <div class="tab-pane" id="tabTimeslot">
