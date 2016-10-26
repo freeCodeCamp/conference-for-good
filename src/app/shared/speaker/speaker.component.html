@@ -50,8 +50,8 @@
           <p>
             <b>Speaker response form: </b>
             <a [routerLink]="['/response', {id: model._id}]">
-              <span *ngIf="model.responseForm.completed">Completed</span>
-              <span *ngIf="!model.responseForm.completed">Not Done</span>
+              <span *ngIf="model.responseForm?.completed">Completed</span>
+              <span *ngIf="!model.responseForm?.completed">Not Done</span>
             </a>
           </p>
           <p><b>Sessions speaker is involved in:</b></p>
