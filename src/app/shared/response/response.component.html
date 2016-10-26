@@ -11,8 +11,8 @@
       <h4>Lodging Information</h4>
 
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label">Would you like CCAW to reserve a room at the Sheraton for you?</label>
-        <label class="control-label sub-label"><u>Only select “No” if you are NOT staying at the Sheraton or if you have already booked a hotel room.</u></label>
+        <label class="control-label primary-label">Would you like CCAW to reserve a room at the {{ (adminService.defaultConference | async).venueName }} for you?</label>
+        <label class="control-label sub-label"><u>Only select “No” if you are NOT staying at {{ (adminService.defaultConference | async).venueName }} or if you have already booked a hotel room.</u></label>
         <div class="radio">
           <label>
             <input type="radio" name="ccawLodging" [(ngModel)]="model.responseForm.ccawLodging"

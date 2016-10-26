@@ -52,7 +52,7 @@
           <div><u><b>Lodging:</b></u><br/><i>Please review Speaker Details for additional lodging information.</i></div>
           <div>
             <ul>
-              <li><b>Hotel:</b> Sheraton Dallas, 400 North Olive Street, Dallas, TX 75201, 214-822-8000</li>
+              <li><b>Hotel:</b> {{ (adminService.defaultConference | async).venueName }}, {{ (adminService.defaultConference | async).venueAddress }}</li>
               <li><b>Arrival Date:</b> {{ speaker.responseForm?.dateArrival | dateCustom }}</li>
               <li><b>Departure Date:</b> {{ speaker.responseForm?.dateDeparture | dateCustom }}</li>
               <li><b>Confirmation #:</b> {{ speaker.arrangements[activeConfIndex]?.lodgingConfirmNum }}</li>

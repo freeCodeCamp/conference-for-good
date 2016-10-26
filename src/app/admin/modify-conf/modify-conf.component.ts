@@ -28,6 +28,8 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
   selectedDaySlots: BehaviorSubject<TimeSlot[]> = new BehaviorSubject([]);
 
   @ViewChild('title') title: ElementRef;
+  @ViewChild('venueName') venueName: ElementRef;
+  @ViewChild('venueAddress') venueAddress: ElementRef;
 
   constructor(private transitionService: TransitionService,
               private adminService: AdminService,
@@ -49,18 +51,24 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
     this.fillCurrentDetails();
   }
 
-  updateConf(title: HTMLInputElement) {
+  updateConf(title: HTMLInputElement, venueName: HTMLInputElement, venueAddress: HTMLInputElement) {
     let currentTitle = this.selectedConf.getValue().title;
     let newTitle = title.value;
+    let newVenueName = venueName.value;
+    let newVenueAddress = venueAddress.value;
     if (newTitle.length < 1) {
       this.toast.error('Conference must have a title');
+      return;
+    }
+    if (newVenueName.length < 1 || newVenueAddress.length < 1) {
+      this.toast.error('Enter a venue name and address for your conference');
       return;
     }
     this.adminService
         .getAllConferences()
         .then((conferences: Conference[]) => {
           if (!this.isDuplicateTitle(conferences, newTitle, this.selectedConf.getValue().title)) {
-            this.adminService.updateConference(currentTitle, newTitle)
+            this.adminService.updateConference(currentTitle, newTitle, newVenueName, newVenueAddress)
               .then(res => {
                 this.toast.success('Conference updated!');
                 let conf = this.selectedConf.getValue();
@@ -191,6 +199,10 @@ export class ModifyConfComponent implements OnInit, AfterViewInit {
 
   fillCurrentDetails() {
     this.title.nativeElement.value = this.selectedConf.getValue().title;
+    if (this.selectedConf.getValue().venueName && this.selectedConf.getValue().venueAddress) {
+      this.venueName.nativeElement.value = this.selectedConf.getValue().venueName;
+      this.venueAddress.nativeElement.value = this.selectedConf.getValue().venueAddress;
+    }
   }
 
   isDuplicateTitle(conferences: Conference[], newTitle: string, currentTitle) {

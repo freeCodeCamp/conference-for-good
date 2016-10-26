@@ -24,7 +24,9 @@ export class AdminService {
 
   constructor(private http: Http) { }
 
-  createConference(title: string, startDate: string, endDate: string) {
+  createConference(title: string,
+                   venueName: string, venueAddress: string,
+                   startDate: string, endDate: string) {
     this.resetActiveConfs();
     this.resetDefaultConfs();
     let newConf: Conference = {
@@ -32,6 +34,8 @@ export class AdminService {
       lastActive: true,
       defaultConf: true,
       title: title,
+      venueName: venueName,
+      venueAddress: venueAddress,
       dateRange: {
         start: startDate,
         end: endDate
@@ -99,9 +103,11 @@ export class AdminService {
               .catch(handleError);
   }
 
-  updateConference(currentTitle: string, newTitle) {
+  updateConference(currentTitle: string, newTitle: string, newVenueName: string, newVenueAddress: string) {
     let conference = _.find(this.allConferences, conf => conf.title === currentTitle);
     conference.title = newTitle;
+    conference.venueName = newVenueName;
+    conference.venueAddress = newVenueAddress;
     let pkg = packageForPost({currentTitle: currentTitle, conference: conference});
     return this.http
               .post(this.baseUrl + '/api/updateconference', pkg.body, pkg.opts)
