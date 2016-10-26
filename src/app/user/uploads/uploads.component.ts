@@ -131,7 +131,6 @@ export class UploadsComponent implements OnInit {
                 this.speakerService
                     .sendToDropbox(userFilename, directory)
                     .then(dbxRes => {
-                        console.log('dbx res: ', dbxRes);
                         if (dbxRes.status ) {
                             this.toast.error('Uploaded unsuccessful. Please try again!');
                         } else {
@@ -177,7 +176,6 @@ export class UploadsComponent implements OnInit {
                 this.speakerService
                     .sendToDropbox(userFilename, 'handouts')
                     .then(dbxRes => {
-                        console.log('dbx res: ', dbxRes);
                         if (dbxRes.status ) {
                             this.toast.error('Upload unsuccessful. Please try again!');
                         } else {
