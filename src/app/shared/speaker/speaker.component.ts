@@ -130,6 +130,8 @@ export class SpeakerComponent implements OnInit, OnDestroy {
     this.model.profileComplete = this.checkProfile(form);
 
     if (this.leadPresId) {
+      // If the lead pres is making a copresenter, create account and email
+
       if (this.speakerService.findSpeakerByEmail(this.model.email)) {
         this.toast.error('A speaker with that email already exists');
         return;
@@ -143,7 +145,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       this.authService
           .signUpForCopres(leadPres, signupData)
           .then(res => {
-            // We need to sync the mongoos ID before udating remaining fields
+            // We need to sync the mongoose ID before udating remaining fields
             this.model._id = res.userId;
             this.speakerService
                 .updateSpeaker(this.model)
@@ -153,6 +155,30 @@ export class SpeakerComponent implements OnInit, OnDestroy {
                 // .then(res => {
                 //   this.toast.success('Copresenter account created and emailed!')
                 // });
+          });
+    } else if (this.authService.user.getValue().admin && !this.model._id) {
+      // If an admin is making a speaker, create account
+
+      if (this.speakerService.findSpeakerByEmail(this.model.email)) {
+        this.toast.error('A speaker with that email already exists');
+        return
+      }
+      let signupData = {
+        email: this.model.email,
+        firstName: this.model.nameFirst,
+        lastName: this.model.nameLast,
+        password: 'password' // Placeholder pass, change on first login
+      }
+      this.authService
+          .signup(signupData)
+          .then(res => {
+            // We need to sync the mongoose ID before udating remaining fields
+            this.model._id = res.userId;
+            this.speakerService
+                .updateSpeaker(this.model)
+                .then(res => {
+                  this.toast.success('Speaker created, account generated.')
+                });
           });
     } else {
       this.speakerService
