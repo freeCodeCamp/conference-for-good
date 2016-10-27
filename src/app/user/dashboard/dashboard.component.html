@@ -24,7 +24,7 @@
                   {{ coPres.nameFirst }} {{ coPres.nameLast }}
                 </div>
               </div>
-              <div><b>Currently Scheduled for: </b></div>
+              <div class="space-top-sm"><b>Currently Scheduled for: </b></div>
               <div *ngFor="let occurrence of session.statusTimeLocation">
                 {{ getPart(session, occurrence) }}{{ getDate(occurrence) | dateCustom }}, {{ slot(occurrence)?.start | time }}-{{ slot(occurrence)?.end | time }} in {{ occurrence.room }}
               </div>
@@ -76,25 +76,27 @@
         <div class="dashboard-item">
           <b>Action Required</b>
 
-          <div>
-            <div *ngIf="noActionRequired()">None</div>
-            <div *ngIf="!speaker.profileComplete"><a [routerLink]="['/speaker', {id: speaker._id}]">Profile Incomplete</a></div>
-            <div *ngIf="incompleteSessions.length > 0">
-              <div class="small-pad" *ngFor="let session of incompleteSessions">
-                <a [routerLink]="['/session', {id: session._id}]">Incomplete Session: {{ session.title }}</a>
+          <div class="space-top-sm">
+            <ul>
+              <li *ngIf="noActionRequired()">None</li>
+              <li *ngIf="!speaker.profileComplete"><a [routerLink]="['/speaker', {id: speaker._id}]">Profile Incomplete</a></li>
+              <div *ngIf="incompleteSessions.length > 0">
+                <li *ngFor="let session of incompleteSessions">
+                  <a [routerLink]="['/session', {id: session._id}]">Incomplete Session: {{ session.title }}</a>
+                </li>
               </div>
-            </div>
-            <div *ngIf="isResponseFormNeeded()">
-              <a [routerLink]="['/response', {id: speaker._id}]">Speaker Response Form - <b>DUE BY {{ monthsBefore(2) }}</b></a>
-            </div>
-            <div *ngIf="!speaker.headshot"><a [routerLink]="['/uploads']">No Headshot Uploaded</a></div>
-            <div *ngIf="!speaker.responseForm?.w9"><a [routerLink]="['/uploads']">No W9 Form Uploaded</a></div>
-            <div *ngIf="needsHandouts()"><a [routerLink]="['/uploads']">No Handouts For Presentation</a></div>
-            <div *ngIf="otherAdminUls.length > 0">
-              <div *ngFor="let upload of otherAdminUls">
-                <a [href]="upload.url">{{ upload.title }}</a>
+              <li *ngIf="isResponseFormNeeded()">
+                <a [routerLink]="['/response', {id: speaker._id}]">Speaker Response Form - <b>DUE BY {{ monthsBefore(2) }}</b></a>
+              </li>
+              <li *ngIf="!speaker.headshot"><a [routerLink]="['/uploads']">No Headshot Uploaded</a></li>
+              <li *ngIf="!speaker.responseForm?.w9"><a [routerLink]="['/uploads']">No W9 Form Uploaded</a></li>
+              <li *ngIf="needsHandouts()"><a [routerLink]="['/uploads']">No Handouts For Presentation</a></li>
+              <div *ngIf="otherAdminUls.length > 0">
+                <li *ngFor="let upload of otherAdminUls">
+                  <a [href]="upload.url">{{ upload.title }}</a>
+                </li>
               </div>
-            </div>
+            </ul>
           </div>
         </div>
 

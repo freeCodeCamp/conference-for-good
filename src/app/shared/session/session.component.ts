@@ -305,6 +305,7 @@ export class SessionComponent implements OnInit, OnDestroy {
   }
   
   lockSession(): boolean {
+    if (!this.model.statusTimeLocation) return false;
     let scheduledForCurrentConf = false;
     this.model.statusTimeLocation.forEach(event => {
       if (event.conferenceTitle === this.adminService.defaultConference.getValue().title) {
