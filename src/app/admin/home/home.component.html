@@ -42,15 +42,15 @@
 
         <div class="dashboard-item">
           <b>Incomplete Speaker Profiles</b>
-          <div>
+          <ul class="space-top-sm">
             <div *ngFor="let speaker of (speakerService.activeProfileNotDone | async)">
-              <div class="name">
+              <li class="name">
                 <a [routerLink]="['/speaker', {id: speaker._id}]">
                   {{ speaker.salutation | capitalize }} {{ speaker.nameFirst | capitalize }} {{ speaker.nameLast | capitalize }}
                 </a>
-              </div>
+              </li>
             </div>
-          </div>
+          </ul>
         </div>
 
       </div>
@@ -60,24 +60,24 @@
         <div class="dashboard-item">
 
           <b>Approved Sessions Pending Scheduling</b>
-          <div>
-            <div *ngFor="let session of (sessionService.sessionsApprovedUnscheduled | async)">
+          <ul class="space-top-sm">
+            <li *ngFor="let session of (sessionService.sessionsApprovedUnscheduled | async)">
               <a [routerLink]="['/session', {id: session._id}]">{{ session.title }}</a>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
 
         <div class="dashboard-item">
           <b>Incomplete Speaker Response Forms</b>
-          <div>
-            <div *ngFor="let speaker of (speakerService.activeNoResponseForm | async)">
-              <div class="name">
+          <ul class="space-top-sm">
+            <div *ngFor="let speaker of (speakerService.activeScheduledNoResponseForm | async)">
+              <li class="name">
                 <a [routerLink]="['/speaker', {id: speaker._id}]">
                   {{ speaker.salutation | capitalize }} {{ speaker.nameFirst | capitalize }} {{ speaker.nameLast | capitalize }}
                 </a>
-              </div>
+              </li>
             </div>
-          </div>
+          </ul>
         </div>
 
       </div>

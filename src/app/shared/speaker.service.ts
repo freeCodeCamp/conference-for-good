@@ -40,7 +40,7 @@ export class SpeakerService {
   // Active speakers filters
   activeProfileCompleted: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
   activeProfileNotDone: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
-  activeNoResponseForm: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+  activeScheduledNoResponseForm: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
   constructor(private http: Http,
               private adminService: AdminService,
@@ -131,7 +131,20 @@ export class SpeakerService {
 
     this.activeProfileCompleted.next(_.filter(this.speakersActive.getValue(), speaker => speaker.profileComplete));
     this.activeProfileNotDone.next(_.filter(this.speakersActive.getValue(), speaker => !speaker.profileComplete));
-    this.activeNoResponseForm.next(_.filter(this.speakersActive.getValue(), speaker => !speaker.responseForm.completed));
+    
+    let activeConf = this.adminService.defaultConference.getValue().title;
+    this.activeScheduledNoResponseForm.next(_.filter(this.speakersActive.getValue(), speaker => {
+      let speakerSessions = this.sessionService.getSpeakerSessions(speaker._id);
+      let activeSpeakerSessions = _.filter(speakerSessions, session => session.associatedConf === activeConf);
+      let hasActiveScheduledSessions = false;
+      activeSpeakerSessions.forEach(session => {
+        if (session.statusTimeLocation.length > 0) hasActiveScheduledSessions = true;
+      });
+      if (hasActiveScheduledSessions) {
+        if (!speaker.responseForm || !speaker.responseForm.completed) return true;
+        else return false;
+      }
+    }));
 
     this.speakersUnfiltered.next(sortedUnfiltered);
   }
