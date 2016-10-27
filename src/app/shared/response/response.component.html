@@ -71,27 +71,6 @@
           fees. Confirmation numbers will be sent no later than {{ monthsBefore(1) }}.
         </div>
 
-        <div *ngIf="model.responseForm.ccawCoveringHotel === 'yes'" class="col-xs-12">
-          <label class="control-label primary-label">I have reviewed my <span *ngIf="!speakerDetails" class="text-danger">Speaker Details</span><a *ngIf="speakerDetails" [href]="speakerDetails">Speaker Details</a> and <a [routerLink]="['/dashboard']">Terms</a> and accept all terms.</label>
-          <div class="radio">
-            <label>
-              <input type="radio" name="agreedHotel" [(ngModel)]="model.responseForm.agreedHotel"
-                      id="agreedHotelYes" [value]="'yes'" #agreedHotel="ngModel" required checked="">
-              I accept
-            </label>
-          </div>
-          <div class="radio">
-            <label>
-              <input type="radio" name="agreedHotel" [(ngModel)]="model.responseForm.agreedHotel"
-                      id="agreedHotelNo" [value]="'no'" #agreedHotel="ngModel">
-              I don't accept
-            </label>
-          </div>
-          <div *ngIf="model.responseForm.agreedHotel === 'no'" class="alert alert-warning">
-            <p>You must agree to the Terms & Conditions. Email <a (click)="email()" class="contact">Brooke Meyer</a> if you have questions or concerns.</p>
-          </div>
-        </div>
-
       </div>
 
 
@@ -215,6 +194,29 @@
         <input type="text" class="form-control"
                 [(ngModel)]="model.responseForm.bookAuthor" id="bookAuthor"
                 name="bookAuthor" #bookAuthor="ngModel" required>
+      </div>
+    </div>
+
+    <div class="row section">
+      <div class="col-xs-12">
+        <label class="control-label primary-label">I have reviewed my <span *ngIf="!speakerDetails" class="text-danger">Speaker Details</span><a *ngIf="speakerDetails" [href]="speakerDetails">Speaker Details</a> and <a [routerLink]="['/dashboard']">Terms</a> and accept all terms.</label>
+        <div class="radio">
+          <label>
+            <input type="radio" name="agreedHotel" [(ngModel)]="model.responseForm.agreedHotel"
+                    id="agreedHotelYes" [value]="'yes'" #agreedHotel="ngModel" required checked="">
+            I accept
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="agreedHotel" [(ngModel)]="model.responseForm.agreedHotel"
+                    id="agreedHotelNo" [value]="'no'" #agreedHotel="ngModel">
+            I don't accept
+          </label>
+        </div>
+        <div *ngIf="model.responseForm.agreedHotel === 'no'" class="alert alert-warning">
+          <p>You must agree to the Terms & Conditions. Email <a (click)="email()" class="contact">Brooke Meyer</a> if you have questions or concerns.</p>
+        </div>
       </div>
     </div>
 
