@@ -89,7 +89,6 @@
                 <a [routerLink]="['/response', {id: speaker._id}]">Speaker Response Form - <b>DUE BY {{ monthsBefore(2) }}</b></a>
               </li>
               <li *ngIf="!speaker.headshot"><a [routerLink]="['/uploads']">No Headshot Uploaded</a></li>
-              <li *ngIf="!speaker.responseForm?.w9"><a [routerLink]="['/uploads']">No W9 Form Uploaded</a></li>
               <li *ngIf="needsHandouts()"><a [routerLink]="['/uploads']">No Handouts For Presentation</a></li>
               <div *ngIf="otherAdminUls.length > 0">
                 <li *ngFor="let upload of otherAdminUls">
