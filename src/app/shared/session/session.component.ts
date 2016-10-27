@@ -303,5 +303,15 @@ export class SessionComponent implements OnInit, OnDestroy {
       return false;
     }
   }
+  
+  lockSession(): boolean {
+    let scheduledForCurrentConf = false;
+    this.model.statusTimeLocation.forEach(event => {
+      if (event.conferenceTitle === this.adminService.defaultConference.getValue().title) {
+        scheduledForCurrentConf = true;
+      }
+    });
+    return scheduledForCurrentConf && this.model.approval === 'approved';
+  }
 
 }
