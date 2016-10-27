@@ -48,6 +48,7 @@ import { TransitionService } from './shared/transition.service';
 import { DatePipe } from './shared/date.pipe';
 import { CapitalizePipe } from './shared/capitalize.pipe';
 import { TimePipe } from './shared/time.pipe';
+import { EllipsisPipe } from './shared/ellipsis.pipe';
 
 /** Directives */
 import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
@@ -70,7 +71,7 @@ import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
     ForgotPasswordComponent, ToastComponent, ResponseComponent, UploadsComponent,
 
     // Pipes
-    DatePipe, CapitalizePipe, TimePipe,
+    DatePipe, CapitalizePipe, TimePipe, EllipsisPipe,
 
     // Directives
     MaxWordsValidatorDirective,

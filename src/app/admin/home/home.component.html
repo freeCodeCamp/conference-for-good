@@ -23,7 +23,8 @@
               <div class="row pending-session">
 
                 <div class="col-xs-6">
-                  <a [routerLink]="['/session', {id: session._id}]">{{ session.title }}</a><br/>
+                  <a [routerLink]="['/session', {id: session._id}]">{{ session.title | ellipsis: 50 }}</a>
+                  <div class="divider-small"></div>
                   <a [routerLink]="['/speaker', {id: session.speakers.mainPresenter}]">
                     {{ speakerService.getSpeakerList(session.speakers).mainPresenter.nameFirst }} {{ speakerService.getSpeakerList(session.speakers).mainPresenter.nameLast }}
                   </a>
@@ -62,7 +63,7 @@
           <b>Approved Sessions Pending Scheduling</b>
           <ul class="space-top-sm">
             <li *ngFor="let session of (sessionService.sessionsApprovedUnscheduled | async)">
-              <a [routerLink]="['/session', {id: session._id}]">{{ session.title }}</a>
+              <a [routerLink]="['/session', {id: session._id}]">{{ session.title | ellipsis: 50 }}</a>
             </li>
           </ul>
         </div>
