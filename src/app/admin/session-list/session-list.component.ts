@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Session } from '../../shared/session.model';
 import { SessionService } from '../../shared/session.service';
+import { SpeakerService } from '../../shared/speaker.service';
 import { TransitionService } from '../../shared/transition.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class SessionListComponent implements OnInit {
 
   constructor(private transitionService: TransitionService,
               private sessionService: SessionService,
+              private speakerService: SpeakerService,
               private router: Router) { }
 
   ngOnInit() {
