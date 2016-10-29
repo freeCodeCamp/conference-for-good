@@ -1,3 +1,5 @@
+<script src="node_modules/ng2-bs3-modal/bundles/ng2-bs3-modal.js"></script>
+
 <div class="container" [class.page-transition]="transitionService.isTransitioning()">
     <div class="row">
         <div class="col-xs-12 col-md-6 col-md-offset-3">
@@ -10,9 +12,8 @@
                 <button class="btn btn-primary" (click)="showDeleteAdmin()">Delete Admin</button>
             </div>
             <div class="col-xs-3 text-center">
-                <button class="btn btn-primary" (click)="clearUploads()">Clear Uploads</button>
+                <button class="btn btn-primary" (click)="modal.open()">Clear Uploads</button>
             </div>
-
         </div>
     </div>
 
@@ -33,6 +34,19 @@
             </div>
         </div>
     </div>
+
+    <modal #modal class="fade in" [keyboard]="false" [backdrop]="'static'">
+            <modal-header [show-close]="false">
+                <h4 class="modal-title">Clear Uploads</h4>
+            </modal-header>
+            <modal-body>
+                Clear uploads will remove all references to speaker headshots, handouts and W-9 forms. Are you sure you want to clear uploads?
+            </modal-body>
+            <modal-footer>
+                <button type="button" class="btn btn-default" (click)="modal.close()">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="clearUploads()">Ok</button>
+            </modal-footer>
+    </modal>
 
     <toast #toast></toast>
 </div>
