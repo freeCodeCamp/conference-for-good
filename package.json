@@ -45,6 +45,7 @@
     "mongoose": "^4.6.0",
     "morgan": "^1.7.0",
     "multer": "^1.2.0",
+    "ng2-bs3-modal": "^0.10.4",
     "node-sass": "^3.9.3",
     "nodemailer": "^2.6.0",
     "passport": "^0.3.2",
