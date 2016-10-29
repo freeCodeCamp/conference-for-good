@@ -3,6 +3,7 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
+import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import { routing } from './app.routing';
 
@@ -59,6 +60,7 @@ import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    Ng2Bs3ModalModule,
     routing,
       CommonModule
   ],
