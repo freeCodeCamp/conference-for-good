@@ -245,8 +245,20 @@ export class CalendarComponent implements OnInit, AfterViewInit {
               }
               doc.setFontType('bold');
               doc.text(70, ctr, room);
-              ctr += 20;
+
               doc.setFontType('normal');
+              ctr += 20;
+              if (ctr >= 720) {
+                doc.addPage({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'letter'
+                });
+                ctr = 60;
+              }
+              doc.text(90, ctr, this.getSessionTitleFull(slot, room));
+
+              ctr += 20;
               if (ctr >= 720) {
                 doc.addPage({
                               orientation: 'portrait',
@@ -256,16 +268,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
                 ctr = 60;
               }
               doc.text(90, ctr, this.fullName(this.getSpeakers(slot, room).mainPresenter));
-              ctr += 20;
-              if (ctr >= 720) {
-                doc.addPage({
-                              orientation: 'portrait',
-                              unit: 'pt',
-                              format: 'letter'
-                            });
-                ctr = 60;
-              }
-              doc.text(90, ctr, this.getSessionTitleFull(slot, room));
+
             }
           }, this);
       });
