@@ -36,6 +36,7 @@ export class AdminService {
       title: title,
       venueName: venueName,
       venueAddress: venueAddress,
+      uploads: [],
       dateRange: {
         start: startDate,
         end: endDate
@@ -118,6 +119,17 @@ export class AdminService {
                 return res;
               })
               .catch(handleError);
+  }
+
+  addConfUpload(conf: Conference) {
+    return this.http
+              .post(this.baseUrl + '/api/addconfupload', conf)
+              .toPromise()
+              .then(parseJson)
+              .then(res => {
+                // Uploads go to current defualt conf, update it
+                this.defaultConference.next(res);
+              });
   }
 
   addTimeslot(startTime: string, endTime: string,

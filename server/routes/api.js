@@ -221,6 +221,21 @@ router.post('/deleteRoom', (req, res) => {
         });
 });
 
+router.post('/addconfupload', (req, res) => {
+    let conf = req.body;
+
+    Conference
+        .findOne({ title: conf.title })
+        .exec()
+        .then(serverConf => {
+            serverConf.uploads = conf.uploads;
+            serverConf.save(err => {
+                if (err) res.status(500).json({ message: 'Upload save failed' });
+                else res.status(200).json(serverConf);
+            });
+        });
+});
+
 router.post('/updateconference', (req, res) => {
     let currentTitle = req.body.currentTitle;
     let conf = req.body.conference;

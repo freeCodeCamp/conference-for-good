@@ -1,6 +1,7 @@
 import { Component, ViewChild, OnInit, NgZone } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
+import { AdminService } from '../../shared/admin.service';
 import { FileService } from '../../shared/file.service';
 import { Session } from '../../shared/session.model';
 import { SessionService } from '../../shared/session.service';
@@ -36,7 +37,11 @@ export class UploadsComponent implements OnInit {
     handoutsFileString = '';
     selectedHandoutsFile: File;
 
+    uploadAllFileString = '';
+    selectedUploadAllFile: File;
+
     constructor(private transitionService: TransitionService,
+                private adminService: AdminService,
                 private authService: AuthService,
                 private fileService: FileService,
                 private sessionService: SessionService,
@@ -52,6 +57,7 @@ export class UploadsComponent implements OnInit {
         this.headshotFileString = this.defaultFileString;
         this.w9FileString = this.defaultFileString;
         this.handoutsFileString = this.defaultFileString;
+        this.uploadAllFileString = this.defaultFileString;
         this.transitionService.transition();
 
         this.sessionService.sessionsUnfiltered.subscribe(sessions => {
@@ -73,6 +79,10 @@ export class UploadsComponent implements OnInit {
             case 'handouts':
                 this.selectedHandoutsFile = files[0];
                 this.handoutsFileString = this.selectedHandoutsFile.name;
+                break;
+            case 'all':
+                this.selectedUploadAllFile = files[0];
+                this.uploadAllFileString = this.selectedUploadAllFile.name;
                 break;
             default:
                 break;
@@ -186,6 +196,45 @@ export class UploadsComponent implements OnInit {
                                 .then(res => {
                                     this.toast.success('Upload success!');
                                     this.transitionService.setLoading(false);
+                                });
+                        }
+                    });
+            });
+    }
+
+    uploadToAll(uploadTitle: string) {
+        if (!this.selectedUploadAllFile) return;
+        let defaultConf = this.adminService.defaultConference.getValue();
+
+        let ext = this.selectedUploadAllFile.name.split('.').pop();
+        let userFilename = `${uploadTitle}.${ext}`;
+        this.transitionService.setLoading(true);
+        let data = new FormData();
+        data.append('userFilename', userFilename);
+        data.append('file', this.selectedUploadAllFile);
+        this.fileService
+            .uploadToServer(data)
+            .then(res => {
+                this.speakerService
+                    .sendToDropbox(userFilename, 'all')
+                    .then(dbxRes => {
+                        if (dbxRes.status ) {
+                            this.toast.error('Upload unsuccessful. Please try again!');
+                        } else {
+                            if (!defaultConf.uploads) defaultConf.uploads = [];
+                            let upload = {
+                                title: uploadTitle,
+                                url: dbxRes
+                            };
+                            defaultConf.uploads.push(upload);
+                            this.adminService
+                                .addConfUpload(defaultConf)
+                                .then(res => {
+                                    this.toast.success('Upload Success!');
+                                    this.transitionService.setLoading(false);
+                                })
+                                .catch(err => {
+                                    this.toast.error(err.message);
                                 });
                         }
                     });

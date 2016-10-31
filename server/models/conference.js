@@ -9,6 +9,10 @@ let conferenceSchema = new mongoose.Schema({
   title: String,
   venueName: String,
   venueAddress: String,
+  uploads: [{ // Uploads all speakers can see
+    title: String,
+    url: String
+  }],
   dateRange: {
     start: String, // 2016-12-30
     end: String
