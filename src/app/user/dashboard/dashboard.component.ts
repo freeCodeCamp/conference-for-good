@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   activeConfIndex: number;
 
   speakerDetails = '';
-  otherAdminUls: {url: string, title: string}[] = [];
+  otherAdminAllUls: {url: string, title: string}[] = [];
 
   private paramsub: any;
 
@@ -86,10 +86,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.leadOnlySessions = _.filter(this.allSpeakerSessions, session => session.speakers.mainPresenter === this.speaker._id);
 
-    // Check Brooke has uploaded speaker details document
-    this.speaker.adminUploads.forEach(upload => {
+    // Check if Brooke has uploaded speaker details document
+    this.adminService.defaultConference.getValue().uploads.forEach(upload => {
       if (upload.title.toLowerCase() === 'speaker details') this.speakerDetails = upload.url;
-      else this.otherAdminUls.push({title: upload.title, url: upload.url});
+      this.otherAdminAllUls.push({title: upload.title, url: upload.url});
     });
   }
 

@@ -35,11 +35,11 @@
         <div class="dashboard-item">
           <b>My Arrangements</b>
 
-          <div *ngIf="speakerDetails">
+          <div *ngIf="speakerDetails" class="space-top-sm">
             <p>PLEASE REVIEW: <a [href]="speakerDetails">Speaker Details</a></p>
           </div>
 
-          <div><u><b>Speaking Terms</b></u><br/><i>The following items will be paid for by CCAW:</i></div>
+          <div class="space-top"><u><b>Speaking Terms</b></u><br/><i>The following items will be paid for by CCAW:</i></div>
           <div>
             <ul>
               <li><b>Conference Registration:</b> Complimentary</li>
@@ -90,11 +90,12 @@
               </li>
               <li *ngIf="!speaker.headshot"><a [routerLink]="['/uploads']">No Headshot Uploaded</a></li>
               <li *ngIf="needsHandouts()"><a [routerLink]="['/uploads']">No Handouts For Presentation</a></li>
-              <div *ngIf="otherAdminUls.length > 0">
-                <li *ngFor="let upload of otherAdminUls">
-                  <a [href]="upload.url">{{ upload.title }}</a>
-                </li>
-              </div>
+              <li *ngFor="let upload of speaker.adminUploads">
+                <a [href]="upload.url">{{ upload.title }}</a>
+              </li>
+              <li *ngFor="let upload of otherAdminAllUls">
+                <a [href]="upload.url">{{ upload.title }}</a>
+              </li>
             </ul>
           </div>
         </div>

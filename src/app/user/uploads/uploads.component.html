@@ -5,13 +5,15 @@
         <div class="col-xs-6 col-xs-offset-3 section">
             <h3 class="text-center title">Upload to All</h3>
             <p>Use this section to upload items that all speakers will see.</p>
-            <p>Use the special name 'speaker details' for the upload and the speakers will see this as the speaker details link in their dashbaord.</p>
+            <p>Use the special name <b>speaker details</b> for the upload and the speakers will see this as the speaker details link in their dashbaord.</p>
 
             <p><b>Current Uploads for this conference: </b></p>
             <div class="handout-list">
-                <div *ngFor="let upload of (adminService.defaultConference | async)?.uploads">
-                    <a [href]="upload.url">{{ upload.title }}</a>
-                </div>
+                <ul>
+                    <li *ngFor="let upload of (adminService.defaultConference | async)?.uploads">
+                        <a [href]="upload.url">{{ upload.title }}</a>
+                    </li>
+                </ul>
             </div>
 
             <label class="control-label primary-label space-top" for="uploadTitle"><b>Name upload:</b></label>
