@@ -158,7 +158,6 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           });
     } else if (this.authService.user.getValue().admin && !this.model._id) {
       // If an admin is making a speaker, create account
-
       if (this.speakerService.findSpeakerByEmail(this.model.email)) {
         this.toast.error('A speaker with that email already exists');
         return

@@ -47,6 +47,7 @@ router.post('/signup', (req, res, next) => {
         req.body.firstName = formData.firstName;
         req.body.lastName = formData.lastName;
         req.body.password = generateRandomPassword();
+        req.body.changePassword = true;
 
         let leadPresName = `${req.body.leadPres.nameFirst} ${req.body.leadPres.nameLast}`
 
@@ -69,6 +70,11 @@ router.post('/signup', (req, res, next) => {
                 console.log('email sent');
             }
         });
+    } else  {
+        // If this account was created by the user, don't flag to change password
+        if (req.body.password !== 'ccawspeakerpassword') {
+            req.body.changePassword = false;
+        } else req.body.changePassword = true;
     }
     passport.authenticate('local-signup', (err, user, info) => {
         if (err) return res.status(500).json({alert: err});
