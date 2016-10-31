@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 
 import { AdminService } from './shared/admin.service';
 import { AuthService } from './shared/auth.service';
@@ -49,6 +50,16 @@ export class AppComponent implements OnInit {
         .then(res => {
           this.router.navigate(['/']);
         });
+  }
+
+  // 2017 Conference ~ May 22-25, 2017
+  getTitleText() {
+    if (!this.adminService.defaultConference.getValue()) return '';
+    let conf = this.adminService.defaultConference.getValue();
+    let dateStart = moment(conf.dateRange.start);
+    let dateEnd = moment(conf.dateRange.end);
+    let dateText = `${dateStart.format('MMM')} ${dateStart.format('D')}-${dateEnd.format('D')}, ${dateEnd.format('YYYY')}`
+    return `${conf.title} ~ ${dateText}`;
   }
 
 }
