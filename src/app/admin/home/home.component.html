@@ -63,7 +63,7 @@
           <b>Approved Sessions Pending Scheduling</b>
           <ul class="space-top-sm">
             <li *ngFor="let session of (sessionService.sessionsApprovedUnscheduled | async)">
-              <a [routerLink]="['/session', {id: session._id}]">{{ session.title | ellipsis: 50 }}</a>
+              <a [routerLink]="['/session', {id: session._id}]">{{ speakerService.getSpeaker(session.speakers.mainPresenter).nameFirst }} {{ speakerService.getSpeaker(session.speakers.mainPresenter).nameLast }} - {{ session.title | ellipsis: 50 }}</a>
             </li>
           </ul>
         </div>

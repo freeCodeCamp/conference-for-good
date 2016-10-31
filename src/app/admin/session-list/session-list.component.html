@@ -30,7 +30,7 @@
       <div *ngFor="let sessionRef of (displaySessions | async)"
           class="session row" (click)="gotoSession(sessionRef._id)">
         <div class="row">
-          <div class="col-xs-12 title"><b>{{ sessionRef.title }} - {{ this.speakerService.getSpeaker(sessionRef.speakers.mainPresenter).nameFirst }} {{ this.speakerService.getSpeaker(sessionRef.speakers.mainPresenter).nameLast }}
+          <div class="col-xs-12 title"><b> {{ speakerService.getSpeaker(sessionRef.speakers.mainPresenter).nameFirst }} {{ speakerService.getSpeaker(sessionRef.speakers.mainPresenter).nameLast }} - {{ sessionRef.title }}
           </b></div>
           <div class="divider-small col-xs-12"></div>
         </div>
