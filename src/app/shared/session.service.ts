@@ -344,7 +344,7 @@ export class SessionService {
   changeApproval(session: Session, approval: string) {
     session.approval = approval;
 
-    return this.updateSession(session);
+    return this.updateSession(session, null, 'approval');
   }
 
   changeAssociatedConf(session: Session, conferenceTitle: string) {
@@ -356,7 +356,7 @@ export class SessionService {
   /** Update new session on server and sync response with front end
    * @updateType Different server endpoints for speaker and slot updates
   */
-  updateSession(session: Session, updateType?: string) {
+  updateSession(session: Session, updateType?: string, alert?: string) {
     let serverUrl = this.baseUrl + '/api/updatesession';
     if (updateType) {
       serverUrl += updateType;
@@ -376,6 +376,11 @@ export class SessionService {
                 }
                 this.sessionsUnfiltered.next(newSessions);
                 this.setFilterAndSort();
+                if (alert) {
+                  if (alert === 'approval') {
+                    this.adminService.triggerSpeakerUpdate.emit('update');
+                  }
+                }
                 return serverSession;
               })
               .catch(handleError);

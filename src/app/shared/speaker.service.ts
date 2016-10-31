@@ -44,7 +44,12 @@ export class SpeakerService {
 
   constructor(private http: Http,
               private adminService: AdminService,
-              private sessionService: SessionService) { }
+              private sessionService: SessionService) {
+    // Trigger speaker update when requested
+    this.adminService.triggerSpeakerUpdate.subscribe(e => {
+      this.getAllSpeakers();
+    });
+  }
 
   getAllSpeakers() {
     return this.http

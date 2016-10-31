@@ -21,6 +21,7 @@ export class AdminService {
   defaultConference: BehaviorSubject<Conference> = new BehaviorSubject(null);
 
   triggerSessionUpdate: EventEmitter<any> = new EventEmitter();
+  triggerSpeakerUpdate: EventEmitter<any> = new EventEmitter();
 
   constructor(private http: Http) { }
 
