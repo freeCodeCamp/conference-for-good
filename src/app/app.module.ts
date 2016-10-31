@@ -3,6 +3,7 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
+import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import { routing } from './app.routing';
 
@@ -48,6 +49,7 @@ import { TransitionService } from './shared/transition.service';
 import { DatePipe } from './shared/date.pipe';
 import { CapitalizePipe } from './shared/capitalize.pipe';
 import { TimePipe } from './shared/time.pipe';
+import { EllipsisPipe } from './shared/ellipsis.pipe';
 
 /** Directives */
 import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
@@ -58,6 +60,7 @@ import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    Ng2Bs3ModalModule,
     routing,
       CommonModule
   ],
@@ -70,7 +73,7 @@ import { MaxWordsValidatorDirective } from './shared/maxwords.directive';
     ForgotPasswordComponent, ToastComponent, ResponseComponent, UploadsComponent,
 
     // Pipes
-    DatePipe, CapitalizePipe, TimePipe,
+    DatePipe, CapitalizePipe, TimePipe, EllipsisPipe,
 
     // Directives
     MaxWordsValidatorDirective,

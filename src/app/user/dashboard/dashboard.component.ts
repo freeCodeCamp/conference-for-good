@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   speaker: Speaker;
   allSpeakerSessions: Session[] = [];
+  activeSpeakerSessions: Session[] = [];
   pendingSessions: Session[] = [];
   scheduledSessions: Session[] = [];
 
@@ -35,7 +36,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   activeConfIndex: number;
 
   speakerDetails = '';
-  otherAdminUls: {url: string, title: string}[] = [];
+  otherAdminAllUls: {url: string, title: string}[] = [];
 
   private paramsub: any;
 
@@ -58,14 +59,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.sessionService.sessionsUnfiltered.subscribe(sessions => {
       this.allSpeakerSessions = this.sessionService.getSpeakerSessions(this.speaker._id);
 
-      this.incompleteSessions = _.filter(this.allSpeakerSessions, session => !session.sessionComplete);
+      this.activeSpeakerSessions = _.filter(this.allSpeakerSessions, session => {
+        return session.associatedConf === this.adminService.defaultConference.getValue().title;
+      });
 
-      this.pendingSessions = _.filter(this.allSpeakerSessions, session => {
+      this.incompleteSessions = _.filter(this.activeSpeakerSessions, session => !session.sessionComplete);
+
+      this.pendingSessions = _.filter(this.activeSpeakerSessions, session => {
         // Approved but unscheduled sessions are considered pending for dashboard
-        if (session.approval === 'approved') {
-          if (session.statusTimeLocation.length === 0) {
-            return true;
-          }
+        if (session.approval === 'approved' && session.statusTimeLocation.length === 0) {
+          return true;
         } else if (session.approval === 'pending' || session.approval === 'denied') {
           return true;
         } else {
@@ -73,7 +76,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.scheduledSessions = _.filter(this.allSpeakerSessions, session => {
+      this.scheduledSessions = _.filter(this.activeSpeakerSessions, session => {
         if (session.approval === 'approved' && session.statusTimeLocation.length > 0) {
           return true;
         }
@@ -83,10 +86,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.leadOnlySessions = _.filter(this.allSpeakerSessions, session => session.speakers.mainPresenter === this.speaker._id);
 
-    // Check Brooke has uploaded speaker details document
-    this.speaker.adminUploads.forEach(upload => {
+    // Check if Brooke has uploaded speaker details document
+    this.adminService.defaultConference.getValue().uploads.forEach(upload => {
       if (upload.title.toLowerCase() === 'speaker details') this.speakerDetails = upload.url;
-      else this.otherAdminUls.push({title: upload.title, url: upload.url});
+      else this.otherAdminAllUls.push({title: upload.title, url: upload.url});
     });
   }
 
@@ -176,6 +179,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     window.open('tel:2143997733');
   }
 
+  hasApprovedSession(): boolean {
+    let hasApprovedSession = false;
+    this.activeSpeakerSessions.forEach(session => {
+      if (session.approval === 'approved') hasApprovedSession = true;
+    });
+    return hasApprovedSession;
+  }
+
   isResponseFormNeeded(): boolean {
     if (this.scheduledSessions.length > 0) {
       if (this.speaker.responseForm && !this.speaker.responseForm.completed) {
@@ -200,7 +211,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (!this.speaker.headshot) return false;
     if (this.needsHandouts()) return false;
     if (this.speaker.responseForm && !this.speaker.responseForm.w9) return false;
-    if (this.otherAdminUls.length > 0) return false;
+    if (this.speaker.adminUploads.length > 0) return false;
+    if (this.otherAdminAllUls.length > 0) return false;
     return true;
   }
 

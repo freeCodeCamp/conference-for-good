@@ -44,6 +44,13 @@
   width: 60%;
 }
 
+.divider-small {
+  height: 1px;
+  background-color: $gray-light;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .card {
   padding: 10px;
   box-shadow: 0 -1px 0 hsl(0, 0%, 90%),

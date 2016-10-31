@@ -74,8 +74,8 @@ export class ResponseComponent implements OnInit, OnDestroy {
         this.generateMealDates();
       }
 
-      // Check Brooke has uploaded speaker details document
-      this.model.adminUploads.forEach(upload => {
+      // Check if Brooke has uploaded speaker details document
+      this.adminService.defaultConference.getValue().uploads.forEach(upload => {
         if (upload.title.toLowerCase() === 'speaker details') this.speakerDetails = upload.url;
       });
     });

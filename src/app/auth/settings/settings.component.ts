@@ -25,8 +25,8 @@ export class SettingsComponent implements OnInit {
                 private authService: AuthService) { }
 
     ngOnInit() {
-        this.password = new FormControl('', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(18)]));
-        this.password2 = new FormControl('', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(18)]));
+        this.password = new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)]));
+        this.password2 = new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)]));
 
         this.form = new FormGroup({
             'password': this.password,

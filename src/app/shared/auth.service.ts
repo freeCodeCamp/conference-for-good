@@ -92,6 +92,9 @@ export class AuthService {
               .post(this.baseUrl + '/auth/changePassword', pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
+              .then(res => {
+                this.user.next(res);
+              })
               .catch(handleError);
   }
 

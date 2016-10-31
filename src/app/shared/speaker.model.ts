@@ -14,6 +14,7 @@ export interface Speaker {
 
   // Speaker information
   profileComplete: boolean,
+  archived: boolean, // Archived users don't show up anywhere except "all" or "archived" speakerlist filters
   status: string, // pending, accepted, denied, notifed: boolean
   statusNotification: boolean,  // After accepting/denying, whether they were notified
   title: string,

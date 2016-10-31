@@ -79,14 +79,14 @@ export class SessionService {
     sortedUnfiltered = _.sortBy(unfilteredCopy, session => session.title);
 
     let defaultConf = this.adminService.defaultConference.getValue().title;
-    this.sessionsActive.next(_.filter(sortedUnfiltered, sessions => sessions.associatedConf === defaultConf));
+    this.sessionsActive.next(_.filter(sortedUnfiltered, session => session.associatedConf === defaultConf && session.approval !== 'denied'));
+    this.sessionsDenied.next(_.filter(sortedUnfiltered, session => session.associatedConf === defaultConf && session.approval === 'denied'));
 
     this.sessionsCompleted.next(_.filter(this.sessionsActive.getValue(), session => session.sessionComplete));
     this.sessionsNotDone.next(_.filter(this.sessionsActive.getValue(), session => !session.sessionComplete));
 
     this.sessionsPending.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'pending'));
     this.sessionsApproved.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'approved'));
-    this.sessionsDenied.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'denied'));
 
     this.sessionsApprovedUnscheduled.next(_.filter(this.sessionsApproved.getValue(), session => session.statusTimeLocation.length < 1));
 
@@ -344,7 +344,7 @@ export class SessionService {
   changeApproval(session: Session, approval: string) {
     session.approval = approval;
 
-    return this.updateSession(session);
+    return this.updateSession(session, null, 'approval');
   }
 
   changeAssociatedConf(session: Session, conferenceTitle: string) {
@@ -356,7 +356,7 @@ export class SessionService {
   /** Update new session on server and sync response with front end
    * @updateType Different server endpoints for speaker and slot updates
   */
-  updateSession(session: Session, updateType?: string) {
+  updateSession(session: Session, updateType?: string, alert?: string) {
     let serverUrl = this.baseUrl + '/api/updatesession';
     if (updateType) {
       serverUrl += updateType;
@@ -376,6 +376,11 @@ export class SessionService {
                 }
                 this.sessionsUnfiltered.next(newSessions);
                 this.setFilterAndSort();
+                if (alert) {
+                  if (alert === 'approval') {
+                    this.adminService.triggerSpeakerUpdate.emit('update');
+                  }
+                }
                 return serverSession;
               })
               .catch(handleError);

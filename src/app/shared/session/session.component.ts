@@ -244,7 +244,7 @@ export class SessionComponent implements OnInit, OnDestroy {
         .then(res => {
           if (!this.authService.user.getValue().admin) {
             this.router.navigate(['/dashboard', { msg: 'Presentation proposal saved!' }]);
-          }
+          } else this.toast.success('Session saved.');
         });
   }
 
@@ -271,17 +271,17 @@ export class SessionComponent implements OnInit, OnDestroy {
       }
     });
 
+    if (!this.atLeastOneChecked()) flag = false;
+    
+    return flag;
+  }
+
+  atLeastOneChecked(): boolean {
     let atLeastOne = false;
     this.model.tags.forEach(tag => {
-      if (tag.checked) {
-        atLeastOne = true;
-      }
+      if (tag.checked) atLeastOne = true
     });
-    if (!atLeastOne) {
-      flag = false;
-    }
-
-    return flag;
+    return atLeastOne;
   }
 
   changeApproval(approval: string) {
@@ -302,6 +302,17 @@ export class SessionComponent implements OnInit, OnDestroy {
     } else {
       return false;
     }
+  }
+  
+  lockSession(): boolean {
+    if (!this.model.statusTimeLocation) return false;
+    let scheduledForCurrentConf = false;
+    this.model.statusTimeLocation.forEach(event => {
+      if (event.conferenceTitle === this.adminService.defaultConference.getValue().title) {
+        scheduledForCurrentConf = true;
+      }
+    });
+    return scheduledForCurrentConf && this.model.approval === 'approved';
   }
 
 }

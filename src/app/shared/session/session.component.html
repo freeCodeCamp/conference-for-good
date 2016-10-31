@@ -2,8 +2,8 @@
      [class.page-transition]="transitionService.isTransitioning()">
   <h1>Session Details</h1>
 
-  <div *ngIf="model.approval === 'approved' && !(authService.user | async).admin" class="alert alert-warning top-alert">
-    <p>This session has already been approved. Please contact <a (click)="email()" class="contact">Brooke Meyer</a> if you wish to make changes.</p>
+  <div *ngIf="lockSession() && !(authService.user | async).admin" class="alert alert-warning top-alert">
+    <p>This session has already been approved and scheduled. Please contact <a (click)="email()" class="contact">Brooke Meyer</a> if you wish to make changes.</p>
   </div>
 
   <form #sessionForm="ngForm">
@@ -170,7 +170,7 @@
           <div class="radio">
             <label>
               <input type="radio" name="type" [(ngModel)]="model.type"
-                     id="typeCaseStudy" [value]="'casestudy'" #type="ngModel" checked="">
+                     id="typeCaseStudy" [value]="'casestudy'" #type="ngModel">
               Case Study
             </label>
           </div>
@@ -198,7 +198,7 @@
           <div class="radio">
             <label>
               <input type="radio" name="length" [(ngModel)]="model.length"
-                     id="length90" [value]="'90'" #length="ngModel" checked="">
+                     id="length90" [value]="'90'" #length="ngModel">
               90 minutes
             </label>
           </div>
@@ -252,7 +252,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label" for="tags">Presentation Tags</label><br/>
+          <label class="control-label primary-label" [ngClass]="!atLeastOneChecked() ? 'formLabelRequiredMissing' : '' " for="tags">Presentation Tags</label><br/>
           <label class="control-label sub-label" for="tags">Please ONLY select tags that are directly applicable to the presentation. (Check all that apply)</label>
           <div class="checkbox-group">
             <label *ngFor="let tag of model.tags">
@@ -271,7 +271,7 @@
           <div class="radio">
             <label>
               <input type="radio" name="level" [(ngModel)]="model.level"
-                     id="levelBeginner" [value]="'beginner'" #level="ngModel" checked="">
+                     id="levelBeginner" [value]="'beginner'" #level="ngModel">
               Beginner
             </label>
           </div>
@@ -298,15 +298,15 @@
           <div class="radio">
             <label>
               <input type="radio" name="willingToBeRecorded" [(ngModel)]="model.willingToBeRecorded"
-                     [value]="'audio'" #willingToBeRecorded="ngModel" checked="">
-              Yes, audio recording
+                     [value]="'audioVisual'" #willingToBeRecorded="ngModel">
+              Yes, audio/visual recording
             </label>
           </div>
           <div class="radio">
             <label>
               <input type="radio" name="willingToBeRecorded" [(ngModel)]="model.willingToBeRecorded"
-                     [value]="'audioVisual'" #willingToBeRecorded="ngModel">
-              Yes, audio/visual recording
+                     [value]="'audio'" #willingToBeRecorded="ngModel">
+              Yes, audio recording
             </label>
           </div>
           <div class="radio">
@@ -325,7 +325,7 @@
           <div class="radio">
             <label>
               <input type="radio" name="isMediaOrPressFriendly" [(ngModel)]="model.isMediaOrPressFriendly"
-                     [value]="'yes'" #isMediaOrPressFriendly="ngModel" checked="">
+                     [value]="'yes'" #isMediaOrPressFriendly="ngModel">
               Yes
             </label>
           </div>
@@ -359,7 +359,7 @@
           <div class="radio">
             <label>
               <input type="radio" name="willingToRepeat" [(ngModel)]="model.willingToRepeat"
-                     [value]="true" #willingToRepeat="ngModel" checked="">
+                     [value]="true" #willingToRepeat="ngModel">
               Yes
             </label>
           </div>
@@ -379,7 +379,7 @@
           <div class="radio">
             <label>
               <input type="radio" name="hasAVneeds" [(ngModel)]="model.hasAVneeds"
-                     [value]="'yes'" #hasAVneeds="ngModel" checked="">
+                     [value]="'yes'" #hasAVneeds="ngModel">
               Yes
             </label>
           </div>
@@ -401,9 +401,8 @@
 
     </div>
     <button type="submit"
-            class="btn btn-primary" [disabled]="model.approval === 'approved' && !(authService.user | async).admin"
+            class="btn btn-primary" [disabled]="lockSession() && !(authService.user | async).admin"
             (click)="updateSession(sessionForm.value)">Submit</button>
     <toast #toast></toast>
   </form>
 </div>
-

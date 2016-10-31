@@ -33,6 +33,10 @@ let speakerSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  archived: { // Archived users don't show up anywhere except "all" or "archived" speakerlist filters
+    type: Boolean,
+    default: false
+  }, 
 
   // Speaker information
   status: {
@@ -141,10 +145,7 @@ let speakerSchema = new mongoose.Schema({
     departAirline: String,
     departFlightNum: String,
   }],
-  changePassword: {
-    type: Boolean,
-    default: true
-  }
+  changePassword: Boolean
 });
 
 speakerSchema.methods.generateHash = password => {

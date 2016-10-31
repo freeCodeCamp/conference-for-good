@@ -29,6 +29,8 @@ export class SpeakerService {
 
   // Non-admins only
   speakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+  archivedSpeakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+  unArchivedSpeakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
   // Speakers filtered by profile completion
   profileCompleted: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
@@ -40,11 +42,17 @@ export class SpeakerService {
   // Active speakers filters
   activeProfileCompleted: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
   activeProfileNotDone: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
-  activeNoResponseForm: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+  activeScheduledNoResponseForm: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+  activeApprovedNoTerms: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
   constructor(private http: Http,
               private adminService: AdminService,
-              private sessionService: SessionService) { }
+              private sessionService: SessionService) {
+    // Trigger speaker update when requested
+    this.adminService.triggerSpeakerUpdate.subscribe(e => {
+      this.getAllSpeakers();
+    });
+  }
 
   getAllSpeakers() {
     return this.http
@@ -108,13 +116,15 @@ export class SpeakerService {
     let speakersOnly = _.filter(sortedUnfiltered, speaker => !speaker.admin);
     speakersOnly = this.setSpeakerSessions(speakersOnly);
     this.speakers.next(speakersOnly);
+    this.unArchivedSpeakers.next(_.filter(speakersOnly, speaker => !speaker.archived));
+    this.archivedSpeakers.next(_.filter(speakersOnly, speaker => speaker.archived));
 
     this.admins.next(_.filter(sortedUnfiltered, speaker => speaker.admin));
 
-    this.profileCompleted.next(_.filter(this.speakers.getValue(), speaker => speaker.profileComplete));
-    this.profileNotDone.next(_.filter(this.speakers.getValue(), speaker => !speaker.profileComplete));
+    this.profileCompleted.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => speaker.profileComplete && speaker.headshot));
+    this.profileNotDone.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => !speaker.profileComplete || !speaker.headshot));
 
-    this.speakersActive.next(_.filter(this.speakers.getValue(), speaker => {
+    this.speakersActive.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => {
       if (speaker.sessions) {
         let defaultConf = this.adminService.defaultConference.getValue().title;
         for (let i = 0; i < speaker.sessions.length; i++) {
@@ -129,9 +139,43 @@ export class SpeakerService {
       }
     }));
 
-    this.activeProfileCompleted.next(_.filter(this.speakersActive.getValue(), speaker => speaker.profileComplete));
-    this.activeProfileNotDone.next(_.filter(this.speakersActive.getValue(), speaker => !speaker.profileComplete));
-    this.activeNoResponseForm.next(_.filter(this.speakersActive.getValue(), speaker => !speaker.responseForm.completed));
+    this.activeProfileCompleted.next(_.filter(this.speakersActive.getValue(), speaker => speaker.profileComplete && speaker.headshot));
+    this.activeProfileNotDone.next(_.filter(this.speakersActive.getValue(), speaker => !speaker.profileComplete || !speaker.headshot));
+    
+    let activeConf = this.adminService.defaultConference.getValue().title;
+    this.activeScheduledNoResponseForm.next(_.filter(this.speakersActive.getValue(), speaker => {
+      let speakerSessions = this.sessionService.getSpeakerSessions(speaker._id);
+      let activeSpeakerSessions = _.filter(speakerSessions, session => session.associatedConf === activeConf);
+      let hasActiveScheduledSessions = false;
+      activeSpeakerSessions.forEach(session => {
+        if (session.statusTimeLocation.length > 0) hasActiveScheduledSessions = true;
+      });
+      if (hasActiveScheduledSessions) {
+        if (!speaker.responseForm || !speaker.responseForm.completed) return true;
+        else return false;
+      }
+    }));
+
+    this.activeApprovedNoTerms.next(_.filter(this.speakersActive.getValue(), speaker => {
+      if (speaker.sessions) {
+        let defaultConf = this.adminService.defaultConference.getValue().title;
+        let hasApprovedSessions = false;
+        for (let i = 0; i < speaker.sessions.length; i++) {
+          let session = this.sessionService.getSession(speaker.sessions[i]);
+          if (session.approval === 'approved') hasApprovedSessions = true;
+        }
+        if (!hasApprovedSessions) return false;
+        if (speaker.arrangements) {
+          for (let i = 0; i < speaker.arrangements.length; i++) {
+            let arrange = speaker.arrangements[i];
+            if (arrange.associatedConf === defaultConf) {
+              if (!arrange.lodgingAmount || !arrange.travelAmount || !arrange.honorarium) return true;
+              else return false;
+            }
+          }
+        } else return false;
+      } else return false;
+    }));
 
     this.speakersUnfiltered.next(sortedUnfiltered);
   }

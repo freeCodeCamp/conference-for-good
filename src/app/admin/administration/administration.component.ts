@@ -1,10 +1,12 @@
 declare var require: any;
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, NgModule } from '@angular/core';
 import { AuthService } from '../../shared/auth.service';
 import { SpeakerService } from '../../shared/speaker.service';
 import { TransitionService } from '../../shared/transition.service';
 import { ToastComponent } from '../../shared/toast.component';
+import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
+
 
 @Component({
                selector: 'administration',
@@ -18,6 +20,7 @@ export class AdministrationComponent implements OnInit {
     addFlag = false;
     deleteFlag = false;
     user;
+    @ViewChild('modal') modal: Ng2Bs3ModalModule;
 
     constructor(private transitionService: TransitionService,
                 private authService: AuthService,
@@ -78,7 +81,9 @@ export class AdministrationComponent implements OnInit {
     clearUploads() {
         this.authService.clearUploads()
             .then( res => {
+                this.modal.close();
                 this.toast.success('Uploads have been cleared');
+                this.speakerService.getAllSpeakers();
             })
             .catch( err => {
                 if (err.status === 400) {

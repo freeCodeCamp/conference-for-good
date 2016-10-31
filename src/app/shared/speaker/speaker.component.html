@@ -25,13 +25,12 @@
         </div>
 
         <div class="row section">
-          <h4>Uploads</h4>
+          <h4>Uploads to Speaker</h4>
 
           <p><b>Current uploads:</b></p>
           <div class="upload-list">
             <div *ngFor="let upload of model.adminUploads">
               <a [href]="upload.url">{{ upload.title }}</a>
-              <!--<a (click)="saveFile(upload.url)" class="contact">{{ upload.title }}</a>-->
             </div>
           </div>
           <div class="col-md-8 col-xs-12 space-top">
@@ -252,13 +251,25 @@
           </div>
         </div>
 
+        <div class="row section">
+          <h4>Archive Speaker</h4>
+
+          <div>Speaker is currently: <span class="text-danger">{{ model.archived ? 'Archived' : 'Not Archived' }}</span></div>
+
+          <div class="space-top">
+            <a class="btn btn-default" (click)="archive(true)">Archive</a>
+            <a class="btn btn-default" (click)="archive(false)">Unarchive</a>
+          </div>
+
+        </div>
+
         <h3>Public Fields</h3>
       </div>
 
       <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label formLabelRequired" [ngClass]="!model.salutation ? 'formLabelRequiredMissing' : '' " for="salutation">Salutation</label>
+            <label class="control-label primary-label" for="salutation">Salutation</label>
             <input type="text" class="form-control"
                   [(ngModel)]="model.salutation"
                    id="salutation"
@@ -438,7 +449,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label formLabelRequired" [ngClass]="!model.costsCoveredByOrg ? 'formLabelRequiredMissing' : '' ">Please select which of the following costs your organization is able to cover (check all that apply or none):</label>
+          <label class="control-label primary-label formLabelRequired" [ngClass]="!model.costsCoveredByOrg ? 'formLabelRequiredMissing' : '' ">Please select which of the following costs your organization is able to cover (check all that apply or don't check any):</label>
           <div class="checkbox-group">
             <label *ngFor="let cost of model.costsCoveredByOrg">
               <input type="checkbox" [checked]="cost.covered"

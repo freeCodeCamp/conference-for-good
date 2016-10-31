@@ -36,7 +36,7 @@ module.exports = function(passport) {
                             email: email,
                             nameFirst: req.body.firstName,
                             nameLast: req.body.lastName,
-
+                            
                             // Fields to initialize
                             status: 'pending',
                             adminNotes: '',
@@ -54,6 +54,7 @@ module.exports = function(passport) {
                             ]
                             // hasPresentedAtCCAWInPast2years: false
                         });
+                        newSpeaker.changePassword = req.body.changePassword;
                         newSpeaker.password  = newSpeaker.generateHash(password);
                         newSpeaker.save(function(err) {
                             if (err) {

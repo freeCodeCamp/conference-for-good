@@ -5,13 +5,12 @@ const passport = require('passport');
 const Speaker = require('../models/speaker');
 const nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-     user: process.env.EMAIL,
-     pass: process.env.PASSWORD
-    }
-});
+// Mailgun setup
+const Mailgun = require('mailgun-js');
+const mailgun_api = process.env.MAILGUN_API_KEY;
+const domain = 'conferencecaw.org';
+const mailgun = new Mailgun({apiKey: mailgun_api, domain: domain});
+const our_email = 'bmeyer@genesisshelter.org';
 
 function generateRandomPassword() {
     let chars = "abcdefghijklmnopqrstuvwxyz123456789";
@@ -48,28 +47,34 @@ router.post('/signup', (req, res, next) => {
         req.body.firstName = formData.firstName;
         req.body.lastName = formData.lastName;
         req.body.password = generateRandomPassword();
+        req.body.changePassword = true;
 
         let leadPresName = `${req.body.leadPres.nameFirst} ${req.body.leadPres.nameLast}`
 
         var mailOptions = {
-            from: 'Jennifer Bland <ratracegrad@gmail.com>', // TODO update with CCAW sender address
+            from: `Brooke Meyer <${our_email}>`,
             to: req.body.email,
             subject: `Copresenter with ${leadPresName} at CCAW`, // Subject line
             html: `
                 <div>You've been signed up as a copresenter for a presentation at Conference for Crimes Against Women by ${leadPresName}.</div>
-                <div>Please <a href="http://localhost:4200/login">log in here</a> to view and update your information with the following: </div>
+                <div>Please <a href="https://ccaw-angcli.herokuapp.com/login">log in here</a> to view and update your information with the following: </div>
                 <div>Your username: ${req.body.email}</div>
                 <div>Your password: ${req.body.password}</div>
-            ` // TODO change to URL for deployment
+            `
         };
 
-        transporter.sendMail(mailOptions, function(error, info){
-            if(error){
+        mailgun.messages().send(mailOptions, function(err, body){
+            if(err){
                 console.log('email not sent', error);
             } else {
                 console.log('email sent');
             }
         });
+    } else  {
+        // If this account was created by the user, don't flag to change password
+        if (req.body.password !== 'ccawspeakerpassword') {
+            req.body.changePassword = false;
+        } else req.body.changePassword = true;
     }
     passport.authenticate('local-signup', (err, user, info) => {
         if (err) return res.status(500).json({alert: err});
@@ -101,7 +106,7 @@ router.post('/changePassword', (req, res) => {
                 if (err) {
                     return res.status(400).json({ alert: 'not saved' });
                 } else {
-                    return res.status(200).json({ alert: 'password changed' });
+                    return res.status(200).json(user);
                 }
             });
         }
@@ -122,14 +127,14 @@ router.post('/forgotpassword', (req, res) => {
                 return res.status(400).json({alert: 'password not saved'});
             } else {
                 var mailOptions = {
-                    from: 'Jennifer Bland <ratracegrad@gmail.com>', // TODO update with CCAW sender address
+                    from: `Brooke Meyer <${our_email}>`,
                     to: formData.email,
                     subject: 'New CCAW password.', // Subject line
-                    html: '<b>Your new password is ' + newPass + '.  </b><a href="http://localhost:4200/login">Login here.</a>' // TODO change to URL for deployment
+                    html: '<b>Your new password is: ' + newPass + '.  </b><a href="https://ccaw-angcli.herokuapp.com/login">Login here.</a>'
                 };
 
-                transporter.sendMail(mailOptions, function(error, info){
-                    if(error){
+                mailgun.messages().send(mailOptions, function(err, body){
+                    if(err){
                         return res.status(400).json({alert: 'not sent'});
                     }else{
                         return res.status(200).json({alert: 'password sent'});

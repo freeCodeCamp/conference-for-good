@@ -7,6 +7,10 @@ export interface Conference {
   title: string,
   venueName: string,
   venueAddress: string,
+  uploads: { // Uploads all speakers can see
+    title: string,
+    url: string
+  }[],
   /** Date format: 2016-12-30 */
   dateRange: {
     start: string,
