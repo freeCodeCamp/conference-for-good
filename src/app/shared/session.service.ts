@@ -79,14 +79,14 @@ export class SessionService {
     sortedUnfiltered = _.sortBy(unfilteredCopy, session => session.title);
 
     let defaultConf = this.adminService.defaultConference.getValue().title;
-    this.sessionsActive.next(_.filter(sortedUnfiltered, sessions => sessions.associatedConf === defaultConf));
+    this.sessionsActive.next(_.filter(sortedUnfiltered, session => session.associatedConf === defaultConf && session.approval !== 'denied'));
+    this.sessionsDenied.next(_.filter(sortedUnfiltered, session => session.associatedConf === defaultConf && session.approval === 'denied'));
 
     this.sessionsCompleted.next(_.filter(this.sessionsActive.getValue(), session => session.sessionComplete));
     this.sessionsNotDone.next(_.filter(this.sessionsActive.getValue(), session => !session.sessionComplete));
 
     this.sessionsPending.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'pending'));
     this.sessionsApproved.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'approved'));
-    this.sessionsDenied.next(_.filter(this.sessionsCompleted.getValue(), session => session.approval === 'denied'));
 
     this.sessionsApprovedUnscheduled.next(_.filter(this.sessionsApproved.getValue(), session => session.statusTimeLocation.length < 1));
 
