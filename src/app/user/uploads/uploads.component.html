@@ -77,7 +77,7 @@
             <p><b>Current handouts:</b></p>
             <div class="handout-list">
                 <div *ngFor="let session of speakerSessions">
-                    {{ session.title | ellipsis: 30 }}: {{ session.handouts?.length }}
+                    <span [ngClass]="session.handouts.length === 0 ? 'text-danger' : '' ">{{ session.title | ellipsis: 30 }}: <b>{{ session.handouts?.length }}</b></span>
                 </div>
             </div>
 
