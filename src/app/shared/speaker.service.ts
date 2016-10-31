@@ -121,8 +121,8 @@ export class SpeakerService {
 
     this.admins.next(_.filter(sortedUnfiltered, speaker => speaker.admin));
 
-    this.profileCompleted.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => speaker.profileComplete));
-    this.profileNotDone.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => !speaker.profileComplete));
+    this.profileCompleted.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => speaker.profileComplete && speaker.headshot));
+    this.profileNotDone.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => !speaker.profileComplete || !speaker.headshot));
 
     this.speakersActive.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => {
       if (speaker.sessions) {
@@ -139,8 +139,8 @@ export class SpeakerService {
       }
     }));
 
-    this.activeProfileCompleted.next(_.filter(this.speakersActive.getValue(), speaker => speaker.profileComplete));
-    this.activeProfileNotDone.next(_.filter(this.speakersActive.getValue(), speaker => !speaker.profileComplete));
+    this.activeProfileCompleted.next(_.filter(this.speakersActive.getValue(), speaker => speaker.profileComplete && speaker.headshot));
+    this.activeProfileNotDone.next(_.filter(this.speakersActive.getValue(), speaker => !speaker.profileComplete || !speaker.headshot));
     
     let activeConf = this.adminService.defaultConference.getValue().title;
     this.activeScheduledNoResponseForm.next(_.filter(this.speakersActive.getValue(), speaker => {
