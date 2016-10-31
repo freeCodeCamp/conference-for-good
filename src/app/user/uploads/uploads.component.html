@@ -79,7 +79,7 @@
             <p><b>Current handouts:</b></p>
             <div class="handout-list">
                 <div *ngFor="let session of speakerSessions">
-                    {{ session.title.substring(0, 20) }}: {{ session.handouts?.length }}
+                    {{ session.title | ellipsis: 30 }}: {{ session.handouts?.length }}
                 </div>
             </div>
 
@@ -92,7 +92,7 @@
                 <select #sessions class="form-control" id="sessions">
                     <option *ngFor="let session of speakerSessions"
                             [value]="session._id">
-                        {{ session.title }}
+                        {{ session.title | ellipsis: 60 }}
                     </option>
                 </select>
                 </div>

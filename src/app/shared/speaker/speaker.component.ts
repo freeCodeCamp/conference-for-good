@@ -167,7 +167,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
         email: this.model.email,
         firstName: this.model.nameFirst,
         lastName: this.model.nameLast,
-        password: 'password' // Placeholder pass, change on first login
+        password: 'ccawspeakerpassword' // Placeholder pass, change on first login
       }
       this.authService
           .signup(signupData)

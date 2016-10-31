@@ -105,7 +105,7 @@
           <div class="dashboard-list">
             <div *ngFor="let session of pendingSessions">
               <div *ngIf="session.speakers?.mainPresenter === speaker._id"><a [routerLink]="['/session', {id: session._id}]">{{ session.title }}</a></div>
-              <div *ngIf="session.speakers?.mainPresenter !== speaker._id">{{ session.title }}</div>
+              <div *ngIf="session.speakers?.mainPresenter !== speaker._id">{{ session.title | ellipsis: 30 }}</div>
               <div class="small-pad"><i>Status: </i> {{ session.approval }}</div>
               <div class="small-pad" *ngIf="session.speakers?.coPresenters?.length > 0" class="copres-list">
                 <div><b>Copresenters:</b></div>
