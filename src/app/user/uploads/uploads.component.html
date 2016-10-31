@@ -9,11 +9,9 @@
 
             <p><b>Current Uploads for this conference: </b></p>
             <div class="handout-list">
-                <ul>
-                    <li *ngFor="let upload of (adminService.defaultConference | async)?.uploads">
-                        <a [href]="upload.url">{{ upload.title }}</a>
-                    </li>
-                </ul>
+                <div *ngFor="let upload of (adminService.defaultConference | async)?.uploads">
+                    <i class="fa fa-ban delete" (click)="deleteUpload(upload)"></i> <a [href]="upload.url">{{ upload.title }}</a>
+                </div>
             </div>
 
             <label class="control-label primary-label space-top" for="uploadTitle"><b>Name upload:</b></label>

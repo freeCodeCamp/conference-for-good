@@ -83,6 +83,7 @@ export class AdministrationComponent implements OnInit {
             .then( res => {
                 this.modal.close();
                 this.toast.success('Uploads have been cleared');
+                this.speakerService.getAllSpeakers();
             })
             .catch( err => {
                 if (err.status === 400) {

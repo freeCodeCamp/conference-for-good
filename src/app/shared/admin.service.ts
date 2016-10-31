@@ -93,6 +93,23 @@ export class AdminService {
     });
   }
 
+  deleteUpload(uploadToDel: {title: string; url: string;}) {
+    let conf = this.defaultConference.getValue();
+    let uploadIndex = _.findIndex(conf.uploads, upload => {
+      if (upload.title === uploadToDel.title && upload.url === uploadToDel.url) {
+        return true;
+      }
+    });
+    conf.uploads.splice(uploadIndex, 1);
+    this.defaultConference.next(conf);
+
+    return this.http
+              .post(this.baseUrl + '/api/deleteupload', conf)
+              .toPromise()
+              .then(parseJson)
+              .catch(handleError);
+  }
+
   archiveConf(confTitle: string, archive: boolean) {
     let conf = _.find(this.allConferences, conf => conf.title === confTitle);
     conf.archived = archive;

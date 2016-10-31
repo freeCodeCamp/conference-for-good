@@ -241,4 +241,12 @@ export class UploadsComponent implements OnInit {
             });
     }
 
+    deleteUpload(upload: {title: string; url: string;}) {
+        this.adminService
+            .deleteUpload(upload)
+            .then(res => {
+                this.toast.success('Removed upload. You still need to delete it from dropbox.')
+            });
+    }
+
 }

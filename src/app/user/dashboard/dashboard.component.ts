@@ -89,7 +89,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Check if Brooke has uploaded speaker details document
     this.adminService.defaultConference.getValue().uploads.forEach(upload => {
       if (upload.title.toLowerCase() === 'speaker details') this.speakerDetails = upload.url;
-      this.otherAdminAllUls.push({title: upload.title, url: upload.url});
+      else this.otherAdminAllUls.push({title: upload.title, url: upload.url});
     });
   }
 
