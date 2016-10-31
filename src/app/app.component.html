@@ -11,10 +11,10 @@
         <a *ngIf="user && user.admin" class="navbar-brand" [routerLink]="['/home']">
           <img class="logo" src="/assets/logo.png">
         </a>
-        <a *ngIf="user && !user?.admin && !user.changePassword" class="navbar-brand" [routerLink]="['/dashboard']">
+        <a *ngIf="user && !user?.admin && !user.changePassword" class="navbar-brand" href="http://www.conferencecaw.org" target="_blank">
           <img class="logo" src="/assets/logo.png">
         </a>
-        <a *ngIf="!user || user.changePassword" class="navbar-brand">
+        <a *ngIf="!user || user.changePassword" class="navbar-brand" href="http://www.conferencecaw.org" target="_blank">
           <img class="logo" src="/assets/logo.png">
         </a>
       </div>
@@ -27,7 +27,7 @@
           <li *ngIf="user && user.admin"><a [routerLink]="['/speaker-list']">Speakers</a></li>
           <li *ngIf="user && user.admin"><a [routerLink]="['/exporting']">Exporting</a></li>
           <li *ngIf="user && !user.admin && !user.changePassword"><a [routerLink]="['/dashboard']">Dashboard</a></li>
-          <li *ngIf="user && !user.admin && !user.changePassword"><a [routerLink]="['/speaker', { id: user?._id }]">Modify Profile</a></li>
+          <li *ngIf="user && !user.admin && !user.changePassword"><a [routerLink]="['/speaker', { id: user?._id }]">Update Profile</a></li>
           <li *ngIf="user && !user.admin && !user.changePassword"><a [routerLink]="['/session', { leadPresId: user?._id }]">Create Proposal</a></li>
           <li *ngIf="user && !user.admin && !user.changePassword"><a [routerLink]="['/uploads']">Uploads</a></li>
         </ul>

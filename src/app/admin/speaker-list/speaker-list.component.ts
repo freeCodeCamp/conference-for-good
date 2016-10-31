@@ -34,10 +34,13 @@ export class SpeakerListComponent implements OnInit {
       case 'all':
         this.displaySpeakers.next(this.speakerService.speakers.getValue());
         break;
-      case 'all complete':
+      case 'unarchived':
+        this.displaySpeakers.next(this.speakerService.unArchivedSpeakers.getValue());
+        break;
+      case 'unarchived complete':
         this.displaySpeakers.next(this.speakerService.profileCompleted.getValue());
         break;
-      case 'all incomplete':
+      case 'unarchived incomplete':
         this.displaySpeakers.next(this.speakerService.profileNotDone.getValue());
         break;
       case 'active':
@@ -48,6 +51,9 @@ export class SpeakerListComponent implements OnInit {
         break;
       case 'active incomplete':
         this.displaySpeakers.next(this.speakerService.activeProfileNotDone.getValue());
+        break;
+      case 'archived':
+        this.displaySpeakers.next(this.speakerService.archivedSpeakers.getValue());
         break;
       default:
         break;

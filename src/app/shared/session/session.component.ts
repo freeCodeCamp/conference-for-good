@@ -271,17 +271,17 @@ export class SessionComponent implements OnInit, OnDestroy {
       }
     });
 
+    if (!this.atLeastOneChecked()) flag = false;
+    
+    return flag;
+  }
+
+  atLeastOneChecked(): boolean {
     let atLeastOne = false;
     this.model.tags.forEach(tag => {
-      if (tag.checked) {
-        atLeastOne = true;
-      }
+      if (tag.checked) atLeastOne = true
     });
-    if (!atLeastOne) {
-      flag = false;
-    }
-
-    return flag;
+    return atLeastOne;
   }
 
   changeApproval(approval: string) {

@@ -102,7 +102,7 @@ export class ExportingComponent implements OnInit {
       mediaWilling: false, costsCoveredByOrg: [], speakingFees: '',
       hasPresentedAtCCAWInPast2years: false, recentSpeakingExp: '',
       speakingReferences: '', adminNotes: '', responseForm: <any>{}, arrangements: <any>{},
-      adminUploads: <any>{}
+      adminUploads: <any>{}, archived: true
     }
     return refSpeaker;
   }

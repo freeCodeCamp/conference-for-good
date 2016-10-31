@@ -179,6 +179,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     window.open('tel:2143997733');
   }
 
+  hasApprovedSession(): boolean {
+    let hasApprovedSession = false;
+    this.activeSpeakerSessions.forEach(session => {
+      if (session.approval === 'approved') hasApprovedSession = true;
+    });
+    return hasApprovedSession;
+  }
+
   isResponseFormNeeded(): boolean {
     if (this.scheduledSessions.length > 0) {
       if (this.speaker.responseForm && !this.speaker.responseForm.completed) {

@@ -107,6 +107,16 @@ export class SpeakerComponent implements OnInit, OnDestroy {
     this.paramsub.unsubscribe();
   }
 
+  archive(archive: boolean) {
+    this.model.archived = archive;
+    this.speakerService
+        .updateSpeaker(this.model)
+        .then(res => {
+          let text = archive ? 'archived' : 'unarchived';
+          this.toast.success(`Speaker ${text}!`);
+        });
+  }
+
   capitalize(word: string): string {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
@@ -222,7 +232,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           if (typeof form[field] !== undefined) {
             // If type is boolean, form item is completed
             if (typeof form[field] !== 'boolean') {
-              if (!form[field] && field !== 'headshot') {
+              if (!form[field] && field !== 'salutation') {
                 flag = false;
               }
             }

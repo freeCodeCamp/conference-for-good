@@ -175,7 +175,7 @@ export class UploadsComponent implements OnInit {
         let handoutNumber = selectedSession.handouts.length + 1;
 
         let ext = this.selectedHandoutsFile.name.split('.').pop();
-        let userFilename = `${this.speaker.email}_${selectedSession.title.substring(0, 15)}_${handoutNumber}.${ext}`;
+        let userFilename = `${selectedSession.title.substring(0, 15)}_${this.speaker.email}_${handoutNumber}.${ext}`;
         this.transitionService.setLoading(true);
         let data = new FormData();
         data.append('userFilename', userFilename);

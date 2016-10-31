@@ -29,6 +29,8 @@ export class SpeakerService {
 
   // Non-admins only
   speakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+  archivedSpeakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+  unArchivedSpeakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
   // Speakers filtered by profile completion
   profileCompleted: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
@@ -114,13 +116,15 @@ export class SpeakerService {
     let speakersOnly = _.filter(sortedUnfiltered, speaker => !speaker.admin);
     speakersOnly = this.setSpeakerSessions(speakersOnly);
     this.speakers.next(speakersOnly);
+    this.unArchivedSpeakers.next(_.filter(speakersOnly, speaker => !speaker.archived));
+    this.archivedSpeakers.next(_.filter(speakersOnly, speaker => speaker.archived));
 
     this.admins.next(_.filter(sortedUnfiltered, speaker => speaker.admin));
 
-    this.profileCompleted.next(_.filter(this.speakers.getValue(), speaker => speaker.profileComplete));
-    this.profileNotDone.next(_.filter(this.speakers.getValue(), speaker => !speaker.profileComplete));
+    this.profileCompleted.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => speaker.profileComplete));
+    this.profileNotDone.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => !speaker.profileComplete));
 
-    this.speakersActive.next(_.filter(this.speakers.getValue(), speaker => {
+    this.speakersActive.next(_.filter(this.unArchivedSpeakers.getValue(), speaker => {
       if (speaker.sessions) {
         let defaultConf = this.adminService.defaultConference.getValue().title;
         for (let i = 0; i < speaker.sessions.length; i++) {
