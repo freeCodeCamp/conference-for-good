@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../shared/auth.service';
 import { TransitionService } from '../../shared/transition.service';
 import { ToastComponent } from '../../shared/toast.component';
@@ -18,7 +18,10 @@ export class LoginComponent implements OnInit {
     password: FormControl;
     form: FormGroup;
 
+    private paramsub: any;
+
     constructor(private transitionService: TransitionService,
+                private route: ActivatedRoute,
                 private router: Router,
                 private authService: AuthService) { }
 
@@ -32,6 +35,16 @@ export class LoginComponent implements OnInit {
         });
 
         this.transitionService.transition();
+
+        this.paramsub = this.route.params.subscribe(params => {
+            if (params['msg']) {
+                this.toast.success(params['msg']);
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        this.paramsub.unsubscribe();
     }
 
     doLogin(event) {

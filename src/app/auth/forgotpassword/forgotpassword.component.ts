@@ -37,8 +37,7 @@ export class ForgotPasswordComponent implements OnInit {
 
         this.authService.forgotPassword(this.form.value)
             .then((res: any) => {
-                this.toast.success('An email with your new password has been sent to your email address.');
-                this.router.navigate(['/login']);
+                this.router.navigate(['/login', { msg: 'An email with your new password has been sent to your email address.' }]);
             })
             .catch(err => {
                 if (err.alert === 'not sent') {

@@ -124,7 +124,7 @@ router.post('/forgotpassword', (req, res) => {
                     from: `Brooke Meyer <${our_email}>`,
                     to: formData.email,
                     subject: 'New CCAW password.', // Subject line
-                    html: '<b>Your new password is ' + newPass + '.  </b><a href="https://ccaw-angcli.herokuapp.com/login">Login here.</a>' // TODO change to URL for deployment
+                    html: '<b>Your new password is: ' + newPass + '.  </b><a href="https://ccaw-angcli.herokuapp.com/login">Login here.</a>'
                 };
 
                 mailgun.messages().send(mailOptions, function(err, body){
