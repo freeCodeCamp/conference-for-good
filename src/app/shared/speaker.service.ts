@@ -41,6 +41,7 @@ export class SpeakerService {
   activeProfileCompleted: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
   activeProfileNotDone: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
   activeScheduledNoResponseForm: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
+  activeApprovedNoTerms: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
   constructor(private http: Http,
               private adminService: AdminService,
@@ -149,6 +150,27 @@ export class SpeakerService {
         if (!speaker.responseForm || !speaker.responseForm.completed) return true;
         else return false;
       }
+    }));
+
+    this.activeApprovedNoTerms.next(_.filter(this.speakersActive.getValue(), speaker => {
+      if (speaker.sessions) {
+        let defaultConf = this.adminService.defaultConference.getValue().title;
+        let hasApprovedSessions = false;
+        for (let i = 0; i < speaker.sessions.length; i++) {
+          let session = this.sessionService.getSession(speaker.sessions[i]);
+          if (session.approval === 'approved') hasApprovedSessions = true;
+        }
+        if (!hasApprovedSessions) return false;
+        if (speaker.arrangements) {
+          for (let i = 0; i < speaker.arrangements.length; i++) {
+            let arrange = speaker.arrangements[i];
+            if (arrange.associatedConf === defaultConf) {
+              if (!arrange.lodgingAmount || !arrange.travelAmount || !arrange.honorarium) return true;
+              else return false;
+            }
+          }
+        } else return false;
+      } else return false;
     }));
 
     this.speakersUnfiltered.next(sortedUnfiltered);
