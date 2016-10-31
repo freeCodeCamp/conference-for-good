@@ -137,7 +137,7 @@
           <select #sessions class="form-control" id="sessions">
             <option *ngFor="let session of leadOnlySessions"
                     [value]="session._id">
-                {{ session.title }}
+                {{ session.title | ellipsis: 50 }}
             </option>
           </select>
         </div>
