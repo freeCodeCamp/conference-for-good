@@ -92,7 +92,7 @@
               <select #sessionSelect class="form-control" id="modalSessions" (input)="isTwoParter(sessionSelect.value)">
                 <option>None</option>
                 <option *ngFor="let session of (sessionService.sessionsApproved | async)" [value]="session._id">
-                  {{ session.title }}
+                  {{ session.title | ellipsis: 30 }}
                 </option>
               </select>
             </div>
