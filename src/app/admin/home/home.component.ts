@@ -35,7 +35,7 @@ export class HomeComponent {
           return false;
         }
         let leadPres = this.speakerService.getSpeaker(session.speakers.mainPresenter);
-        if (leadPres.profileComplete && leadPres.headshot) {
+        if (leadPres.profileComplete) {
           return true;
         }
       });
