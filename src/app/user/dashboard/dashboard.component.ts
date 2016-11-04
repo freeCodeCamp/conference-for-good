@@ -187,6 +187,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return hasApprovedSession;
   }
 
+  hasApprovedSessAndScheduled(): boolean {
+    return (this.scheduledSessions.length > 0 && this.hasApprovedSession()); 
+  }
+
   isResponseFormNeeded(): boolean {
     if (this.scheduledSessions.length > 0) {
       if (this.speaker.responseForm && !this.speaker.responseForm.completed) {
