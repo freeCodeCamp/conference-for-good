@@ -35,6 +35,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li *ngIf="transitionService?.isLoading()"><img src="/assets/loading.svg" class="loading" alt="loading"></li>
           <li *ngIf="user && user.admin"><a [routerLink]="['/select-active']">{{ getTitleText() }}</a></li>
+          <li *ngIf="user && !user.admin"><a>{{ getTitleText() }}</a></li>
           <li *ngIf="user && !user.changePassword" class="dropdown">
             <a href="#" id="cog-link" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
               <i class="fa fa-cog" aria-hidden="true"></i>

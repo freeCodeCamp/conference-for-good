@@ -51,7 +51,7 @@ export class SignupComponent implements OnInit {
                 this.speakerService.getAllSpeakers();
 
                 this.toast.success('You account is registered. Please login!');
-                this.router.navigate(['/login']);
+                this.router.navigate(['/login', { msg: 'Your account has been created. Please sign in.' }]);
             })
             .catch(err => {
                 if (err.status === 409) {
