@@ -35,9 +35,10 @@ export class HomeComponent {
           return false;
         }
         let leadPres = this.speakerService.getSpeaker(session.speakers.mainPresenter);
-        if (leadPres.profileComplete) {
+        if (leadPres && leadPres.profileComplete) {
           return true;
         }
+        return false;
       });
     });
   }
