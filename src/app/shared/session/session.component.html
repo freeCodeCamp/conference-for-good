@@ -68,9 +68,9 @@
             <p id="co-pres-label">Co-Presenters: </p>
             <div class="co-presenters">
               <div *ngFor="let coPres of (sessionSpeakers | async)?.coPresenters">
-                <i class="fa fa-ban delete" (click)="removeSpeaker(coPres._id)"></i>
+                <i class="fa fa-ban delete" (click)="removeSpeaker(coPres?._id)"></i>
                 <span class="slot-display">
-                  <a class="slot-speaker" [routerLink]="['/speaker', {id: coPres._id}]">
+                  <a class="slot-speaker" [routerLink]="['/speaker', {id: coPres?._id}]">
                     {{ coPres?.nameFirst }} {{ coPres?.nameLast }}
                   </a>
                 </span>

@@ -226,8 +226,9 @@ export class SessionComponent implements OnInit, OnDestroy {
   getSessionSpeakers() {
     let mainPresenter = this.speakerService.getSpeaker(this.model.speakers.mainPresenter);
     let coPresenters = [];
-    this.model.speakers.coPresenters.forEach(speaker => {
-      coPresenters.push(this.speakerService.getSpeaker(speaker));
+    this.model.speakers.coPresenters.forEach(coPresId => {
+      let coPres = this.speakerService.getSpeaker(coPresId);
+      if (coPres) coPresenters.push(coPres);
     });
     this.sessionSpeakers.next({
       mainPresenter: mainPresenter,
