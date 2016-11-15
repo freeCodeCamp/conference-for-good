@@ -539,10 +539,12 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
             if (sessions[i].speakers && sessions[i].speakers.coPresenters && sessions[i].speakers.coPresenters.length > 0) {
                 for (let j = 0; j < sessions[i].speakers.coPresenters.length; j++) {
                     let coPres = _.find(speakers, speaker => speaker._id.toString() === sessions[i].speakers.coPresenters[j]);
-                    exportJson[i][`coSpeakerFirst${j+1}`] = coPres.nameFirst;
-                    exportJson[i][`coSpeakerLast${j+1}`] = coPres.nameLast;
-                    desiredFields.push(`coSpeakerFirst${j+1}`);
-                    desiredFields.push(`coSpeakerLast${j+1}`);
+                    if (coPres) {
+                        exportJson[i][`coSpeakerFirst${j+1}`] = coPres.nameFirst;
+                        exportJson[i][`coSpeakerLast${j+1}`] = coPres.nameLast;
+                        desiredFields.push(`coSpeakerFirst${j+1}`);
+                        desiredFields.push(`coSpeakerLast${j+1}`);
+                    }
                 }
             }
         }
