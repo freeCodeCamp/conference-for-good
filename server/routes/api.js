@@ -342,7 +342,7 @@ router.post('/updatespeaker', (req, res) => {
     //     do we need to generate an account for the folks that
     //     need this done for them?
     Speaker
-        .findOneAndUpdate({email: speaker.email}, speaker, {upsert:true, new: true}, (err, user) => {
+        .findOneAndUpdate({_id: speaker._id}, speaker, {upsert:true, new: true}, (err, user) => {
             if (err) {
                 return res.status(500).json({ alert: 'failed' });
             }
