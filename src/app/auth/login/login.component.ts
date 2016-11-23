@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
                 private authService: AuthService) { }
 
     ngOnInit() {
-        this.email = new FormControl('', Validators.compose([Validators.required, Validators.pattern('[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?')]));
+        this.email = new FormControl('', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?')]));
         this.password = new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)]));
 
         this.form = new FormGroup({
