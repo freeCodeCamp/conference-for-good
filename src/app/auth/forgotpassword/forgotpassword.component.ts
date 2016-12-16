@@ -40,10 +40,11 @@ export class ForgotPasswordComponent implements OnInit {
                 this.router.navigate(['/login', { msg: 'An email with your new password has been sent to your email address.' }]);
             })
             .catch(err => {
+                err = err.json();
                 if (err.alert === 'not sent') {
                     this.toast.error('Unable to send new password at this time. Try again later!');
                 } else if (err.alert === 'email not found') {
-                    this.toast.error('Could not find a user with that email address. Please try again!');
+                    this.toast.error('Could not find a user with that email address. Note your email address is CASE SENSITIVE.');
                 } else {
                     this.toast.error('Reset password error, please try again later');
                 }
