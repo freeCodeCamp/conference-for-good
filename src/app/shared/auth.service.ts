@@ -77,8 +77,7 @@ export class AuthService {
       return this.http
           .post(this.baseUrl + '/auth/forgotpassword', pkg.body, pkg.opts)
           .toPromise()
-          .then(parseJson)
-          .catch(handleError);
+          .then(parseJson);
   }
 
   changePassword(formData) {

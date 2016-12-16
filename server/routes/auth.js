@@ -119,7 +119,10 @@ router.post('/forgotpassword', (req, res) => {
 
     Speaker.findOne({email: formData.email}, function (err, user) {
         if (err) {
-            return res.status(404).json({alert: 'email not found'})
+            return res.status(404).json({alert: 'email not found'});
+        }
+        if (!user) {
+            return res.status(404).json({alert: 'email not found'});
         }
         user.password = user.generateHash(newPass);
         user.save(function(err) {

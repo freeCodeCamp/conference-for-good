@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
             })
             .catch(err => {
                 if (err.status === 401) {
-                    this.toast.error('Email or password do not match records');
+                    this.toast.error('Email or password do not match records. BOTH Email and password are CASE SENSITIVE.');
                 } else {
                     this.toast.error('Login error, please try again later');
                 }
