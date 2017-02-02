@@ -8,6 +8,7 @@ import { Speaker } from '../../shared/speaker.model';
 import { SpeakerService, SpeakerList } from '../../shared/speaker.service';
 import { TransitionService } from '../../shared/transition.service';
 import { ToastComponent } from '../../shared/toast.component';
+import * as _ from 'lodash';
 
 declare var $: any;
 declare let jsPDF;

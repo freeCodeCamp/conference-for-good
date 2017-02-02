@@ -6,7 +6,7 @@ import { SpeakerService } from '../../shared/speaker.service';
 import { TransitionService } from '../../shared/transition.service';
 import { ToastComponent } from '../../shared/toast.component';
 import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
-
+import * as _ from 'lodash';
 
 @Component({
                selector: 'administration',
@@ -81,7 +81,7 @@ export class AdministrationComponent implements OnInit {
     clearUploads() {
         this.authService.clearUploads()
             .then( res => {
-                this.modal.close();
+                // this.modal.close();
                 this.toast.success('Uploads have been cleared');
                 this.speakerService.getAllSpeakers();
             })
