@@ -7,6 +7,7 @@ import { SessionService } from '../../shared/session.service';
 import { Speaker } from '../../shared/speaker.model';
 import { SpeakerService } from '../../shared/speaker.service';
 import { ToastComponent } from '../../shared/toast.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'home',

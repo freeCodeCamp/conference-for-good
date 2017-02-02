@@ -10,6 +10,7 @@ import { SpeakerService } from '../../shared/speaker.service';
 import { AuthService } from '../../shared/auth.service';
 import { TransitionService } from '../../shared/transition.service';
 import { ToastComponent } from '../../shared/toast.component';
+import * as _ from 'lodash';
 
 @Component({
    selector: 'uploads',
