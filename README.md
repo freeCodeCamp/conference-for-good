@@ -1,4 +1,4 @@
-# Free Code Camp Conference for Good
+# freeCodeCamp Conference for Good
 
 **To run this project locally:**
 
