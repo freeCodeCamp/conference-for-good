@@ -14,7 +14,8 @@ require('./config/passport')(passport);
 
 const app = express();
 
-// seed database
+// seed database: running the server will automatically seed the database now
+// after it's seeded, this line can be commented out:
 require('./seed_data/seed');
 
 /** Define Variables  **/
