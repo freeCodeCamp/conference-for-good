@@ -14,6 +14,9 @@ require('./config/passport')(passport);
 
 const app = express();
 
+// seed database
+require('./seed_data/seed');
+
 /** Define Variables  **/
 let production = process.env.NODE_ENV === 'production';
 let port = process.env.PORT || 3000;
