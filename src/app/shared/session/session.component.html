@@ -82,7 +82,7 @@
             <label class="control-label primary-label" for="speakers">Speakers:</label>
             <select #speakers class="form-control" id="speakers" (input)="updateSelectedDate(dates.value)">
               <option value="">None</option>
-              <option *ngFor="let speaker of (speakerService.speakers | async)"
+              <option *ngFor="let speaker of (speakerService.unArchivedSpeakers | async)"
                       [value]="speaker._id">
                 {{ speaker.nameFirst }} {{ speaker.nameLast }}
               </option>
