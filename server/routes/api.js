@@ -11,6 +11,11 @@ const json2csv = require('json2csv');
 const fs = require('fs');
 const Dropbox = require('dropbox');
 
+// helper function to email notification messages to admin users
+function notifyAdmin(message) {
+    console.log(message);
+};
+
 router.get('/dropbox/:filename/:directory', (req, res) => {
     var filename = req.params.filename;
     var directory = req.params.directory;
@@ -334,13 +339,22 @@ router.post('/deleteupload', (req, res) => {
 });
 
 
-
 router.post('/updatespeaker', (req, res) => {
     let speaker = req.body;
 
-    // TODO When Brooke makes a speaker herself
-    //     do we need to generate an account for the folks that
-    //     need this done for them?
+    let name = `${speaker.nameFirst} ${speaker.nameLast}`;
+    let message = '';
+
+    if (speaker.profileComplete && !speaker.responseForm.completed) {
+        message += `${name}'s profile is now complete.`;
+    } else if (speaker.responseForm.completed) {
+        message += `${name}'s response form is now complete.`;
+    } else {
+        message += `${name} has submitted a profile update.`;
+    };
+
+    notifyAdmin(message);
+
     Speaker
         .findOneAndUpdate({_id: speaker._id}, speaker, {upsert:true, new: true}, (err, user) => {
             if (err) {
