@@ -25,6 +25,7 @@ let port = process.env.PORT || 3000;
 
 /*  Configure Connection to MongoDB  **/
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 // TODO we need to change the below to use the mlab database used with heroku
 let mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/ccaw-app';
 mongoose.connect(mongoURI);

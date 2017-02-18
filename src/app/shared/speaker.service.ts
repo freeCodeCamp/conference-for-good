@@ -194,7 +194,8 @@ export class SpeakerService {
     speakers.mainPresenter = this.getSpeaker(speakerIdList.mainPresenter);
     speakers.coPresenters = [];
     speakerIdList.coPresenters.forEach(coPresId => {
-      speakers.coPresenters.push(this.getSpeaker(coPresId));
+      let coPresenter = this.getSpeaker(coPresId);
+      if (coPresenter) speakers.coPresenters.push(coPresenter);
     });
     return speakers;
   }

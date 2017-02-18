@@ -1,6 +1,6 @@
 <div class="container" [class.page-transition]="transitionService.isTransitioning()">
   <div class="row">
-    <h1 class="text-center">Hello, {{speaker.nameFirst}}!</h1>
+    <h1 class="text-center">Hello, {{speaker?.nameFirst}}!</h1>
     <p class="text-center">Please complete your speaker account by updating your profile and proposal(s).<br/> Contact Brooke Meyer at <a (click)="email()" class="contact">bmeyer@genesisshelter.org</a> or <a (click)="call()" class="contact">214-389-7733</a> if you have any questions or issues.</p>
     <button class="btn btn-primary center-block" (click)="copresLinkJump()">Add co-presenters</button>
   </div>
@@ -91,7 +91,7 @@
                 <div><i>Copresenters:</i></div>
                 <div *ngFor="let coPres of speakerService.getSpeakerList(session.speakers).coPresenters">
                   <i class="fa fa-ban delete" (click)="removeCopres(session._id, coPres._id)"></i>
-                  {{ coPres.nameFirst }} {{ coPres.nameLast }}
+                  {{ coPres?.nameFirst }} {{ coPres?.nameLast }}
                 </div>
               </div>
               <div class="space-top-sm"><b>Currently Scheduled for: </b></div>
@@ -114,7 +114,7 @@
                 <div><b>Copresenters:</b></div>
                 <div *ngFor="let coPres of speakerService.getSpeakerList(session.speakers).coPresenters">
                   <i *ngIf="session.speakers?.mainPresenter === speaker._id" class="fa fa-ban delete" (click)="removeCopres(session._id, coPres._id)"></i>
-                  {{ coPres.nameFirst }} {{ coPres.nameLast }}
+                  {{ coPres?.nameFirst }} {{ coPres?.nameLast }}
                 </div>
               </div>
               <div class="divider-s"></div>
@@ -152,7 +152,7 @@
           <select #speakers class="form-control" id="speakers">
             <option *ngFor="let speaker of (speakerService.unArchivedSpeakers | async)"
                     [value]="speaker._id">
-              {{ speaker.nameLast }}, {{ speaker.nameFirst }}
+              {{ speaker?.nameLast }}, {{ speaker?.nameFirst }}
             </option>
           </select>
           <button class="btn btn-primary" (click)="addCopres(sessions.value, speakers.value)">Add Co-presenter</button>
