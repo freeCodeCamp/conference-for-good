@@ -55,7 +55,7 @@ router.get('/dropbox/:filename/:directory/:speakerName', (req, res) => {
     let message = `${speakerName} has uploaded a file: ${filename}`;
     notifyAdmin(message, 'New File Uploaded');
 
-    var dbx = new Dropbox({ accessToken: process.env.DROPBOX_TOKEN || '123' });
+    var dbx = new Dropbox({ accessToken: process.env.DROPBOX_TOKEN });
     let fileDir = path.join(__dirname, '../uploads/' + filename);
 
     fs.readFile(fileDir, (err, contents) => {

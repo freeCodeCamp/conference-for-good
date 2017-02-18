@@ -61,10 +61,10 @@ if (production) {
 
 /** Configure Passport **/
 app.use(expressSession({
-                         secret: 'cookie_secret',
-                         resave: false,
-                         saveUninitialized: true
-                       }));
+  secret: 'cookie_secret',
+  resave: false,
+  saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
