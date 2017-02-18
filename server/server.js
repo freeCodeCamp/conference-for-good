@@ -19,9 +19,9 @@ let production = process.env.NODE_ENV === 'production';
 let port = process.env.PORT || 3000;
 
 // Load local environment variables in development
-// if (process.env.NODE_ENV !== 'production') {
-// 	require('dotenv').load();
-// }
+if (process.env.NODE_ENV !== 'production') {
+	require('dotenv').load();
+}
 
 /*  Configure Connection to MongoDB  **/
 const mongoose = require('mongoose');

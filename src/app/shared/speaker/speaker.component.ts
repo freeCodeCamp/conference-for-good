@@ -137,7 +137,8 @@ export class SpeakerComponent implements OnInit, OnDestroy {
   }
 
   updateSpeaker(form: any) {
-    this.model.profileComplete = this.checkProfile(form);
+    let complete = this.checkProfile(form);
+    this.model.profileComplete = complete
 
     if (this.leadPresId) {
       // If the lead pres is making a copresenter, create account and email
@@ -193,7 +194,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       this.speakerService
       // Must user model here rather than form, not all fields are
       // 2-way data bound and are only updated via model (costsCovered)
-          .updateSpeaker(this.model)
+          .updateSpeaker(this.model, complete)
           .then(res => {
             // Only navigate for speakers, admins have too many partial fields bound to this function
             if (!this.authService.user.getValue().admin) {
@@ -232,7 +233,7 @@ export class SpeakerComponent implements OnInit, OnDestroy {
           if (typeof form[field] !== undefined) {
             // If type is boolean, form item is completed
             if (typeof form[field] !== 'boolean') {
-              if (!form[field] && field !== 'salutation') {
+              if (!form[field]) {
                 flag = false;
               }
             }
@@ -242,7 +243,6 @@ export class SpeakerComponent implements OnInit, OnDestroy {
         }
       }
     }
-
     return flag;
   }
 
@@ -277,11 +277,12 @@ export class SpeakerComponent implements OnInit, OnDestroy {
       let data = new FormData();
       data.append('userFilename', userFilename);
       data.append('file', this.selectedAdminFile);
+      let speakerName = this.model.nameFirst + ' ' + this.model.nameLast;
       this.fileService
           .uploadToServer(data)
           .then(res => {
             this.speakerService
-                .sendToDropbox(userFilename, 'adminUploads')
+                .sendToDropbox(userFilename, 'adminUploads', speakerName)
                 .then(dbxRes => {
                   if (dbxRes.status) {
                     this.toast.error('Upload unsuccessful. Please try again!');

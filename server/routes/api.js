@@ -11,14 +11,49 @@ const json2csv = require('json2csv');
 const fs = require('fs');
 const Dropbox = require('dropbox');
 
+// Mailgun setup
+const Mailgun = require('mailgun-js');
+const mailgun_api = process.env.MAILGUN_API_KEY;
+const domain = 'conferencecaw.org';
+const mailgun = new Mailgun({apiKey: mailgun_api, domain: domain});
+const our_email = 'bmeyer@genesisshelter.org';
+
+/**** Exporting API ****/
+// these comments can be removed once we verify this feature is working as needed —
+// need notification of change when:
+
+// a) new account created: include info                         -> /signup
+// b) new profile created/completed: include info               -> /updatespeaker
+// c) new workshop proposal created: include info               -> /updatesession
+// d) speaker response form completed: include info             -> /updatespeaker
+// e) speaker uploads handout: no info needed (bc Dropbox)      -> /uploadFile
+// f) speaker uploads W9: no info needed (bc Dropbox)           -> /uploadFile
+
 // helper function to email notification messages to admin users
-function notifyAdmin(message) {
-    console.log(message);
+function notifyAdmin(message, subject) {
+    
+    var mailOptions = {
+        from: `CCAW Admin Service <${our_email}>`,
+        to: 'sean.smith.2009@gmail.com',
+        subject: `CCAW: ${subject}`,
+        html: `<div>${message}</div>`
+    };
+
+    mailgun.messages().send(mailOptions, function(err, body){
+        if(err){
+            console.log('email not sent', error);
+        } else {
+            console.log('email sent');
+        }
+    });
+
 };
 
-router.get('/dropbox/:filename/:directory', (req, res) => {
-    var filename = req.params.filename;
-    var directory = req.params.directory;
+router.get('/dropbox/:filename/:directory/:speakerName', (req, res) => {
+
+    let { filename, directory, speakerName } = req.params;
+    let message = `${speakerName} has uploaded a file: ${filename}`;
+    notifyAdmin(message, 'New File Uploaded');
 
     var dbx = new Dropbox({ accessToken: process.env.DROPBOX_TOKEN || '123' });
     let fileDir = path.join(__dirname, '../uploads/' + filename);
@@ -339,21 +374,24 @@ router.post('/deleteupload', (req, res) => {
 });
 
 
-router.post('/updatespeaker', (req, res) => {
+router.post('/updatespeaker/:notify', (req, res) => {
+    let notify = req.params.notify;
     let speaker = req.body;
 
     let name = `${speaker.nameFirst} ${speaker.nameLast}`;
-    let message = '';
 
-    if (speaker.profileComplete && !speaker.responseForm.completed) {
-        message += `${name}'s profile is now complete.`;
-    } else if (speaker.responseForm.completed) {
-        message += `${name}'s response form is now complete.`;
-    } else {
-        message += `${name} has submitted a profile update.`;
-    };
+    if (notify === 'true') {
 
-    notifyAdmin(message);
+        let message = '';
+
+        if (speaker.profileComplete && !speaker.responseForm.completed) {
+            message += `${name}'s profile is now complete.`;
+        } else if (speaker.responseForm.completed) {
+            message += `${name}'s response form is now complete.`;
+        }
+        
+        notifyAdmin(message, 'Speaker Information Updated');
+    }
 
     Speaker
         .findOneAndUpdate({_id: speaker._id}, speaker, {upsert:true, new: true}, (err, user) => {
@@ -385,6 +423,14 @@ router.post('/updatesession', (req, res) => {
             });
     } else {
         let newSession = new Session();
+
+        // compose a message to notify admins that a speaker has submited a new proposal
+        Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
+            let name = `${speaker.nameFirst} ${speaker.nameLast}`;
+            let message = `${name} has submited a new session titled ${session.title}`;
+            notifyAdmin(message, 'New Proposal Submission');
+        });
+
         _.merge(newSession, session);
         newSession.save(err => {
             if (err) {

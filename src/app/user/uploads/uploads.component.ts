@@ -136,11 +136,12 @@ export class UploadsComponent implements OnInit {
         let data = new FormData();
         data.append('userFilename', userFilename);
         data.append('file', selectedFile);
+        let speakerName = this.speaker.nameFirst + ' ' + this.speaker.nameLast;
         this.fileService
             .uploadToServer(data)
             .then(res => {
                 this.speakerService
-                    .sendToDropbox(userFilename, directory)
+                    .sendToDropbox(userFilename, directory, speakerName)
                     .then(dbxRes => {
                         if (dbxRes.status ) {
                             this.toast.error('Uploaded unsuccessful. Please try again!');
@@ -181,11 +182,12 @@ export class UploadsComponent implements OnInit {
         let data = new FormData();
         data.append('userFilename', userFilename);
         data.append('file', this.selectedHandoutsFile);
+        let speakerName = this.speaker.nameFirst + ' ' + this.speaker.nameLast;
         this.fileService
             .uploadToServer(data)
             .then(res => {
                 this.speakerService
-                    .sendToDropbox(userFilename, 'handouts')
+                    .sendToDropbox(userFilename, 'handouts', speakerName)
                     .then(dbxRes => {
                         if (dbxRes.status ) {
                             this.toast.error('Upload unsuccessful. Please try again!');
@@ -213,11 +215,12 @@ export class UploadsComponent implements OnInit {
         let data = new FormData();
         data.append('userFilename', userFilename);
         data.append('file', this.selectedUploadAllFile);
+        let speakerName = this.speaker.nameFirst + ' ' + this.speaker.nameLast;
         this.fileService
             .uploadToServer(data)
             .then(res => {
                 this.speakerService
-                    .sendToDropbox(userFilename, 'all')
+                    .sendToDropbox(userFilename, 'all', speakerName)
                     .then(dbxRes => {
                         if (dbxRes.status ) {
                             this.toast.error('Upload unsuccessful. Please try again!');
