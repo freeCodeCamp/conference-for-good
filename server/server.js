@@ -19,9 +19,9 @@ let production = process.env.NODE_ENV === 'production';
 let port = process.env.PORT || 3000;
 
 // Load local environment variables in development
-// if (process.env.NODE_ENV !== 'production') {
-// 	require('dotenv').load();
-// }
+if (process.env.NODE_ENV !== 'production') {
+	require('dotenv').load();
+}
 
 /*  Configure Connection to MongoDB  **/
 const mongoose = require('mongoose');
@@ -60,10 +60,10 @@ if (production) {
 
 /** Configure Passport **/
 app.use(expressSession({
-                         secret: 'cookie_secret',
-                         resave: false,
-                         saveUninitialized: true
-                       }));
+  secret: 'cookie_secret',
+  resave: false,
+  saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 

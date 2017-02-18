@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 
 // Mailgun setup
 const Mailgun = require('mailgun-js');
-const mailgun_api = process.env.MAILGUN_API_KEY || '123';
+const mailgun_api = process.env.MAILGUN_API_KEY;
 const domain = 'conferencecaw.org';
 const mailgun = new Mailgun({apiKey: mailgun_api, domain: domain});
 const our_email = 'bmeyer@genesisshelter.org';
