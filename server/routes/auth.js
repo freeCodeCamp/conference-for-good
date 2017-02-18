@@ -74,6 +74,22 @@ router.post('/signup', (req, res, next) => {
         // If this account was created by the user, don't flag to change password
         if (req.body.password !== 'ccawspeakerpassword') {
             req.body.changePassword = false;
+
+            var mailOptions = {
+                from: `CCAW Admin Service <${our_email}>`,
+                to: 'sean.smith.2009@gmail.com',
+                subject: `CCAW: New Sign Up`,
+                html: `<div>${req.body.firstName} ${req.body.lastName} has signed up as a speaker.</div>`
+            };
+
+            mailgun.messages().send(mailOptions, function(err, body){
+                if(err){
+                    console.log('email not sent', error);
+                } else {
+                    console.log('email sent');
+                }
+            });
+
         } else req.body.changePassword = true;
     }
     passport.authenticate('local-signup', (err, user, info) => {

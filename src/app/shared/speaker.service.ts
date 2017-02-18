@@ -200,11 +200,11 @@ export class SpeakerService {
     return speakers;
   }
 
-  updateSpeaker(speaker: Speaker) {
+  updateSpeaker(speaker: Speaker, notify?:Boolean = false) {
 
     let pkg = packageForPost(speaker);
     return this.http
-              .post(this.baseUrl + '/api/updatespeaker', pkg.body, pkg.opts)
+              .post(this.baseUrl + `/api/updatespeaker/${notify}`, pkg.body, pkg.opts)
               .toPromise()
               .then(parseJson)
               .then(serverSpeaker => {
@@ -222,9 +222,9 @@ export class SpeakerService {
               .catch(handleError);
   }
 
-  sendToDropbox(filename: String, directory: String) {
+  sendToDropbox(filename: String, directory: String, name: String) {
     return this.http
-        .get(this.baseUrl + '/api/dropbox/' + filename + '/' + directory)
+        .get(this.baseUrl + '/api/dropbox/' + filename + '/' + directory + '/' + name)
         .toPromise()
         .then(parseJson)
         .then(data => {

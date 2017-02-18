@@ -150,7 +150,7 @@ export class ResponseComponent implements OnInit, OnDestroy {
   submitResponse() {
     this.model.responseForm.completed = true;
     this.speakerService
-        .updateSpeaker(this.model)
+        .updateSpeaker(this.model, true)
         .then(res => {
           if (this.authService.user.getValue().admin) {
             this.toast.success('Speaker response submitted.')
