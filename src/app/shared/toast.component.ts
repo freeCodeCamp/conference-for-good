@@ -18,7 +18,7 @@ import { Component } from '@angular/core';
       font-size: 18px;
       padding: 18px;
       border-radius: 10px;
-      transition: all 0.3s;
+      transition: all .3s;
     }
   `]
 })
@@ -36,16 +36,19 @@ export class ToastComponent {
 
   constructor() { }
 
-  private showToast(text: string, type?: string) {
+  private showToast(text: string, type: string, duration?: number) {
     this.toastType = type;
     let timeout = (text.length < 30) ? 2000 : 3000;
+    if (duration) {
+      timeout = duration;
+    }
     this.toastText = text;
     window.setTimeout(() => this.toastText = null, timeout);
   }
 
   /** Show a notification message */
-  message(text: string) {
-    this.showToast(text, this.toastTypes.default);
+  message(text: string, duration?: number) {
+    this.showToast(text, this.toastTypes.default, duration);
   }
 
   /** Show an error message */
@@ -54,8 +57,8 @@ export class ToastComponent {
   }
 
   /** Show an success message */
-  success(text: string) {
-    this.showToast(text, this.toastTypes.success);
+  success(text: string, duration?: number) {
+    this.showToast(text, this.toastTypes.success, +duration);
   }
 
 }

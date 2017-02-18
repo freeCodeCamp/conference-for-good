@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
 
         this.paramsub = this.route.params.subscribe(params => {
             if (params['msg']) {
-                this.toast.success(params['msg']);
+                this.toast.success(params['msg'], params['duration']);
             }
         });
     }

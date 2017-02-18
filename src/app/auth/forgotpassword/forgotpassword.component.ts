@@ -37,7 +37,10 @@ export class ForgotPasswordComponent implements OnInit {
 
         this.authService.forgotPassword(this.form.value)
             .then((res: any) => {
-                this.router.navigate(['/login', { msg: 'An email with your new password has been sent to your email address.' }]);
+                let msg = `We've sent you an email with a new password.
+                Please allow several minutes for the email to arrive and be sure to check your spam folder if you don't see it.`
+                let duration = 25000;
+                this.router.navigate([ '/login', { msg, duration } ]);
             })
             .catch(err => {
                 err = err.json();
