@@ -214,7 +214,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.isResponseFormNeeded()) return false;
     if (!this.speaker.headshot) return false;
     if (this.needsHandouts()) return false;
-    if (this.speaker.responseForm && !this.speaker.responseForm.w9) return false;
     if (this.speaker.adminUploads.length > 0) return false;
     if (this.otherAdminAllUls.length > 0) return false;
     return true;
