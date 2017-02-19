@@ -200,7 +200,7 @@ export class SpeakerService {
     return speakers;
   }
 
-  updateSpeaker(speaker: Speaker, notify?:Boolean = false) {
+  updateSpeaker(speaker: Speaker, notify:Boolean = false) {
 
     let pkg = packageForPost(speaker);
     return this.http
