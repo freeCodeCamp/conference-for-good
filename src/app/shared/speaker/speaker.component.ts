@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-let fileSaver = require('file-saver');
+import file-saver from 'file-saver';
+//let fileSaver = require('file-saver');
 
 import { AdminService } from '../admin.service';
 import { AuthService } from '../auth.service';

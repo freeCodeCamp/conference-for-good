@@ -2,7 +2,8 @@ declare var require: any
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-let fileSaver = require('file-saver');
+import file-saver from 'file-saver';
+//let fileSaver = require('file-saver');
 
 import { ExportingService } from './exporting.service';
 import { Session } from '../../shared/session.model';
