@@ -34,7 +34,7 @@ function notifyAdmin(message, subject) {
     
     var mailOptions = {
         from: `CCAW Admin Service <${our_email}>`,
-        to: 'sean.smith.2009@gmail.com',
+        to: our_email,
         subject: `CCAW: ${subject}`,
         html: `<div>${message}</div>`
     };

@@ -77,7 +77,7 @@ router.post('/signup', (req, res, next) => {
 
             var mailOptions = {
                 from: `CCAW Admin Service <${our_email}>`,
-                to: 'sean.smith.2009@gmail.com',
+                to: our_email,
                 subject: `CCAW: New Sign Up`,
                 html: `<div>${req.body.firstName} ${req.body.lastName} has signed up as a speaker.</div>`
             };
