@@ -91,6 +91,13 @@ export class ResponseComponent implements OnInit, OnDestroy {
     let startMoment = moment(conf.dateRange.start);
     let endMoment = moment(conf.dateRange.end);
     let mealDates = [];
+    
+    mealDates.push({
+       date: "05/21/17",
+       label: `Speaker/VIP Welcome Reception, 6-8pm- 05/21/17`,
+       attending: false
+    });
+
     for (let i = startMoment; i.isSameOrBefore(endMoment); i.add(1, 'd')) {
       let breakfast = {
         date: i.format(this.dateService.dbFormatDate),
@@ -110,19 +117,15 @@ export class ResponseComponent implements OnInit, OnDestroy {
         };
         mealDates.push(lunch);
       }
-    }
 
-    mealDates.push({
-       date: "05/21/17",
-       label: `Speaker/VIP Welcome Reception- 05/21/17, 6-8pm`,
-       attending: false
-    });
- 
-    mealDates.push({
-       date: "05/22/17",
-       label: `CCAW Networking Event- 05/22/17, 5-7pm`,
-       attending: false
-    });
+      if (mealDates.length == 3) {
+        mealDates.push({
+           date: i.format(this.dateService.dbFormatDate),
+           label: `CCAW Networking Event, 4:30-7pm- ${i.format(this.dateService.userFormatDate)}`,
+           attending: false
+        });       
+      }
+    }
 
     this.model.responseForm.mealDates = mealDates;
   }
