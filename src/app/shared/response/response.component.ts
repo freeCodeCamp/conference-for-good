@@ -112,6 +112,18 @@ export class ResponseComponent implements OnInit, OnDestroy {
       }
     }
 
+    mealDates.push({
+       date: "05/21/17",
+       label: `Speaker/VIP Welcome Reception- 05/21/17, 6-8pm`,
+       attending: false
+    });
+ 
+    mealDates.push({
+       date: "05/22/17",
+       label: `CCAW Networking Event- 05/22/17, 5-7pm`,
+       attending: false
+    });
+
     this.model.responseForm.mealDates = mealDates;
   }
 
