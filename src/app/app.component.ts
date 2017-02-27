@@ -59,8 +59,8 @@ export class AppComponent implements OnInit {
     let dateStart = moment(conf.dateRange.start);
     let dateEnd = moment(conf.dateRange.end);
     let dateText = `${dateStart.format('MMM')} ${dateStart.format('D')}-${dateEnd.format('D')}, ${dateEnd.format('YYYY')}`
-    let title = `${conf.title}`;
-    // let title = `${conf.title} ~ ${dateText}`;
+    // let title = `${conf.title}`;
+    let title = `CCAW ~ ${dateText}`;
     return title;
   }
 
