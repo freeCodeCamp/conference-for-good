@@ -84,9 +84,9 @@ router.post('/signup', (req, res, next) => {
 
             mailgun.messages().send(mailOptions, function(err, body){
                 if(err){
-                    console.log('email not sent', error);
+                    console.log('admin notification email not sent', error);
                 } else {
-                    console.log('email sent');
+                    console.log('admin notification email sent');
                 }
             });
 
