@@ -143,7 +143,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
   }
 
-  removeCopres(sessionId: string, speakerId: string) {
+  removeCopres(session, sessionId: string, speakerId: string) {
     this.sessionService.removeSpeaker(speakerId, sessionId)
         .then(res => {
           this.toast.success('Copresenter removed');

@@ -85,12 +85,16 @@
           <b>My Scheduled Presentations</b>
           <div class="dashboard-list">
             <div *ngFor="let session of scheduledSessions">
-              <div *ngIf="session.speakers?.mainPresenter === speaker._id"><a [routerLink]="['/session', {id: session._id}]">{{ session.title }}</a></div>
-              <div *ngIf="session.speakers?.mainPresenter !== speaker._id">{{ session.title }}</div>
+              <div><i>Presentation Title:</i></div>
+              <div><a [routerLink]="['/session', {id: session._id}]">{{ session.title }}</a></div>
               <div *ngIf="session.speakers?.coPresenters?.length > 0" class="copres-list">
-                <div><i>Copresenters:</i></div>
+                <div class="mainPresenter"><i>Main Presenter:</i></div>
+                <div><b>
+                  {{ speakerService.getSpeaker(session.speakers.mainPresenter)?.nameFirst }} {{ speakerService.getSpeaker(session.speakers.mainPresenter)?.nameLast }}
+                </b></div>
+                <div class="coPresenter"><i>Copresenters:</i></div>
                 <div *ngFor="let coPres of speakerService.getSpeakerList(session.speakers).coPresenters">
-                  <i class="fa fa-ban delete" (click)="removeCopres(session._id, coPres._id)"></i>
+                  <i *ngIf="session.speakers.mainPresenter === speaker._id" class="fa fa-ban delete" (click)="removeCopres(session, session._id, coPres._id)"></i>
                   {{ coPres?.nameFirst }} {{ coPres?.nameLast }}
                 </div>
               </div>
