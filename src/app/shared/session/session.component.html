@@ -3,7 +3,7 @@
   <h1>Session Details</h1>
 
   <div *ngIf="lockSession() && !(authService.user | async).admin" class="alert alert-warning top-alert">
-    <p>This session has already been approved and scheduled. Please contact <a (click)="email()" class="contact">Brooke Meyer</a> if you wish to make changes.</p>
+    <p>This session has already been approved and scheduled; you can view the session details here. Please contact <a (click)="email()" class="contact">Brooke Meyer</a> if you need to make any changes.</p>
   </div>
 
   <form #sessionForm="ngForm">
