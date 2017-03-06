@@ -386,7 +386,6 @@ router.post('/updatespeaker/:notify', (req, res) => {
 
         if (speaker.profileComplete && !speaker.responseForm.completed) {
             message += `${name}'s profile is now complete.`;
-            console.log(speaker.profile)
         } else if (speaker.responseForm.completed) {
             message += `${name}'s response form is now complete.`;
         }
