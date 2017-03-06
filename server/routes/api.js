@@ -424,15 +424,17 @@ router.post('/updatesession', (req, res) => {
     } else {
         let newSession = new Session();
 
-        // compose a message to notify admins that a speaker has submited a new proposal
-        Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
-            let name = `${speaker.nameFirst} ${speaker.nameLast}`;
-            let message = `${name} has submited a new session titled <b>${session.title}</b>.
-            The session Website Description is:<br><br><i>${newSession.descriptionWebsite}</i><br><br>
-            The session Program Description is:<br><br><i>${newSession.descriptionProgram}</i>`
-            notifyAdmin(message, 'New Proposal Submission');
-        });
-
+        if (session.speakers) {
+          // compose a message to notify admins that a speaker has submited a new proposal
+          Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
+              let name = `${speaker.nameFirst} ${speaker.nameLast}`;
+              let message = `${name} has submited a new session titled <b>${session.title}</b>.
+              The session Website Description is:<br><br><i>${newSession.descriptionWebsite}</i><br><br>
+              The session Program Description is:<br><br><i>${newSession.descriptionProgram}</i>`
+              notifyAdmin(message, 'New Proposal Submission');
+          });
+        }
+      
         _.merge(newSession, session);
         newSession.save(err => {
             if (err) {
