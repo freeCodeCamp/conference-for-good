@@ -240,13 +240,17 @@ export class SessionComponent implements OnInit, OnDestroy {
     this.model.sessionComplete = this.checkSession(form);
     this.model.associatedConf = this.adminService.defaultConference.getValue().title;
 
-    this.sessionService
-        .updateSession(this.model)
-        .then(res => {
-          if (!this.authService.user.getValue().admin) {
-            this.router.navigate(['/dashboard', { msg: 'Presentation proposal saved!' }]);
-          } else this.toast.success('Session saved.');
-        });
+    // only submit and save session if user has completed all fields
+    if (this.model.sessionComplete) {
+      this.sessionService
+          .updateSession(this.model)
+          .then(res => {
+            if (!this.authService.user.getValue().admin) {
+              this.router.navigate(['/dashboard', { msg: 'Presentation proposal saved!' }]);
+            } else this.toast.success('Session saved.');
+          });
+    }
+
   }
 
   checkSession(form: any) {
