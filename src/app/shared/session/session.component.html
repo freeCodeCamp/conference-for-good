@@ -194,7 +194,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label" [ngClass]="!model.length ? 'formLabelRequiredMissing' : '' " for="length">Presentation Length</label>
+          <label class="control-label primary-label" [ngClass]="!model.length ? 'formLabelRequiredMissing' : '' " for="length">Presentation Length*</label>
           <div class="radio">
             <label>
               <input type="radio" name="length" [(ngModel)]="model.length"
@@ -214,7 +214,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label" [ngClass]="!model.title ? 'formLabelRequiredMissing' : '' " for="title">Title of Presentation</label>
+          <label class="control-label primary-label" [ngClass]="!model.title ? 'formLabelRequiredMissing' : '' " for="title">Title of Presentation*</label>
           <input type="text" class="form-control" required
                  [(ngModel)]="model.title" id="title"
                  name="title" #title="ngModel">
@@ -226,7 +226,7 @@
           <label class="control-label primary-label" [ngClass]="!model.descriptionWebsite ? 'formLabelRequiredMissing' : '' " for="descriptionWebsite">Website Description</label><br/>
           <label class="control-label sub-label" for="descriptionWebsite"><b>150 word limit.</b> This description will appear on CCAW's website and on the conference app.</label><br/>
           <label class="control-label sub-label" for="descriptionWebsite">The description must discuss learning objectives and/or takeaways for attendees. Please use third person.</label>
-          <textarea class="form-control" rows="3" maxWords="150"
+          <textarea class="form-control" rows="3" maxWords="150" required
                  [(ngModel)]="model.descriptionWebsite"
                  name="descriptionWebsite" #descriptionWebsite="ngModel"></textarea>
           <div *ngIf="!descriptionWebsite.valid" class="alert alert-warning">
@@ -238,9 +238,9 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label" [ngClass]="!model.descriptionProgram ? 'formLabelRequiredMissing' : '' " for="descriptionProgram">Program Description</label><br/>
+          <label class="control-label primary-label" [ngClass]="!model.descriptionProgram ? 'formLabelRequiredMissing' : '' " for="descriptionProgram">Program Description*</label><br/>
           <label class="control-label sub-label" for="descriptionProgram"><b>60 word limit.</b> In order to cut down on printing costs and reduce paper waste, please shorten your presentation description to be included in the printed program. Please use third person.</label>
-          <textarea class="form-control" rows="3" maxWords="60"
+          <textarea class="form-control" rows="3" maxWords="60" required
                  [(ngModel)]="model.descriptionProgram"
                  name="descriptionProgram" #descriptionProgram="ngModel"></textarea>
           <div *ngIf="!descriptionProgram.valid" class="alert alert-warning">
@@ -252,7 +252,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label" [ngClass]="!atLeastOneChecked() ? 'formLabelRequiredMissing' : '' " for="tags">Presentation Tags</label><br/>
+          <label class="control-label primary-label" [ngClass]="!atLeastOneChecked() ? 'formLabelRequiredMissing' : '' " for="tags">Presentation Tags*</label><br/>
           <label class="control-label sub-label" for="tags">Please ONLY select tags that are directly applicable to the presentation. (Check all that apply)</label>
           <div class="checkbox-group">
             <label *ngFor="let tag of model.tags">
@@ -266,7 +266,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label" [ngClass]="!model.level ? 'formLabelRequiredMissing' : '' " for="level">Presentation Level</label><br/>
+          <label class="control-label primary-label" [ngClass]="!model.level ? 'formLabelRequiredMissing' : '' " for="level">Presentation Level*</label><br/>
           <label class="control-label sub-label" for="type">Please note that the majority of CCAW presentations will fall under the 'intermediate' and 'advanced' categories.</label>
           <div class="radio">
             <label>
@@ -294,7 +294,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label" [ngClass]="!model.willingToBeRecorded ? 'formLabelRequiredMissing' : '' " for="willingToBeRecorded">Are you willing to have this presentation recorded for future use by the Conference on Crimes Against Women?</label><br/>
+          <label class="control-label primary-label" [ngClass]="!model.willingToBeRecorded ? 'formLabelRequiredMissing' : '' " for="willingToBeRecorded">Are you willing to have this presentation recorded for future use by the Conference on Crimes Against Women?*</label><br/>
           <div class="radio">
             <label>
               <input type="radio" name="willingToBeRecorded" [(ngModel)]="model.willingToBeRecorded"
@@ -321,7 +321,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label" [ngClass]="!model.isMediaOrPressFriendly ? 'formLabelRequiredMissing' : '' " for="isMediaOrPressFriendly">Is this presentation media/press friendly?</label><br/>
+          <label class="control-label primary-label" [ngClass]="!model.isMediaOrPressFriendly ? 'formLabelRequiredMissing' : '' " for="isMediaOrPressFriendly">Is this presentation media/press friendly?*</label><br/>
           <div class="radio">
             <label>
               <input type="radio" name="isMediaOrPressFriendly" [(ngModel)]="model.isMediaOrPressFriendly"
@@ -355,7 +355,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label" [ngClass]="!willingToRepeatComplete() ? 'formLabelRequiredMissing' : '' " for="willingToRepeat">Are you willing to repeat this presentation, if necessary?</label>
+          <label class="control-label primary-label" [ngClass]="!willingToRepeatComplete() ? 'formLabelRequiredMissing' : '' " for="willingToRepeat">Are you willing to repeat this presentation, if necessary?*</label>
           <div class="radio">
             <label>
               <input type="radio" name="willingToRepeat" [(ngModel)]="model.willingToRepeat"
@@ -375,7 +375,7 @@
 
       <div class="row section">
         <div class="col-md-8 col-xs-12">
-          <label class="control-label primary-label" [ngClass]="!model.hasAVneeds ? 'formLabelRequiredMissing' : '' " for="hasAVneeds">An LCD projector connected to the house sound system, screen, and one or two wireless microphones will be provided. <u>Do you have additional A/V needs?</u></label><br/>
+          <label class="control-label primary-label" [ngClass]="!model.hasAVneeds ? 'formLabelRequiredMissing' : '' " for="hasAVneeds">An LCD projector connected to the house sound system, screen, and one or two wireless microphones will be provided. <u>Do you have additional A/V needs?</u>*</label><br/>
           <div class="radio">
             <label>
               <input type="radio" name="hasAVneeds" [(ngModel)]="model.hasAVneeds"
@@ -392,7 +392,7 @@
           </div>
         </div>
         <div *ngIf="model.hasAVneeds === 'yes'" class="col-md-8 col-xs-12 space-top">
-          <label class="control-label primary-label" [ngClass]="!model.avNeeds ? 'formLabelRequiredMissing' : '' " for="avNeeds">Additional A/V Needs:</label>
+          <label class="control-label primary-label" [ngClass]="!model.avNeeds ? 'formLabelRequiredMissing' : '' " for="avNeeds">Additional A/V Needs:*</label>
           <input type="text" class="form-control"
                   [(ngModel)]="model.avNeeds" id="avNeeds"
                   name="avNeeds" #avNeeds="ngModel">
@@ -400,9 +400,18 @@
       </div>
 
     </div>
+
+   <div class="row section">
+      <div class="col-md-8 col-xs-12">
+        <label class="control-label primary-label">Please note: all session fields are required.</label>
+      </div>
+  </div>
+
     <button type="submit"
             class="btn btn-primary" [disabled]="lockSession() && !(authService.user | async).admin"
             (click)="updateSession(sessionForm.value)">Submit</button>
+
     <toast #toast></toast>
+
   </form>
 </div>
