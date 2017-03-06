@@ -39,6 +39,8 @@ function notifyAdmin(message, subject) {
         html: `<div>${message}</div>`
     };
 
+    console.log('notifying... ', subject);
+
     mailgun.messages().send(mailOptions, function(err, body){
         if(err){
             console.log('admin notification email not sent', error);
@@ -424,12 +426,14 @@ router.post('/updatesession', (req, res) => {
     } else {
         let newSession = new Session();
 
-        // compose a message to notify admins that a speaker has submited a new proposal
-        Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
-            let name = `${speaker.nameFirst} ${speaker.nameLast}`;
-            let message = `${name} has submited a new session titled ${session.title}`;
-            notifyAdmin(message, 'New Proposal Submission');
-        });
+        if (session.speakers) {
+            // compose a message to notify admins that a speaker has submited a new proposal
+            Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
+                let name = `${speaker.nameFirst} ${speaker.nameLast}`;
+                let message = `${name} has submited a new session titled ${session.title}`;
+                notifyAdmin(message, 'New Proposal Submission');
+            });
+        }
 
         _.merge(newSession, session);
         newSession.save(err => {
