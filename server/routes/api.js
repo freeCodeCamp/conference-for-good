@@ -39,8 +39,6 @@ function notifyAdmin(message, subject) {
         html: `<div>${message}</div>`
     };
 
-    console.log('notifying... ', subject);
-
     mailgun.messages().send(mailOptions, function(err, body){
         if(err){
             console.log('admin notification email not sent', error);
