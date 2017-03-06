@@ -152,13 +152,29 @@ router.post('/forgotpassword', (req, res) => {
                     html: '<b>Your new password is: ' + newPass + '.  </b><a href="https://ccaw-angcli.herokuapp.com/login">Login here.</a>'
                 };
 
-                mailgun.messages().send(mailOptions, function(err, body){
-                    if(err){
-                        return res.status(400).json({alert: 'not sent'});
-                    }else{
-                        return res.status(200).json({alert: 'password sent'});
+                mailgun.messages().send(mailOptions, function(err, body) {
+                    if (err) {
+                        return res.status(400).json({alert: 'password email to user not sent'});
+                    } else {
+                        return res.status(200).json({alert: 'password email sent to user'});
                     }
                 });
+
+                var fallbackEmail = {
+                    from: `Brooke Meyer <${our_email}>`,
+                    to: our_email,
+                    subject: 'CCAW User Password Reset', // Subject line
+                    html: `${user.nameFirst} ${user.nameLast} (${formData.email}) has requested a new password. Their new password is: <b>${newPass}</b>.`
+                };
+
+                mailgun.messages().send(fallbackEmail, function(err, body) {
+                    if (err) {
+                        return res.status(400).json({alert: 'password email to admin not sent'});
+                    } else {
+                        return res.status(200).json({alert: 'password reset email sent to admin'});
+                    }
+                });
+
             }
         });
     });
