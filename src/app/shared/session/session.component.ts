@@ -249,6 +249,8 @@ export class SessionComponent implements OnInit, OnDestroy {
               this.router.navigate(['/dashboard', { msg: 'Presentation proposal saved!' }]);
             } else this.toast.success('Session saved.');
           });
+    } else {
+      this.toast.error('Please complete all the fields!');
     }
 
   }

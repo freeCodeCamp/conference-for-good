@@ -226,7 +226,7 @@
           <label class="control-label primary-label" [ngClass]="!model.descriptionWebsite ? 'formLabelRequiredMissing' : '' " for="descriptionWebsite">Website Description</label><br/>
           <label class="control-label sub-label" for="descriptionWebsite"><b>150 word limit.</b> This description will appear on CCAW's website and on the conference app.</label><br/>
           <label class="control-label sub-label" for="descriptionWebsite">The description must discuss learning objectives and/or takeaways for attendees. Please use third person.</label>
-          <textarea class="form-control" rows="3" maxWords="150" required
+          <textarea class="form-control" rows="3" maxWords="150"
                  [(ngModel)]="model.descriptionWebsite"
                  name="descriptionWebsite" #descriptionWebsite="ngModel"></textarea>
           <div *ngIf="!descriptionWebsite.valid" class="alert alert-warning">
@@ -240,7 +240,7 @@
         <div class="col-md-8 col-xs-12">
           <label class="control-label primary-label" [ngClass]="!model.descriptionProgram ? 'formLabelRequiredMissing' : '' " for="descriptionProgram">Program Description*</label><br/>
           <label class="control-label sub-label" for="descriptionProgram"><b>60 word limit.</b> In order to cut down on printing costs and reduce paper waste, please shorten your presentation description to be included in the printed program. Please use third person.</label>
-          <textarea class="form-control" rows="3" maxWords="60" required
+          <textarea class="form-control" rows="3" maxWords="60"
                  [(ngModel)]="model.descriptionProgram"
                  name="descriptionProgram" #descriptionProgram="ngModel"></textarea>
           <div *ngIf="!descriptionProgram.valid" class="alert alert-warning">
@@ -400,12 +400,6 @@
       </div>
 
     </div>
-
-   <div class="row section">
-      <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label">Please note: all session fields are required.</label>
-      </div>
-  </div>
 
     <button type="submit"
             class="btn btn-primary" [disabled]="lockSession() && !(authService.user | async).admin"
