@@ -222,6 +222,11 @@
 
     <button type="submit" [disabled]="!isFormValid(responseForm.form.valid)"
             class="btn btn-primary" (click)="submitResponse()">Submit</button>
+
+    <div *ngIf="!isFormValid(responseForm.form.valid)">
+      <h5 class="formGuard">All fields are required before this form can be submitted.</h5>
+    </div>
+
   <toast #toast></toast>
   </form>
 
