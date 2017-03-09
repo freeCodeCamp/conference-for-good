@@ -45,3 +45,12 @@ input.ng-invalid.ng-dirty.ng-touched {
   margin-top: 25px;
   color: red;
 }
+
+.formLabelRequired::before {
+  content: "*";
+  color: red;
+}
+
+.formLabelRequiredMissing {
+  color: red;
+}

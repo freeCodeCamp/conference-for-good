@@ -11,7 +11,7 @@
       <h4>Lodging Information</h4>
 
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label">Would you like CCAW to reserve a room at the {{ (adminService.defaultConference | async).venueName }} for you?</label>
+        <label class="control-label primary-label formLabelRequired" [ngClass]="!model.responseForm.ccawLodging ? 'formLabelRequiredMissing' : '' " for="responseForm.ccawLodging">Would you like CCAW to reserve a room at the {{ (adminService.defaultConference | async).venueName }} for you?</label>
         <label class="control-label sub-label"><u>Only select “No” if you are NOT staying at {{ (adminService.defaultConference | async).venueName }} or if you have already booked a hotel room.</u></label>
         <div class="radio">
           <label>
@@ -31,18 +31,18 @@
 
       <div *ngIf="model.responseForm.ccawLodging === 'yes'">
         <div class="col-xs-6">
-          <label class="control-label" for="dateArrival">What is your arrival date?</label>
+          <label class="control-label formLabelRequired" [ngClass]="!model.responseForm.dateArrival ? 'formLabelRequiredMissing' : '' " for="responseForm.dateArrival">What is your arrival date?</label>
           <input type="date" class="form-control" id="dateArrival" name="dateArrival"
                  #dateArrival="ngModel" [(ngModel)]="model.responseForm.dateArrival" required>
         </div>
         <div class="col-xs-6">
           <label class="control-label" for="dateDeparture">What is your departure date?</label>
-          <input type="date" class="form-control" id="dateDeparture" name="dateDeparture"
+          <input type="date" class="form-control formLabelRequired" [ngClass]="!model.responseForm.dateDeparture ? 'formLabelRequiredMissing' : '' " for="responseForm.dateDeparture" id="dateDeparture" name="dateDeparture"
                  #dateDeparture="ngModel" [(ngModel)]="model.responseForm.dateDeparture" required>
         </div>
 
         <div class="col-md-8 col-xs-12 space-top">
-          <label class="control-label primary-label">Is CCAW covering the cost of your hotel (as listed under Speaking Terms)?</label>
+          <label class="control-label primary-label formLabelRequired" [ngClass]="!model.responseForm.ccawCoveringHotel ? 'formLabelRequiredMissing' : '' " for="responseForm.ccawCoveringHotel">Is CCAW covering the cost of your hotel (as listed under Speaking Terms)?</label>
           <div class="radio">
             <label>
               <input type="radio" name="ccawCoveringHotel" [(ngModel)]="model.responseForm.ccawCoveringHotel"
@@ -79,7 +79,7 @@
     <div class="row section">
       <h4>Transportation Information</h4>
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label">Please note that if you will be taking advantage of CCAW's complimentary transportation to/from the airport, you must send your complete & official flight itinerary to bmeyer@genesisshelter.org <u>no later than {{ monthsBefore(1) }}</u></label>
+        <label class="control-label primary-label formLabelRequired" [ngClass]="!model.responseForm.agreedTransport ? 'formLabelRequiredMissing' : '' " for="responseForm.agreedTransport">Please note that if you will be taking advantage of CCAW's complimentary transportation to/from the airport, you must send your complete & official flight itinerary to bmeyer@genesisshelter.org <u>no later than {{ monthsBefore(1) }}</u></label>
         <div class="radio">
           <label>
             <input type="radio" name="agreedTransport" [(ngModel)]="model.responseForm.agreedTransport"
@@ -103,7 +103,7 @@
     <div class="row section">
       <h4>Workshop Agenda</h4>
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label">Do you agree to ALL dates and times listed on the preliminary agenda included on your Speaker Agreement?</label>
+        <label class="control-label primary-label formLabelRequired" [ngClass]="!model.responseForm.agreedDates ? 'formLabelRequiredMissing' : '' " for="responseForm.agreedDates">Do you agree to ALL dates and times listed on the preliminary agenda included on your Speaker Agreement?</label>
         <div class="radio">
           <label>
             <input type="radio" name="agreedDates" [(ngModel)]="model.responseForm.agreedDates"
@@ -120,7 +120,7 @@
         </div>
       </div>
       <div *ngIf="model.responseForm.agreedDates === 'no'" class="col-md-8 col-xs-12">
-        <label class="control-label primary-label" for="whyConflict">Please specify which workshop(s) conflict with your schedule and why:</label><br/>
+        <label class="control-label primary-label formLabelRequired" [ngClass]="!model.responseForm.whyConflict ? 'formLabelRequiredMissing' : '' " for="responseForm.whyConflict">Please specify which workshop(s) conflict with your schedule and why:</label><br/>
         <label class="control-label sub-label">We will be in touch to let you know if it is possible to schedule during a different time slot.</label>
         <textarea class="form-control" rows="3"
               [(ngModel)]="model.responseForm.whyConflict"
@@ -132,7 +132,7 @@
     <div class="row section">
       <h4>Speaker Meals</h4>
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label">Please select which speaker meals you'll be attending.</label><br/>
+        <label class="control-label primary-label formLabelRequired" for="mealDates">Please select which speaker meals you'll be attending.</label><br/>
         <label class="control-label sub-label">Choose as many as you like or none</label>
         <div class="checkbox-group">
           <label *ngFor="let date of model.responseForm.mealDates">
@@ -166,7 +166,7 @@
     <div class="row section">
       <h4>Book Sales</h4>
       <div class="col-md-8 col-xs-12">
-        <label class="control-label primary-label">Is there a book that you would like our bookseller to have available at CCAW?</label><br/>
+        <label class="control-label primary-label formLabelRequired" [ngClass]="!model.responseForm.bookAvailable ? 'formLabelRequiredMissing' : '' " for="responseForm.bookAvailable">Is there a book that you would like our bookseller to have available at CCAW?</label><br/>
         <label class="control-label sub-label">This book can be self-authored or used as a reference in your presentation.</label>
         <div class="radio">
           <label>
@@ -184,13 +184,13 @@
         </div>
       </div>
       <div *ngIf="model.responseForm.bookAvailable === 'yes'" class="col-md-8 col-xs-12 space-top">
-        <label class="control-label primary-label" for="bookTitle">Full Title of Book:</label>
+        <label class="control-label primary-label  formLabelRequired" [ngClass]="!model.responseForm.bookTitle ? 'formLabelRequiredMissing' : '' " for="responseForm.bookTitle">Full Title of Book:</label>
         <input type="text" class="form-control"
                 [(ngModel)]="model.responseForm.bookTitle" id="bookTitle"
                 name="bookTitle" #bookTitle="ngModel" required>
       </div>
       <div *ngIf="model.responseForm.bookAvailable === 'yes'" class="col-md-8 col-xs-12 space-top">
-        <label class="control-label primary-label" for="bookAuthor">Author:</label>
+        <label class="control-label primary-label formLabelRequired" [ngClass]="!model.responseForm.bookAuthor ? 'formLabelRequiredMissing' : '' " for="responseForm.bookAuthor" for="bookAuthor">Author:</label>
         <input type="text" class="form-control"
                 [(ngModel)]="model.responseForm.bookAuthor" id="bookAuthor"
                 name="bookAuthor" #bookAuthor="ngModel" required>
@@ -199,7 +199,7 @@
 
     <div class="row section">
       <div class="col-xs-12">
-        <label class="control-label primary-label">I have reviewed my <span *ngIf="!speakerDetails" class="text-danger">Speaker Details</span><a *ngIf="speakerDetails" [href]="speakerDetails">Speaker Details</a> and <a [routerLink]="['/dashboard']">Terms</a> and accept all terms.</label>
+        <label class="control-label primary-label formLabelRequired" [ngClass]="!model.responseForm.agreedHotel ? 'formLabelRequiredMissing' : '' " for="responseForm.agreedHotel">I have reviewed my <span *ngIf="!speakerDetails" class="text-danger">Speaker Details</span><a *ngIf="speakerDetails" [href]="speakerDetails">Speaker Details</a> and <a [routerLink]="['/dashboard']">Terms</a> and accept all terms.</label>
         <div class="radio">
           <label>
             <input type="radio" name="agreedHotel" [(ngModel)]="model.responseForm.agreedHotel"
@@ -222,10 +222,6 @@
 
     <button type="submit" [disabled]="!isFormValid(responseForm.form.valid)"
             class="btn btn-primary" (click)="submitResponse()">Submit</button>
-
-    <div *ngIf="!isFormValid(responseForm.form.valid)">
-      <h5 class="formGuard">All fields are required before this form can be submitted.</h5>
-    </div>
 
   <toast #toast></toast>
   </form>
