@@ -10,6 +10,7 @@ const path = require('path');
 const json2csv = require('json2csv');
 const fs = require('fs');
 const Dropbox = require('dropbox');
+const csv = require("fast-csv");
 
 // Mailgun setup
 const Mailgun = require('mailgun-js');
@@ -108,6 +109,38 @@ router.post('/upload', upload.any(), (req, res) => {
 
 router.post('/uploadFile', upload.any(), (req, res) => {
     res.status(200).json({msg: 'file uploaded'});
+});
+
+router.post('/uploadCsv', upload.any(), (req, res) => {
+    console.log("YOU MADE IT TO POST REQUEST");
+    var csvData = [];
+    fs.createReadStream(__dirname + '/../uploads/' + req.body.userFilename).pipe(csv()).on("data", function(data) {
+        csvData.push(data);
+    })
+    .on("end", function(data) {
+        var emailIndex = csvData[0].indexOf("email");
+        var counter = 0;
+        
+        for (var i = 1; i < csvData.length; i++) {
+            counter++;
+            for (var j = 0; j < csvData[i].length; j++) {
+                var currentProperty = csvData[0][j];
+                var proObject = {};
+                proObject[currentProperty] = csvData[i][j]
+                Speaker
+                    .update(
+                        {"email": csvData[i][emailIndex]},
+                        {"$set": proObject})
+                    .exec()
+                    .then(function() {
+                        if (counter == csvData.length - 1) {
+                            res.status(200);
+                            res.end();
+                        }
+                    });
+            }
+        }
+    })    
 });
 
 router.get('/getallconferences', (req, res) => {

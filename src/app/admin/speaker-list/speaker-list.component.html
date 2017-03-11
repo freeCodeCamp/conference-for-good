@@ -26,6 +26,14 @@
 
   <div class="divider"></div>
 
+  <div class="col-xs-6 col-xs-offset-3 section">
+    <label class="btn btn-default" for="csvFile"><i class="fa fa-upload fa-lg"></i>{{ csvFileString }}</label>
+    <input id="csvFile" class="file" type="file" #csvFile (change)="fileSelected(csvFile.files, 'csv')">
+    <button class="btn btn-primary" (click)="upload('csv')">Upload</button>
+  </div>
+
+  <div class="divider"></div>
+
   <div class="row">
 
 
@@ -50,4 +58,5 @@
 
 
   </div>
+  <toast #toast></toast>
 </div>
