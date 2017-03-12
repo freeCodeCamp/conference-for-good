@@ -148,7 +148,7 @@
                 </option>
               </select>
             </div>
-            <div *ngIf="model.length === '180'" class="col-xs-4">
+            <div *ngIf="!model.length === '180'" class="col-xs-4">
               <select #partSelect class="form-control" id="modalParts">
                 <option value="1">Part 1</option>
                 <option value="2">Part 2</option>
