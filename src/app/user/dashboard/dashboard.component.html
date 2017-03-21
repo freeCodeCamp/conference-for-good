@@ -19,7 +19,7 @@
             <ul>
               <li *ngIf="noActionRequired()">None</li>
               <li *ngIf="!speaker.profileComplete"><a [routerLink]="['/speaker', {id: speaker._id}]">Profile Incomplete</a></li>
-              <div *ngIf="incompleteSessions.length > 0">
+              <div *ngIf="incompleteSessions?.length > 0">
                 <li *ngFor="let session of incompleteSessions">
                   <a [routerLink]="['/session', {id: session._id}]">Incomplete Session: {{ session.title }}</a>
                 </li>
@@ -145,7 +145,7 @@
           <select #sessions class="form-control" id="sessions">
             <option *ngFor="let session of leadOnlySessions"
                     [value]="session._id">
-                {{ session.title | ellipsis: 50 }}
+                {{ (session.title) ? (session.title | ellipsis: 50) : session.title }}
             </option>
           </select>
         </div>

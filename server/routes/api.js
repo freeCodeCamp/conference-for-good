@@ -439,6 +439,17 @@ router.post('/updatesession', (req, res) => {
                 if (serverSession === null) {
                     res.status(500).json({message: 'Session not found'});
                 } else {
+                    // only send additional notification if proposal is now complete
+                    if (session.sessionComplete) {
+                        // compose a message to notify admins that a speaker has submited a new proposal
+                        Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
+                            let name = `${speaker.nameFirst} ${speaker.nameLast}`;
+                            let message = `${name} has saved a completed proposal titled <b>${session.title}</b>.
+                            The session Website Description is:<br><br><i>${session.descriptionWebsite}</i><br><br>.
+                            The session Program Description is:<br><br><i>${session.descriptionProgram}</i>.`
+                            notifyAdmin(message, 'Speaker Proposal Complete');
+                        });
+                    }
                     _.merge(serverSession, session);
                     serverSession.save(err => {
                         if (err) {
@@ -450,20 +461,20 @@ router.post('/updatesession', (req, res) => {
     } else {
         let newSession = new Session();
 
-        if (session.speakers) {
-          // we only want to send the notification if the session is complete (?)
-          if (session.sessionComplete) {
-            // compose a message to notify admins that a speaker has submited a new proposal
-            Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
-                let name = `${speaker.nameFirst} ${speaker.nameLast}`;
-                let message = `${name} has submited a new session titled <b>${session.title}</b>.
-                The session Website Description is:<br><br><i>${newSession.descriptionWebsite}</i><br><br>
-                The session Program Description is:<br><br><i>${newSession.descriptionProgram}</i>`
-                notifyAdmin(message, 'New Proposal Submission');
-            });
-          }
-        }
-      
+        // compose a message to notify admins that a speaker has submited a new proposal
+        Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
+            let name = `${speaker.nameFirst} ${speaker.nameLast}`;
+            let message = `${name} has submited a new session. `
+
+            if (session.title) message += `The Title is: <b>${session.title}</b>. `;
+            if (session.descriptionWebsite) message += `The session Website Description is:<br><br><i>${session.descriptionWebsite}</i><br><br>. `;
+            if (session.descriptionProgram) message += `The session Program Description is:<br><br><i>${session.descriptionProgram}</i>. `;
+
+            message += `The proposal is currently${session.sessionComplete ? '<b>Complete</b>' : '<b>Incomplete</b>.'}`;
+
+            notifyAdmin(message, 'New Proposal Submission');
+        });
+              
         _.merge(newSession, session);
         newSession.save(err => {
             if (err) {
