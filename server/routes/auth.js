@@ -145,6 +145,22 @@ router.post('/forgotpassword', (req, res) => {
             if (err){
                 return res.status(400).json({alert: 'password not saved'});
             } else {
+
+                var fallbackEmail = {
+                    from: `Brooke Meyer <${our_email}>`,
+                    to: our_email,
+                    subject: 'CCAW User Password Reset', // Subject line
+                    html: `${user.nameFirst} ${user.nameLast} (${formData.email}) has requested a new password. Their new password is: <b>${newPass}</b>.`
+                };
+
+                mailgun.messages().send(fallbackEmail, function(err, body) {
+                    if (err) {
+                        console.log('Password email to admin not send.');
+                    } else {
+                        console.log('Password email to admin sent.')
+                    }
+                });
+
                 var mailOptions = {
                     from: `Brooke Meyer <${our_email}>`,
                     to: formData.email,
@@ -157,21 +173,6 @@ router.post('/forgotpassword', (req, res) => {
                         return res.status(400).json({alert: 'password email to user not sent'});
                     } else {
                         return res.status(200).json({alert: 'password email sent to user'});
-                    }
-                });
-
-                var fallbackEmail = {
-                    from: `Brooke Meyer <${our_email}>`,
-                    to: our_email,
-                    subject: 'CCAW User Password Reset', // Subject line
-                    html: `${user.nameFirst} ${user.nameLast} (${formData.email}) has requested a new password. Their new password is: <b>${newPass}</b>.`
-                };
-
-                mailgun.messages().send(fallbackEmail, function(err, body) {
-                    if (err) {
-                        return res.status(400).json({alert: 'password email to admin not sent'});
-                    } else {
-                        return res.status(200).json({alert: 'password reset email sent to admin'});
                     }
                 });
 
