@@ -154,6 +154,7 @@
         <div class="col-md-4 col-xs-12 existing-copres">
           <p>Please select a co-presenter from the list below or select ‘Create New Co-Presenter’.</p>
           <select #speakers class="form-control" id="speakers">
+            <option value="Select a Co-Presenter">Select a Co-Presenter</option>
             <option *ngFor="let speaker of (speakerService.unArchivedSpeakers | async)"
                     [value]="speaker._id">
               {{ speaker?.nameLast }}, {{ speaker?.nameFirst }}

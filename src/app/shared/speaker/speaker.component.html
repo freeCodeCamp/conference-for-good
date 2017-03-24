@@ -400,29 +400,21 @@
         <div class="row">
           <div class="col-md-8 col-xs-12">
             <label class="control-label primary-label formLabelRequired" [ngClass]="!model.bioWebsite ? 'formLabelRequiredMissing' : '' " for="bioWebsite">Website Bio</label><br/>
-            <label class="control-label sub-label"><b>125 word limit.</b> This bio will appear on CCAW's website and on the conference app. Please use third person.</label>
+            <label class="control-label sub-label"><b>This bio will appear on CCAW's website and on the conference app. Please use third person.</b></label>
             <textarea class="form-control" rows="3"
-                  [(ngModel)]="model.bioWebsite" maxWords="125"
+                  [(ngModel)]="model.bioWebsite" required
                       id="bioWebsite"
                   name="bioWebsite" #bioWebsite="ngModel"></textarea>
-            <div *ngIf="!bioWebsite.valid" class="alert alert-warning">
-              <p>There is a 125 word limit for the website bio, please edit text to below limit.</p>
-              <p>Current words: {{ bioWebsite.value.split(' ').length }}</p>
-            </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-8 col-xs-12">
             <label class="control-label primary-label formLabelRequired" [ngClass]="!model.bioProgram ? 'formLabelRequiredMissing' : '' " for="bioProgram">Program Bio </label><br/>
-            <label class="control-label sub-label"><b>60 word limit.</b> In order to cut down on printing costs and reduce paper waste, please shorten your bio to be included in the printed program.</label>
+            <label class="control-label sub-label"><b>In order to cut down on printing costs and reduce paper waste, please shorten your bio to be included in the printed program.</b></label>
             <textarea class="form-control" rows="3"
-                  [(ngModel)]="model.bioProgram" maxWords="60"
+                  [(ngModel)]="model.bioProgram" required
                       id="bioProgram"
                   name="bioProgram" #bioProgram="ngModel"></textarea>
-            <div *ngIf="!bioProgram.valid" class="alert alert-warning">
-              <p>There is a 60 word limit for the program bio, please edit text to below limit.</p>
-              <p>Current words: {{ bioProgram.value.split(' ').length }}</p>
-            </div>
           </div>
         </div>
       </div>
