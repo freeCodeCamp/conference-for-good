@@ -126,27 +126,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
   addCopres(sessionId: string, speakerId: string) {
     if (sessionId === '') {
       this.toast.error('Please select the presentation this copresenter will be assigned to.');
-      return;
+    } else if (speakerId === this.speaker._id) {
+      this.toast.error('Cannot make yourself a Co-Presenter.');
+    } else if (speakerId === 'Select a Co-Presenter') {
+      this.toast.error('Please select a Co-Presenter.');
+    } else {
+      let isLead = false;
+      this.sessionService.assignSpeaker(speakerId, isLead, sessionId)
+          .then(res => {
+            if (res.message === 'duplicate') {
+              this.toast.error('Already a Co-Presenter for this presentation.');
+            } else {
+              this.toast.success('Co-Presenter assigned!');
+            }
+          });
     }
-    if (speakerId === this.speaker._id) {
-      this.toast.error('Cannot make yourself a copresenter.');
-      return;
-    }
-    let isLead = false;
-    this.sessionService.assignSpeaker(speakerId, isLead, sessionId)
-        .then(res => {
-          if (res.message === 'duplicate') {
-            this.toast.error('Already a copresenter for this presentation');
-          } else {
-            this.toast.success('Copresenter assigned');
-          }
-        });
   }
 
   removeCopres(sessionId: string, speakerId: string) {
     this.sessionService.removeSpeaker(speakerId, sessionId)
         .then(res => {
-          this.toast.success('Copresenter removed');
+          this.toast.success('Co-Presenter removed');
         });
   }
 
