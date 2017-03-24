@@ -153,8 +153,8 @@
 
           <div class="col-md-8 col-xs-12 space-top">
             <div><b>CCAW Booking:</b> {{ model.responseForm?.ccawLodging }}</div>
-            <div class="space-top-sm"><b>Arrival Date:</b> {{ model.responseForm?.dateArrival | dateCustom }}</div>
-            <div class="space-top-sm"><b>Departure Date:</b> {{ model.responseForm?.dateDeparture | dateCustom }}</div>
+            <div class="space-top-sm"><b>Arrival Date:</b> {{ model.responseForm?.dateArrival | date }}</div>
+            <div class="space-top-sm"><b>Departure Date:</b> {{ model.responseForm?.dateDeparture | date }}</div>
             <div class="space-top-sm"><b># of Nights:</b> {{ getNights(model.responseForm?.dateArrival, model.responseForm?.dateDeparture) }}</div>
             
             <div class="space-top-sm">
