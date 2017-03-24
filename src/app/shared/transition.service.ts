@@ -16,6 +16,7 @@ export class TransitionService {
       this.transitioning = false;
     }
     this.transitioning = true;
+    window.scrollTo(0, 0);
     setTimeout(() => this.transitioning = false, 600);
   }
 
