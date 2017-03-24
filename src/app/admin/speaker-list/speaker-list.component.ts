@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
+import { FileService } from '../../shared/file.service';
 import { SpeakerService } from '../../shared/speaker.service';
 import { Speaker } from '../../shared/speaker.model';
 import { TransitionService } from '../../shared/transition.service';
+import { ToastComponent } from '../../shared/toast.component';
 
 @Component({
   selector: 'speaker-list',
@@ -12,19 +13,36 @@ import { TransitionService } from '../../shared/transition.service';
   styleUrls: ['./speaker-list.component.scss']
 })
 export class SpeakerListComponent implements OnInit {
-
+  @ViewChild('toast') toast: ToastComponent;
+  defaultFileString = 'Choose a file...';
+  csvFileString = '';
+  selectedCsvFile: File;
   defaultFilter = 'active';
   currentFilter: string;
   displaySpeakers: BehaviorSubject<Speaker[]> = new BehaviorSubject([]);
 
   constructor(private transitionService: TransitionService,
               private speakerService: SpeakerService,
+              private fileService: FileService,
               private router: Router) { }
 
   ngOnInit() {
     this.transitionService.transition();
     this.currentFilter = this.defaultFilter;
     this.setFilter(this.currentFilter);
+    this.csvFileString = this.defaultFileString;
+  }
+
+  fileSelected(files: FileList, whichFile: string) {
+      if (!files[0]) return;
+      switch (whichFile) {
+          case 'csv':
+              this.selectedCsvFile = files[0];
+              this.csvFileString = this.selectedCsvFile.name;
+              break;
+          default:
+              break;
+      }
   }
 
   setFilter(filter: string) {
@@ -64,4 +82,38 @@ export class SpeakerListComponent implements OnInit {
     this.router.navigate(['/speaker', {id: speakerId}]);
   }
 
+  upload(directory: string) {
+      let selectedFile: File;
+      switch (directory) {
+          case 'csv':
+              selectedFile = this.selectedCsvFile;
+              break;
+          default:
+              break;
+      }
+      if (!selectedFile) {
+          //this.toast.error('Please select a file to upload.');
+          alert("select file to upload");
+          return;
+      }
+      /*let invalid = this.validateFile(selectedFile, directory);
+      if (invalid) {
+          console.log("invalid file zzzzzzzzzzzzzzzzzzzzzzzz");
+          //this.toast.error(invalid);
+          return;
+      }*/
+      let ext = selectedFile.name.split('.').pop();
+      //let userFilename = `${this.speaker.nameLast}_${this.speaker.email}_${directory}.${ext}`;
+      this.transitionService.setLoading(true);
+      let data = new FormData();
+      data.append('userFilename', "Speakers_csv");
+      data.append('file', selectedFile);
+      this.fileService
+          .uploadCsv(data)
+          .then(res => {
+              console.log("Response back from server ZZZZZZZZZZZZZZZZZZZ");
+              this.toast.success('File uploaded and speakers information updated.');
+              this.transitionService.setLoading(false);
+          });
+  }
 }

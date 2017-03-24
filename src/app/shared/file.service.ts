@@ -20,4 +20,11 @@ export class FileService {
               .catch(handleError);
   }
 
+  uploadCsv(file: FormData) {
+    return this.http
+              .post(this.baseUrl + '/api/uploadCsv', file)
+              .toPromise()
+              .then(parseJson)
+              .catch(handleError);
+  }
 }
