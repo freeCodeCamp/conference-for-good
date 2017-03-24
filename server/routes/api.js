@@ -865,15 +865,21 @@ function updateSpeakerFromImport(req, res, csvData, counter, emailIndex, i) {
         .exec()
         .then(function(speaker) {
             var proObject = speaker[0];
+            if (proObject.arrangements.length == 0) {
+                proObject.arrangements[0] = {};
+            }
+
             for (var j = 0; j < csvData[i].length; j++) {
                 var currentProperty = csvData[0][j];
                 if (responseFromProps.indexOf(currentProperty) > -1) {
-                    if (csvData[i][j] == "FALSE") {
-                        proObject[currentProperty] = false;
-                    } else if (csvData[i][j] == "") {
-                        proObject["responseForm"][currentProperty] = "";
-                    } else {
-                        proObject["responseForm"][currentProperty] = csvData[i][j];
+                    if (currentProperty != "dateDeparture" && currentProperty != "dateArrival") {
+                        if (csvData[i][j] == "FALSE") {
+                            proObject["responseForm"][currentProperty] = false;
+                        } else if (csvData[i][j] == "") {
+                            proObject["responseForm"][currentProperty] = "";
+                        } else {
+                            proObject["responseForm"][currentProperty] = csvData[i][j];
+                        }
                     }
                 } else if (mealsArray.indexOf(currentProperty) > -1) {
                     var index = mealsArray.indexOf(currentProperty);
@@ -929,10 +935,12 @@ function updateSpeakerFromImport(req, res, csvData, counter, emailIndex, i) {
                         proObject.responseForm.otherDietary = "";
                     }
                 } else if (arrangementsArray.indexOf(currentProperty) > -1) {
-                    if (proObject.arrangements.length == 0) {
-                        proObject.arrangements[0] = {};
-                    }
                     proObject.arrangements[0][currentProperty] = csvData[i][j];
+                    if (currentProperty == "arrivalDate" && csvData[i][j] != "") {
+                        proObject.responseForm.dateArrival = csvData[i][j];
+                    } else if (currentProperty == "departDate" && csvData[i][j] != "") {
+                        proObject.responseForm.dateDeparture = csvData[i][j];
+                    }
                 } else if (currentProperty == "costsCoveredByOrgn") {
                     if (csvData[i][j] == "") {
                         proObject.costsCoveredByOrg = [{ "name" : "travel", "covered" : false }, { "name" : "lodging", "covered" : false }];
