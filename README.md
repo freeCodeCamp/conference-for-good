@@ -1,7 +1,3 @@
 # freeCodeCamp Conference for Good
 
-**To run this project locally:**
-
-- Run `mongod` in one terminal window.
-- Run `npm run server` in another terminal window to start the server.
-- Run `npm run start` in another terminal window to start the Angular build process.
+**This app is currently in production and is being actively developed by a freeCodeCamp team for a non-profit organization. Once the current phase ends the goal is to open the project to outside contributions as an Open Source for Good project.**
