@@ -10,6 +10,7 @@ const path = require('path');
 const json2csv = require('json2csv');
 const fs = require('fs');
 const Dropbox = require('dropbox');
+const csv = require("fast-csv");
 
 // Mailgun setup
 const Mailgun = require('mailgun-js');
@@ -108,6 +109,31 @@ router.post('/upload', upload.any(), (req, res) => {
 
 router.post('/uploadFile', upload.any(), (req, res) => {
     res.status(200).json({msg: 'file uploaded'});
+});
+
+var responseFromProps = ["completed", "agreedHotel", "bookAuthor", "bookTitle", "bookAvailable", "otherDietary", "whyConflict", "agreedDates", "agreedTransport", "ccawCoveringHotel", "dateDeparture", "dateArrival", "ccawLodging", "otherDietary"];
+
+var mealsArray = ["Speaker/VIP Welcome Reception, 6-8pm- 05/21/17", "Breakfast- 05/22/2017", "Lunch- 05/22/2017", "CCAW Networking Event, 4:30-7pm- 05/22/2017", "Breakfast- 05/23/2017", "Lunch- 05/23/2017", "Breakfast- 05/24/2017", "Lunch- 05/24/2017", "Breakfast- 05/25/2017"]
+
+var mealsObjectsArray = [{"date": "05/21/17", "meal": "Reception"}, { "date": "2017-05-22", "meal": "Breakfast"}, { "date": "2017-05-22", "meal": "Lunch"}, {"date": "2017-05-22", "meal": "Networking"}, {"date": "2017-05-23", "meal": "Breakfast"}, {"date": "2017-05-23", "meal": "Lunch"}, {"date": "2017-05-24", "meal": "Breakfast"}, {"date": "2017-05-24", "meal": "Lunch"}, {"date": "2017-05-25", "meal": "Breakfast"}];
+
+var dietaryNeedsArray = ["Vegetarian", "Vegan", "Gluten-Free", "Dairy-Free", "Other"]
+
+var arrangementsArray = ["associatedConf", "travel", "travelAmount", "lodging", "lodgingAmount", "honorarium", "lodgingConfirmNum", "receivedFlightItin", "arrivalAirport", "arrivalDate", "arrivalAirline", "arrivalFlightNum", "departAirport", "departDate", "departAirline", "departFlightNum"];
+
+router.post('/uploadCsv', upload.any(), (req, res) => {
+    var csvData = [];
+    fs.createReadStream(__dirname + '/../uploads/' + req.body.userFilename).pipe(csv()).on("data", function(data) {
+        csvData.push(data);
+    })
+    .on("end", function(data) {
+        var emailIndex = csvData[0].indexOf("email");
+        var counter = 0;
+        for (var i = 1; i < csvData.length; i++) {
+            counter++;
+            updateSpeakerFromImport(req, res, csvData, counter, emailIndex, i);
+        }
+    })    
 });
 
 router.get('/getallconferences', (req, res) => {
@@ -653,29 +679,19 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
                     }
                     if (j === 0) {
                         let refSess = _.clone(sessions[i].toObject());
-                        if (sessions[i].statusTimeLocation[j].part !== '0') {
-                            exportJson[i].title = `(Part ${sessions[i].statusTimeLocation[j].part}) ${refTitle.title.slice()}`;
-                        }
                         exportJson[i].date = confDay.date;
                         exportJson[i].timeSlot = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
                         exportJson[i].room = sessions[i].statusTimeLocation[j].room;
                         delete exportJson[i].statusTimeLocation;
                     } else {
-                        // For sessions with multiple schedules, split into dupes with other sched info
-                        let dupeSess = _.clone(exportJson[i]);
-                        if (sessions[i].statusTimeLocation[j].part !== '0') {
-                            dupeSess.title = `(Part ${refTitle.statusTimeLocation[j].part}) ${refTitle.title.slice()}`;
-                        }
-                        dupeSess.date = confDay.date;
-                        dupeSess.timeSlot = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
-                        dupeSess.room = sessions[i].statusTimeLocation[j].room;
-                        delete dupeSess.statusTimeLocation;
-                        exportJson.splice(i+1, 0, dupeSess);
+                        // For sessions with multiple schedules, add two colomns for second room and timeslot
+                        exportJson[i]["timeSlot 2"] = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
+                        exportJson[i]["room 2"] = sessions[i].statusTimeLocation[j].room;
                     }
                 }
             }
         }
-        desiredFields.push('date', 'timeSlot', 'room');
+        desiredFields.push('date', 'timeSlot', 'room', 'timeSlot 2', 'room 2');
         _.remove(desiredFields, field => field === 'statusTimeLocation');
     }
     // Flatten tags into comma separated list of tag names that are checked
@@ -831,6 +847,128 @@ function updateDefaultConfs(defaultConf) {
             });
     });
     return savePromise;
+}
+
+function updateSpeakerFromImport(req, res, csvData, counter, emailIndex, i) {
+    Speaker
+        .find({"email": csvData[i][emailIndex]})
+        .exec()
+        .then(function(speaker) {
+            var proObject = speaker[0];
+            if (proObject.arrangements.length == 0) {
+                proObject.arrangements[0] = {};
+            }
+
+            for (var j = 0; j < csvData[i].length; j++) {
+                var currentProperty = csvData[0][j];
+                if (responseFromProps.indexOf(currentProperty) > -1) {
+                    if (currentProperty != "dateDeparture" && currentProperty != "dateArrival") {
+                        if (csvData[i][j] == "FALSE") {
+                            proObject["responseForm"][currentProperty] = false;
+                        } else if (csvData[i][j] == "") {
+                            proObject["responseForm"][currentProperty] = "";
+                        } else {
+                            proObject["responseForm"][currentProperty] = csvData[i][j];
+                        }
+                    }
+                } else if (mealsArray.indexOf(currentProperty) > -1) {
+                    var index = mealsArray.indexOf(currentProperty);
+                    
+                    var mealObject = {
+                        "date": mealsObjectsArray[index]["date"],
+                        "meal": mealsObjectsArray[index]["meal"],
+                        "label": mealsArray[index]
+                    }
+
+                    if (csvData[i][j] == "FALSE" || csvData[i][j] == "" || csvData[i][j] == 0) {
+                        mealObject["attending"] = false;
+                    } else {
+                        mealObject["attending"] = true;
+                    }
+
+                    var mealInMeals = false;
+                    for (var meal in proObject.responseForm.mealDates) {
+                        if (proObject.responseForm.mealDates[meal].label == mealObject.label) {
+                            proObject.responseForm.mealDates[meal] = mealObject;
+                            mealInMeals = true;
+                            break;
+                        }
+                    }
+                    if (!mealInMeals) {
+                        proObject.responseForm.mealDates.push(mealObject);
+                    }
+
+                } else if (dietaryNeedsArray.indexOf(currentProperty) > -1) {
+                    var dietaryObject = {
+                        "need": currentProperty
+                    }
+                    
+                    if (csvData[i][j] == "FALSE" || csvData[i][j] == "" || csvData[i][j] == 0) {
+                        dietaryObject["checked"] = false;
+                    } else {
+                        dietaryObject["checked"] = true;
+                    }   
+                    
+                    var needInNeeds = false;
+                    for (var need in proObject.responseForm.dietaryNeeds) {
+                        if (proObject.responseForm.dietaryNeeds[need].need == dietaryObject.need) {
+                            proObject.responseForm.dietaryNeeds[need] = dietaryObject;
+                            needInNeeds = true;
+                            break;
+                        }
+                    }
+                    if (!needInNeeds) {
+                        proObject.responseForm.dietaryNeeds.push(dietaryObject);
+                    }
+
+                    if (currentProperty == "Other" && csvData[i][j] == 0) {
+                        proObject.responseForm.otherDietary = "";
+                    }
+                } else if (arrangementsArray.indexOf(currentProperty) > -1) {
+                    proObject.arrangements[0][currentProperty] = csvData[i][j];
+                    if (currentProperty == "arrivalDate" && csvData[i][j] != "") {
+                        proObject.responseForm.dateArrival = csvData[i][j];
+                    } else if (currentProperty == "departDate" && csvData[i][j] != "") {
+                        proObject.responseForm.dateDeparture = csvData[i][j];
+                    }
+                } else if (currentProperty == "costsCoveredByOrgn") {
+                    if (csvData[i][j] == "") {
+                        proObject.costsCoveredByOrg = [{ "name" : "travel", "covered" : false }, { "name" : "lodging", "covered" : false }];
+                    } else {
+                        var coveredItems = csvData[i][j].split(",");
+                        if (coveredItems.length == 2) {
+                            proObject.costsCoveredByOrg = [{ "name": "travel", "covered": true }, { "name" : "lodging", "covered": true}];
+                        } else {
+                            if (coveredItems[0].trim() == "travel") {
+                                proObject.costsCoveredByOrg = [{ "name": "travel", "covered": true }, { "name" : "lodging", "covered": false}];
+                            } else if (coveredItems[0].trim() == "lodging") {
+                                proObject.costsCoveredByOrg = [{ "name": "travel", "covered": false }, { "name" : "lodging", "covered": true}];
+                            }
+                        } 
+                    }
+                } else {
+                    if (csvData[i][j] == "FALSE") {
+                        proObject[currentProperty] = false;
+                    } else if (csvData[i][j] == "") {
+                        proObject[currentProperty] = "";
+                    } else {
+                        proObject[currentProperty] = csvData[i][j];
+                    }
+                }
+            }
+
+            Speaker
+                .update(
+                    {"email": csvData[i][emailIndex]},
+                    {"$set": proObject})
+                .exec()
+                .then(function() {
+                    if (counter == csvData.length - 1) {
+                        res.status(200);
+                        res.end();
+                    }
+                });
+        })
 }
 
 module.exports = router;
