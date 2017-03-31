@@ -405,6 +405,10 @@
                   [(ngModel)]="model.bioWebsite" required
                       id="bioWebsite"
                   name="bioWebsite" #bioWebsite="ngModel"></textarea>
+            <div *ngIf="bioWebsite?.value?.split(' ').length > 125" class="alert alert-warning">
+              <p>There is a 125 word limit for the website bio, please try to keep text below the limit.</p>
+              <p>Current words: {{ bioWebsite?.value?.split(' ').length }}</p>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -415,6 +419,10 @@
                   [(ngModel)]="model.bioProgram" required
                       id="bioProgram"
                   name="bioProgram" #bioProgram="ngModel"></textarea>
+            <div *ngIf="bioProgram?.value?.split(' ').length > 60" class="alert alert-warning">
+              <p>There is a 60 word limit for the program bio, please try to keep text below the limit.</p>
+              <p>Current words: {{ bioProgram?.value?.split(' ').length }}</p>
+            </div>
           </div>
         </div>
       </div>
