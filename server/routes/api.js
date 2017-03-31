@@ -679,29 +679,19 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
                     }
                     if (j === 0) {
                         let refSess = _.clone(sessions[i].toObject());
-                        if (sessions[i].statusTimeLocation[j].part !== '0') {
-                            exportJson[i].title = `(Part ${sessions[i].statusTimeLocation[j].part}) ${refTitle.title.slice()}`;
-                        }
                         exportJson[i].date = confDay.date;
                         exportJson[i].timeSlot = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
                         exportJson[i].room = sessions[i].statusTimeLocation[j].room;
                         delete exportJson[i].statusTimeLocation;
                     } else {
-                        // For sessions with multiple schedules, split into dupes with other sched info
-                        let dupeSess = _.clone(exportJson[i]);
-                        if (sessions[i].statusTimeLocation[j].part !== '0') {
-                            dupeSess.title = `(Part ${refTitle.statusTimeLocation[j].part}) ${refTitle.title.slice()}`;
-                        }
-                        dupeSess.date = confDay.date;
-                        dupeSess.timeSlot = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
-                        dupeSess.room = sessions[i].statusTimeLocation[j].room;
-                        delete dupeSess.statusTimeLocation;
-                        exportJson.splice(i+1, 0, dupeSess);
+                        // For sessions with multiple schedules, add two colomns for second room and timeslot
+                        exportJson[i]["timeSlot 2"] = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
+                        exportJson[i]["room 2"] = sessions[i].statusTimeLocation[j].room;
                     }
                 }
             }
         }
-        desiredFields.push('date', 'timeSlot', 'room');
+        desiredFields.push('date', 'timeSlot', 'room', 'timeSlot 2', 'room 2');
         _.remove(desiredFields, field => field === 'statusTimeLocation');
     }
     // Flatten tags into comma separated list of tag names that are checked
