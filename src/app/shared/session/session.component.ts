@@ -300,6 +300,17 @@ export class SessionComponent implements OnInit, OnDestroy {
     window.open('mailto:bmeyer@genesisshelter.org');
   }
 
+  deleteSession() {
+    this.sessionService
+      .deleteSession(this.model)
+      .then(res => {
+        this.sessionService
+          .getAllSessions().then(() => {
+            this.router.navigate(['/dashboard', { msg: 'Session has been deleted.' }]);
+          });
+      });
+  }
+
   willingToRepeatComplete(): boolean {
     if (typeof this.model.willingToRepeat === 'boolean') {
       return true;

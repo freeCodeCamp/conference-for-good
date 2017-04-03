@@ -40,13 +40,13 @@ function notifyAdmin(message, subject) {
         html: `<div>${message}</div>`
     };
 
-    mailgun.messages().send(mailOptions, function(err, body){
-        if (err) {
-            console.log('admin notification email not sent', error);
-        } else {
-            console.log('admin notification email sent');
-        }
-    });
+    // mailgun.messages().send(mailOptions, function(err, body){
+    //     if (err) {
+    //         console.log('admin notification email not sent', error);
+    //     } else {
+    //         console.log('admin notification email sent');
+    //     }
+    // });
 
 };
 
@@ -482,6 +482,15 @@ router.post('/updatesession', (req, res) => {
             } else res.status(200).json(newSession);
         });
     }
+});
+
+router.post('/deletesession', (req, res) => {
+    const session = req.body;
+    Session.findByIdAndRemove(session._id)
+        .exec()
+        .then(doc => {
+            res.status(200).json({message: 'Session deleted'});
+        });
 });
 
 router.post('/updatesessionspeakers', (req, res) => {
