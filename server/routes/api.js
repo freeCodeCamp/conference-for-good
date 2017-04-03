@@ -40,13 +40,13 @@ function notifyAdmin(message, subject) {
         html: `<div>${message}</div>`
     };
 
-    // mailgun.messages().send(mailOptions, function(err, body){
-    //     if (err) {
-    //         console.log('admin notification email not sent', error);
-    //     } else {
-    //         console.log('admin notification email sent');
-    //     }
-    // });
+    mailgun.messages().send(mailOptions, function(err, body){
+        if (err) {
+            console.log('admin notification email not sent', error);
+        } else {
+            console.log('admin notification email sent');
+        }
+    });
 
 };
 
