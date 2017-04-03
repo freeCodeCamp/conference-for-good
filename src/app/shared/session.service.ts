@@ -353,6 +353,16 @@ export class SessionService {
     return this.updateSession(session);
   }
 
+  deleteSession(session: Session) {
+    const serverUrl = this.baseUrl + '/api/deletesession';
+    const pkg = packageForPost(session);
+    return this.http
+            .post(serverUrl, pkg.body, pkg.opts)
+            .toPromise()
+            .then(parseJson)
+            .catch(handleError);
+  }
+
   /** Update new session on server and sync response with front end
    * @updateType Different server endpoints for speaker and slot updates
   */

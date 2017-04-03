@@ -484,6 +484,15 @@ router.post('/updatesession', (req, res) => {
     }
 });
 
+router.post('/deletesession', (req, res) => {
+    const session = req.body;
+    Session.findByIdAndRemove(session._id)
+        .exec()
+        .then(doc => {
+            res.status(200).json({message: 'Session deleted'});
+        });
+});
+
 router.post('/updatesessionspeakers', (req, res) => {
     let session = req.body;
 
