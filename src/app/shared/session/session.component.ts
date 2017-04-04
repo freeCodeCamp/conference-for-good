@@ -301,14 +301,17 @@ export class SessionComponent implements OnInit, OnDestroy {
   }
 
   deleteSession() {
-    this.sessionService
-      .deleteSession(this.model)
-      .then(res => {
-        this.sessionService
-          .getAllSessions().then(() => {
-            this.router.navigate(['/dashboard', { msg: 'Session has been deleted.' }]);
-          });
-      });
+    var confirmation = confirm('Are you sure you want to delete this session?');
+    if (confirmation) {
+      this.sessionService
+        .deleteSession(this.model)
+        .then(res => {
+          this.sessionService
+            .getAllSessions().then(() => {
+              this.router.navigate(['/home', { msg: 'Session has been deleted.' }]);
+            });
+        });
+    }
   }
 
   willingToRepeatComplete(): boolean {

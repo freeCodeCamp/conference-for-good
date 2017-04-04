@@ -23,7 +23,7 @@
   @extend .card;
   display: inline-block;
   text-align: left;
-  height: 100px;
+  height: 150px;
   padding: 0;
   margin: 10px;
   font-weight: 100;
@@ -50,6 +50,9 @@
   margin-left: 10px;
   margin-top: 3px;
   text-align: left;
+  .deleteSpeaker {
+    float: right;
+  }
 }
 
 .noHeadshot {
