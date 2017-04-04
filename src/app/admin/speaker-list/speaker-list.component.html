@@ -25,15 +25,16 @@
   </div>
 
   <div class="divider"></div>
-
+  <!--
   <div class="col-xs-6 col-xs-offset-3 section">
     <p>Upload a CSV file and click upload to update speakers' information.</p>
     <label class="btn btn-default" for="csvFile"><i class="fa fa-upload fa-lg"></i>{{ csvFileString }}</label>
     <input id="csvFile" class="file" type="file" #csvFile (change)="fileSelected(csvFile.files, 'csv')">
     <button class="btn btn-primary" (click)="upload('csv')">Upload</button>
-  </div>
+  </div> -->
 
-  <div class="row" style="margin-top: 120px">
+  <!--<div class="row" style="margin-top: 120px">-->
+  <div class="row">
       <div *ngFor="let speaker of (displaySpeakers | async)">
           <div id="speakers" class="col-md-6 col-xs-12">
             <div *ngIf="!speaker.admin"
@@ -48,6 +49,7 @@
                 <div>{{ speaker.organization }}</div>
                 <div>{{ speaker.email }}</div>
                 <div>{{ speaker.sessions?.length }} session<span *ngIf="speaker.sessions?.length > 1">s</span></div>
+                <a class="btn btn-danger deleteSpeaker" (click)="deleteSpeaker(speaker._id)">Delete Speaker</a>
               </div>
             </div>
           </div>

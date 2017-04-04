@@ -163,6 +163,19 @@ router.get('/getallsessions', (req, res) => {
         })
 });
 
+router.post('/deletespeaker', (req, res) => {
+    const speaker = req.body;
+    Speaker.findByIdAndRemove(speaker.id)
+        .exec()
+        .then(doc => {
+            Session.remove({ 'speakers.mainPresenter': speaker.id }, (err, doc) => {
+                if (!err) {
+                    res.status(200).json({message: 'Speaker deleted'});
+                }
+            })
+        });
+});
+
 router.post('/createconference', (req, res) => {
     let conf = req.body;
     updateActiveConfs(null)
@@ -484,6 +497,15 @@ router.post('/updatesession', (req, res) => {
     }
 });
 
+router.post('/deletesession', (req, res) => {
+    const session = req.body;
+    Session.findByIdAndRemove(session._id)
+        .exec()
+        .then(doc => {
+            res.status(200).json({message: 'Session deleted'});
+        });
+});
+
 router.post('/updatesessionspeakers', (req, res) => {
     let session = req.body;
 
@@ -685,13 +707,14 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
                         delete exportJson[i].statusTimeLocation;
                     } else {
                         // For sessions with multiple schedules, add two colomns for second room and timeslot
+                        exportJson[i]["date 2"] = confDay.date;
                         exportJson[i]["timeSlot 2"] = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
                         exportJson[i]["room 2"] = sessions[i].statusTimeLocation[j].room;
                     }
                 }
             }
         }
-        desiredFields.push('date', 'timeSlot', 'room', 'timeSlot 2', 'room 2');
+        desiredFields.push('date', 'timeSlot', 'room', 'date 2', 'timeSlot 2', 'room 2');
         _.remove(desiredFields, field => field === 'statusTimeLocation');
     }
     // Flatten tags into comma separated list of tag names that are checked

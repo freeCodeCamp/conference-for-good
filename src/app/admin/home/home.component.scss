@@ -7,3 +7,13 @@
   border: 1px dashed hsl(0, 0%, 75%);
   border-radius: 10px;
 }
+
+.sessionButtons {
+  display: flex;
+  justify-content: center;
+  a {
+    font-size: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+}

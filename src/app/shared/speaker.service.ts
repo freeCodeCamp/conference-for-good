@@ -103,6 +103,16 @@ export class SpeakerService {
     return _.find(this.speakersUnfiltered.getValue(), speaker => speaker._id === speakerId );
   }
 
+  deleteSpeaker(speakerId: string) {
+    const serverUrl = this.baseUrl + '/api/deletespeaker';
+    const pkg = packageForPost({ id: speakerId });
+    return this.http
+            .post(serverUrl, pkg.body, pkg.opts)
+            .toPromise()
+            .then(parseJson)
+            .catch(handleError);
+  }
+
   findSpeakerByEmail(speakerEmail: string) {
     return _.find(this.speakersUnfiltered.getValue(), speaker => speaker.email === speakerEmail);
   }

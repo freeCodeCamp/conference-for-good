@@ -29,9 +29,10 @@
                     {{ speakerService.getSpeakerList(session.speakers).mainPresenter?.nameFirst }} {{ speakerService.getSpeakerList(session.speakers).mainPresenter?.nameLast }}
                   </a>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-6 sessionButtons">
                   <a class="btn btn-success" (click)="changeApproval(session, 'approved')">Approve</a>
                   <a class="btn btn-warning" (click)="changeApproval(session, 'denied')">Deny</a>
+                  <a class="btn btn-danger" (click)="deleteSession(session)">Delete</a>
                 </div>
 
               </div>

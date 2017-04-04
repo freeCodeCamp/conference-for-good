@@ -56,4 +56,18 @@ export class HomeComponent {
         });
   }
 
+  deleteSession(session: Session) {
+    var confirmation = confirm('Are you sure you want to delete this session?');
+    if (confirmation) {
+      this.sessionService
+        .deleteSession(session)
+        .then(res => {
+          this.sessionService
+            .getAllSessions().then(() => {
+              this.toast.success('Session has been deleted.');
+            });
+        });
+    }
+  }
+
 }

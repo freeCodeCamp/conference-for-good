@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { FileService } from '../../shared/file.service';
 import { SpeakerService } from '../../shared/speaker.service';
+import { SessionService } from '../../shared/session.service';
 import { Speaker } from '../../shared/speaker.model';
 import { TransitionService } from '../../shared/transition.service';
 import { ToastComponent } from '../../shared/toast.component';
@@ -23,6 +24,7 @@ export class SpeakerListComponent implements OnInit {
 
   constructor(private transitionService: TransitionService,
               private speakerService: SpeakerService,
+              private sessionService: SessionService,
               private fileService: FileService,
               private router: Router) { }
 
@@ -80,6 +82,22 @@ export class SpeakerListComponent implements OnInit {
 
   gotoSpeaker(speakerId: string) {
     this.router.navigate(['/speaker', {id: speakerId}]);
+  }
+
+  deleteSpeaker(speakerId: string) {
+    var confirmation = confirm('Are you sure you want to delete this session?');
+    if (confirmation) {
+      this.speakerService
+        .deleteSpeaker(speakerId)
+        .then(res => {
+          this.speakerService
+            .getAllSpeakers().then(() => {
+              this.sessionService.getAllSessions().then(() => {
+                this.router.navigate(['/home', { msg: 'Speaker has been deleted.' }]);
+              });
+            });
+        });
+    }
   }
 
   upload(directory: string) {
