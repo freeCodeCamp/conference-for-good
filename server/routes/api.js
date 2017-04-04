@@ -163,6 +163,19 @@ router.get('/getallsessions', (req, res) => {
         })
 });
 
+router.post('/deletespeaker', (req, res) => {
+    const speaker = req.body;
+    Speaker.findByIdAndRemove(speaker.id)
+        .exec()
+        .then(doc => {
+            Session.remove({ 'speakers.mainPresenter': speaker.id }, (err, doc) => {
+                if (!err) {
+                    res.status(200).json({message: 'Speaker deleted'});
+                }
+            })
+        });
+});
+
 router.post('/createconference', (req, res) => {
     let conf = req.body;
     updateActiveConfs(null)

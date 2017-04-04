@@ -49,6 +49,7 @@
                 <div>{{ speaker.organization }}</div>
                 <div>{{ speaker.email }}</div>
                 <div>{{ speaker.sessions?.length }} session<span *ngIf="speaker.sessions?.length > 1">s</span></div>
+                <a class="btn btn-danger deleteSpeaker" (click)="deleteSpeaker(speaker._id)">Delete Speaker</a>
               </div>
             </div>
           </div>
