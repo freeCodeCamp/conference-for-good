@@ -685,13 +685,14 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
                         delete exportJson[i].statusTimeLocation;
                     } else {
                         // For sessions with multiple schedules, add two colomns for second room and timeslot
+                        exportJson[i]["date 2"] = confDay.date;
                         exportJson[i]["timeSlot 2"] = `${slotWeLookinFo.start}-${slotWeLookinFo.end}`;
                         exportJson[i]["room 2"] = sessions[i].statusTimeLocation[j].room;
                     }
                 }
             }
         }
-        desiredFields.push('date', 'timeSlot', 'room', 'timeSlot 2', 'room 2');
+        desiredFields.push('date', 'timeSlot', 'room', 'date 2', 'timeSlot 2', 'room 2');
         _.remove(desiredFields, field => field === 'statusTimeLocation');
     }
     // Flatten tags into comma separated list of tag names that are checked
