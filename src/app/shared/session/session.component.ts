@@ -239,14 +239,14 @@ export class SessionComponent implements OnInit, OnDestroy {
   updateSession(form: any) {
     this.model.sessionComplete = this.checkSession(form);
     this.model.associatedConf = this.adminService.defaultConference.getValue().title;
-    
+
     this.sessionService
       .updateSession(this.model)
       .then(res => {
         if (!this.authService.user.getValue().admin) {
           this.router.navigate(['/dashboard', { msg: 'Presentation proposal saved!' }]);
         } else {
-          this.router.navigate(['/dashboard', { msg: 'Session saved!' }]);
+          this.router.navigate(['/session-list', { msg: 'Session saved!' }]);
         }
       });
 

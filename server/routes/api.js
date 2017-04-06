@@ -473,20 +473,21 @@ router.post('/updatesession', (req, res) => {
             });
     } else {
         let newSession = new Session();
-
         // compose a message to notify admins that a speaker has submited a new proposal
-        Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
-            let name = `${speaker.nameFirst} ${speaker.nameLast}`;
-            let message = `${name} has submited a new session. `
+        if (session.speakers) {
+            Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
+                let name = `${speaker.nameFirst} ${speaker.nameLast}`;
+                let message = `${name} has submited a new session. `
 
-            if (session.title) message += `The Title is: <b>${session.title}</b>. `;
-            if (session.descriptionWebsite) message += `The session Website Description is:<br><br><i>${session.descriptionWebsite}</i><br><br>. `;
-            if (session.descriptionProgram) message += `The session Program Description is:<br><br><i>${session.descriptionProgram}</i>. `;
+                if (session.title) message += `The Title is: <b>${session.title}</b>. `;
+                if (session.descriptionWebsite) message += `The session Website Description is:<br><br><i>${session.descriptionWebsite}</i><br><br>. `;
+                if (session.descriptionProgram) message += `The session Program Description is:<br><br><i>${session.descriptionProgram}</i>. `;
 
-            message += `The proposal is currently${session.sessionComplete ? '<b>Complete</b>' : '<b>Incomplete</b>.'}`;
+                message += `The proposal is currently${session.sessionComplete ? '<b>Complete</b>' : '<b>Incomplete</b>.'}`;
 
-            notifyAdmin(message, 'New Proposal Submission');
-        });
+                notifyAdmin(message, 'New Proposal Submission');
+            });
+        }
               
         _.merge(newSession, session);
         newSession.save(err => {
