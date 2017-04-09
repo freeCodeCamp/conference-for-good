@@ -509,6 +509,8 @@ router.post('/deletesession', (req, res) => {
 
 router.post('/updatesessionspeakers', (req, res) => {
     let session = req.body;
+    const newSpeakers = session.speakers;
+    const updatedSessionSpeakers = [newSpeakers.mainPresenter, ...newSpeakers.coPresenters];
 
     Session
         .findById(session._id)
@@ -517,6 +519,28 @@ router.post('/updatesessionspeakers', (req, res) => {
             if (serverSession === null) {
                 res.status(500).json({message: 'Session not found'});
             } else {
+                /* First we diff the speakers in the updated session and the saved copy 
+                   to see if a speaker has been removed. If so, we update that speaker
+                   to remove this session from their profile. */
+                const { speakers } = serverSession;
+                const sessionSpeakers = [speakers.mainPresenter, ...speakers.coPresenters];
+                const possiblyRemoved = sessionSpeakers.filter(s => {
+                    return (updatedSessionSpeakers.indexOf(s) === -1);
+                }).pop();
+                if (possiblyRemoved) {
+                    Speaker.findById(possiblyRemoved)
+                    .exec()
+                    .then(speaker => {
+                        if (speaker !== null) {
+                            speaker.sessions = speaker.sessions.filter(s => s !== session._id);
+                            speaker.save(err => {
+                                if (!err) {
+                                    console.log('Speaker removed from session updated');
+                                }
+                            });
+                        }
+                    });
+                }
                 serverSession.speakers = session.speakers;
                 serverSession.save(err => {
                     if (err) {
