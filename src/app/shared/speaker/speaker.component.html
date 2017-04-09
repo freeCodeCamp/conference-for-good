@@ -269,8 +269,8 @@
       <div class="row section">
         <div class="row">
           <div class="col-md-8 col-xs-12">
-            <label class="control-label primary-label" for="salutation">Salutation</label>
-            <input type="text" class="form-control"
+            <label class="control-label primary-label" [ngClass]="!model.salutation ? 'formLabelRequiredMissing' : '' " for="salutation">Salutation</label>
+            <input type="text" class="form-control" required
                   [(ngModel)]="model.salutation"
                    id="salutation"
                   name="salutation" #salutation="ngModel">

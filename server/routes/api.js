@@ -453,7 +453,7 @@ router.post('/updatesession', (req, res) => {
                     res.status(500).json({message: 'Session not found'});
                 } else {
                     // only send additional notification if proposal is now complete
-                    if (session.sessionComplete) {
+                    if (session.sessionComplete && session.speakers.mainPresenter) {
                         // compose a message to notify admins that a speaker has submited a new proposal
                         Speaker.findById(session.speakers.mainPresenter, (err, speaker) => {
                             let name = `${speaker.nameFirst} ${speaker.nameLast}`;
