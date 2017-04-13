@@ -49,7 +49,7 @@ export class ExportingComponent implements OnInit {
     for (let field in refSpeaker) {
       if (refSpeaker.hasOwnProperty(field)) {
         if (field !== 'password'
-            && field !== 'adminUploads' && field !== 'statusNotification') {
+            && field !== 'adminUploads' && field !== 'statusNotification' && field !== 'costsCoveredByOrg' && field !== 'status') {
           this.speakerFields.push({name: field, checked: false});
         }
       }
@@ -81,7 +81,7 @@ export class ExportingComponent implements OnInit {
   /** Empty session with all fields to loop through */
   genRefSession() {
     let refSess: Session = {
-      associatedConf: '', approval: '', type: '', length: '',
+      _id: '', associatedConf: '', approval: '', type: '', length: '',
       title: '', descriptionWebsite: '', descriptionProgram: '',
       tags: [], level: '', willingToBeRecorded: '',
       isMediaOrPressFriendly: '', willingToRepeat: true,

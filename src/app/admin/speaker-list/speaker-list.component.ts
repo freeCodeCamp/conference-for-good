@@ -110,28 +110,33 @@ export class SpeakerListComponent implements OnInit {
               break;
       }
       if (!selectedFile) {
-          //this.toast.error('Please select a file to upload.');
-          alert("select file to upload");
+          this.toast.error('Please select a valid file to upload.');
           return;
       }
-      /*let invalid = this.validateFile(selectedFile, directory);
-      if (invalid) {
-          console.log("invalid file zzzzzzzzzzzzzzzzzzzzzzzz");
-          //this.toast.error(invalid);
+      let valid = this.validateFile(selectedFile);
+      if (!valid) {
+          this.toast.error("Please select a csv file.");
           return;
-      }*/
+      }
       let ext = selectedFile.name.split('.').pop();
-      //let userFilename = `${this.speaker.nameLast}_${this.speaker.email}_${directory}.${ext}`;
       this.transitionService.setLoading(true);
       let data = new FormData();
       data.append('userFilename', "Speakers_csv");
       data.append('file', selectedFile);
       this.fileService
-          .uploadCsv(data)
+          .uploadCsv(data, "uploadCsv")
           .then(res => {
-              console.log("Response back from server ZZZZZZZZZZZZZZZZZZZ");
               this.toast.success('File uploaded and speakers information updated.');
               this.transitionService.setLoading(false);
           });
+  }
+
+  validateFile(selectedFile: File): boolean {
+    var ext = selectedFile.name.slice(-3);
+    if (ext === "csv") {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
