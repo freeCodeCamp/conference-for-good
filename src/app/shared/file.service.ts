@@ -20,7 +20,7 @@ export class FileService {
               .catch(handleError);
   }
 
-  uploadCsv(file: FormData, parameter) {q
+  uploadCsv(file: FormData, parameter) {
     return this.http
               .post(this.baseUrl + '/api/' + parameter, file)
               .toPromise()
