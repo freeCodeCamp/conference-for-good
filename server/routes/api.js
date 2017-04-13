@@ -670,6 +670,7 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
     let wantSpeakers = _.findIndex(desiredFields, field => field === 'speakers') >= 0;
     let wantSchedule = _.findIndex(desiredFields, field => field === 'statusTimeLocation') >= 0;
     let wantTags = _.findIndex(desiredFields, field => field === 'tags') >= 0;
+    let wantHandouts = _.findIndex(desiredFields, field => field === 'handouts') >= 0;
 
     for (let i = 0; i < exportJson.length; i++) exportJson[i] = exportJson[i].toObject();
 
@@ -759,6 +760,17 @@ function parseSessionData(desiredFields, sessions, speakers, defaultConf) {
         }
         desiredFields.push('sessTags');
         _.remove(desiredFields, field => field === 'tags');
+    }
+
+    // diplsay yes or no depending on whether handouts are uploaded or not.
+    if (wantHandouts) {
+        for (let i = 0; i < sessions.length; i++) {
+            if (sessions[i].handouts.length == 0) {
+                exportJson[i].handouts = "no";
+            } else {
+                exportJson[i].handouts = "yes";
+            }
+        }
     }
 
     let csv = json2csv({ data: exportJson, fields: desiredFields });

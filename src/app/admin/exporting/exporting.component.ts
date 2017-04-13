@@ -87,7 +87,7 @@ export class ExportingComponent implements OnInit {
       isMediaOrPressFriendly: '', willingToRepeat: true,
       hasAVneeds: '', avNeeds: '', speakers: {mainPresenter: '', coPresenters: []},
       statusTimeLocation: [],
-      miscRequirements: '', sessionComplete: false
+      miscRequirements: '', sessionComplete: false, handouts: []
     }
     return refSess;
   }
