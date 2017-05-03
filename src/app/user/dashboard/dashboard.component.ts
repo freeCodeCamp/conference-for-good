@@ -57,13 +57,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
 
     this.sessionService.sessionsUnfiltered.subscribe(sessions => {
+
       this.allSpeakerSessions = this.sessionService.getSpeakerSessions(this.speaker._id);
 
       this.activeSpeakerSessions = _.filter(this.allSpeakerSessions, session => {
         return session.associatedConf === this.adminService.defaultConference.getValue().title;
       });
 
-      this.incompleteSessions = _.filter(this.activeSpeakerSessions, session => !session.sessionComplete);
+      this.incompleteSessions = _.filter(this.activeSpeakerSessions, session => {
+        return !session.sessionComplete;
+      });
 
       this.pendingSessions = _.filter(this.activeSpeakerSessions, session => {
         // Approved but unscheduled sessions are considered pending for dashboard
