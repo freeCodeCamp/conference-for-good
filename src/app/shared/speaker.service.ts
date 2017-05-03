@@ -139,7 +139,7 @@ export class SpeakerService {
         let defaultConf = this.adminService.defaultConference.getValue().title;
         for (let i = 0; i < speaker.sessions.length; i++) {
           let session = this.sessionService.getSession(speaker.sessions[i]);
-          if (session.associatedConf === defaultConf && session.approval !== 'denied') {
+          if (session && session.associatedConf === defaultConf && session.approval !== 'denied') {
             return true;
           }
         }
@@ -172,7 +172,7 @@ export class SpeakerService {
         let hasApprovedSessions = false;
         for (let i = 0; i < speaker.sessions.length; i++) {
           let session = this.sessionService.getSession(speaker.sessions[i]);
-          if (session.approval === 'approved') hasApprovedSessions = true;
+          if (session && session.approval === 'approved') hasApprovedSessions = true;
         }
         if (!hasApprovedSessions) return false;
         if (speaker.arrangements) {
