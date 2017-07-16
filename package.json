@@ -14,7 +14,7 @@
   },
   "private": true,
   "engines": {
-    "node": "6.5.0",
+    "node": "7.10.1",
     "npm": "3.10.5"
   },
   "dependencies": {
