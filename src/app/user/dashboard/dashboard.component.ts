@@ -87,6 +87,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
     });
 
+    for (var session in this.scheduledSessions) {
+      this.scheduledSessions[session].statusTimeLocation = _.filter(this.scheduledSessions[session].statusTimeLocation, timeSlot => {
+        if (timeSlot.conferenceTitle === this.adminService.defaultConference.getValue().title) {
+          return true;
+        }
+        return false;
+      });
+    }
+
     this.leadOnlySessions = _.filter(this.allSpeakerSessions, session => session.speakers.mainPresenter === this.speaker._id);
 
     // Check if Brooke has uploaded speaker details document
