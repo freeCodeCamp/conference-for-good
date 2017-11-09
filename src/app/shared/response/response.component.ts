@@ -93,8 +93,8 @@ export class ResponseComponent implements OnInit, OnDestroy {
     let mealDates = [];
     
     mealDates.push({
-       date: "05/21/17",
-       label: `Speaker/VIP Welcome Reception, 6-8pm- 05/21/17`,
+       date: "04/15/18",
+       label: `Speaker/VIP Welcome Reception, 6-8pm- 04/15/18`,
        attending: false
     });
 

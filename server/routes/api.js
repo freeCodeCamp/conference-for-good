@@ -113,9 +113,9 @@ router.post('/uploadFile', upload.any(), (req, res) => {
 
 var responseFromProps = ["completed", "agreedHotel", "bookAuthor", "bookTitle", "bookAvailable", "otherDietary", "whyConflict", "agreedDates", "agreedTransport", "ccawCoveringHotel", "dateDeparture", "dateArrival", "ccawLodging", "otherDietary"];
 
-var mealsArray = ["Speaker/VIP Welcome Reception, 6-8pm- 05/21/17", "Breakfast- 05/22/2017", "Lunch- 05/22/2017", "CCAW Networking Event, 4:30-7pm- 05/22/2017", "Breakfast- 05/23/2017", "Lunch- 05/23/2017", "Breakfast- 05/24/2017", "Lunch- 05/24/2017", "Breakfast- 05/25/2017"]
+var mealsArray = ["Speaker/VIP Welcome Reception, 6-8pm- 04/15/18", "Breakfast- 04/16/2018", "Lunch- 04/16/2018", "CCAW Networking Event, 4:30-7pm- 04/16/2018", "Breakfast- 04/17/2018", "Lunch- 04/17/2018", "Breakfast- 04/18/2018", "Lunch- 04/18/2018", "Breakfast- 04/19/2018"]
 
-var mealsObjectsArray = [{"date": "05/21/17", "meal": "Reception"}, { "date": "2017-05-22", "meal": "Breakfast"}, { "date": "2017-05-22", "meal": "Lunch"}, {"date": "2017-05-22", "meal": "Networking"}, {"date": "2017-05-23", "meal": "Breakfast"}, {"date": "2017-05-23", "meal": "Lunch"}, {"date": "2017-05-24", "meal": "Breakfast"}, {"date": "2017-05-24", "meal": "Lunch"}, {"date": "2017-05-25", "meal": "Breakfast"}];
+var mealsObjectsArray = [{"date": "04-15-18", "meal": "Reception"}, { "date": "2018-04-16", "meal": "Breakfast"}, { "date": "2018-04-16", "meal": "Lunch"}, {"date": "2018-04-16", "meal": "Networking"}, {"date": "2018-04-17", "meal": "Breakfast"}, {"date": "2018-04-17", "meal": "Lunch"}, {"date": "2018-04-18", "meal": "Breakfast"}, {"date": "2018-04-18", "meal": "Lunch"}, {"date": "2018-04-19", "meal": "Breakfast"}];
 
 var dietaryNeedsArray = ["Vegetarian", "Vegan", "Gluten-Free", "Dairy-Free", "Other"]
 
